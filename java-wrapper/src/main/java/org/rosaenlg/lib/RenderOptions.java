@@ -31,7 +31,7 @@ import org.json.JSONObject;
 /**
  * RosaeNLG runtime options helper.
  * <p>
- * <a href="https://rosaenlg.org/rosaenlg/1.4.0/advanced/params.html#_rendering_parameters">Runtime options</a>
+ * <a href="https://rosaenlg.org/rosaenlg/1.5.0/advanced/params.html#_rendering_parameters">Runtime options</a>
  * </p>
  * 
  * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org

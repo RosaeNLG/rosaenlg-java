@@ -39,7 +39,7 @@ import org.json.JSONObject;
 /**
  * RosaeNLG compilation options helper.
  * <p>
- * <a href="https://rosaenlg.org/rosaenlg/1.4.0/advanced/params.html#_compiling_parameters">Compile options</a>
+ * <a href="https://rosaenlg.org/rosaenlg/1.5.0/advanced/params.html#_compiling_parameters">Compile options</a>
  * </p>
  * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
  */

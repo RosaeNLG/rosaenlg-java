@@ -8,6 +8,8 @@
 
   <packaging>pom</packaging>
 
+  <description>Java components for RosaeNLG: Wrapper and Server</description>
+
   <!-- for central repo -->
   <name>${project.groupId}:${project.artifactId}</name>
   <url>https://gitlab.com/rosaenlg-projects/rosaenlg-java</url>
@@ -38,7 +40,7 @@
 
   <properties>
     <revision>1.5.0</revision>
-    <rosaenlg.version>1.4.0</rosaenlg.version>
+    <rosaenlg.version>${revision}</rosaenlg.version>
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

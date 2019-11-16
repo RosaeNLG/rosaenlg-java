@@ -171,7 +171,7 @@ public class RosaeContext {
    * Will create a new GraalVM context for this template, compile the template,
    * test if autotest is activated, and be ready to render multiple times.
    * See
-   * https://rosaenlg.org/rosaenlg/1.4.0/integration/gulp.html#_packagetemplatejson
+   * https://rosaenlg.org/rosaenlg/1.5.0/integration/gulp.html#_packagetemplatejson
    * to create such a package.
    * </p>
    * 

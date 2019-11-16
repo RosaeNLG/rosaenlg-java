@@ -119,7 +119,7 @@ So it is 50 to 80 times slower than with native node.js, but should be fast enou
 [options="header"]
 |=====================================================================
 | java-wrapper version | corresponding RosaeNLG version
-| 1.4.1 | TODO
+| 1.5.0 | 1.5.0
 | 1.4.0 | 1.4.0
 | 1.3.2 | 1.3.2
 | 1.3.1 | 1.3.1
