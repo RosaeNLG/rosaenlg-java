@@ -1,0 +1,3 @@
+target/
+src/main/resources/rosaenlg_*.js
+.flattened-pom.xml

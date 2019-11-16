@@ -1,0 +1,21 @@
+{
+  "templateId": "verb_fr",
+  "entryTemplate": "verb_fr.pug",
+  "compileInfo": {
+    "compileDebug": false,
+    "language": "fr_FR"
+  },
+  "templates": {
+    "verb_fr.pug": "p\n  | il #[+verb(getAnonMS(), {verb: 'chanter', tense:'FUTUR'} )]\n"
+  },
+  "autotest": {
+    "activate": true,
+    "input": {
+      "language": "fr_FR"
+    },
+    "expected": [
+      "Il",
+      "chantera"
+    ]
+  }
+}
