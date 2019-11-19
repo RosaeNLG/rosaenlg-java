@@ -255,7 +255,7 @@
         <executions>
           <execution>
             <id>download-rosaenlgjs-fr_FR_comp</id>
-            <phase>compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>wget</goal>
             </goals>
@@ -266,7 +266,7 @@
           </execution>
           <execution>
             <id>download-rosaenlgjs-en_US_comp</id>
-            <phase>compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>wget</goal>
             </goals>
@@ -277,7 +277,7 @@
           </execution>
           <execution>
             <id>download-rosaenlgjs-de_DE_comp</id>
-            <phase>compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>wget</goal>
             </goals>
@@ -288,7 +288,7 @@
           </execution>
           <execution>
             <id>download-rosaenlgjs-it_IT_comp</id>
-            <phase>compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>wget</goal>
             </goals>
@@ -299,7 +299,7 @@
           </execution>
           <execution>
             <id>download-rosaenlgjs-OTHER_comp</id>
-            <phase>compile</phase>
+            <phase>validate</phase>
             <goals>
               <goal>wget</goal>
             </goals>

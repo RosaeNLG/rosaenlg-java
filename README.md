@@ -6,28 +6,25 @@ This repo contains:
 - a Java Server based on the Wrapper
 
 
-## RosaeNLG Java Wrapper
+## Documentation
 
-For documentation, see:
 - [RosaeNLG documentation](https://rosaenlg.org)
 - [Wrapper JavaDoc](https://www.javadoc.io/doc/org.rosaenlg/java-wrapper/)
-- and [here](doc/modules/java-wrapper/java-wrapper.adoc)
-
-
-## RosaeNLG Java Server
-
-Java Server for RosaeNLG, based on the Wrapper.
-
-For documentation, see:
-- [RosaeNLG documentation](https://rosaenlg.org)
 - [Server JavaDoc](https://www.javadoc.io/doc/org.rosaenlg/java-server/)
-- and [here](doc/modules/java-server/java-server.adoc)
 
 
 ## Contrib
 
 _this part of doc is just for me_
 
+release process:
+- update `CHANGELOG.md`
+- change `<revision>...</revision>` to proper version of RosaeNLG
+- change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
+- `mvn deploy` locally
+- push for CI to generate docker file
+
+misc:
 - test packaging skipping tests: `mvn package -Dmaven.test.skip=true`
 - test: `mvn -Dtest=TestApplicationPersistence test`
 - upload to central repo: `mvn deploy`
