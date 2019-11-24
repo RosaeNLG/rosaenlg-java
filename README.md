@@ -19,15 +19,15 @@ _this part of doc is just for me_
 
 release process:
 - update `CHANGELOG.md`
-- change `<revision>...</revision>` to proper version of RosaeNLG
+- in `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
 - change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
+- `mvn clean` locally
 - `mvn deploy` locally
 - push for CI to generate docker file
 
 misc:
 - test packaging skipping tests: `mvn package -Dmaven.test.skip=true`
 - test: `mvn -Dtest=TestApplicationPersistence test`
-- upload to central repo: `mvn deploy`
 
 For the wrapper in case of issues with the download cache:
 ```xml
