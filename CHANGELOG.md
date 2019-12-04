@@ -7,6 +7,12 @@
 ### Changed
 {:/comment}
 
+## [1.5.4] 2019-12-04
+
+### Changed
+
+* uses RosaeNLG 1.5.4
+
 
 ## [1.5.3] 2019-11-24
 
