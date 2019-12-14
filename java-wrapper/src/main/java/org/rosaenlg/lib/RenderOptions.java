@@ -39,7 +39,6 @@ import org.json.JSONObject;
 public class RenderOptions {
   private String language;
   private Integer forceRandomSeed;
-  private Boolean disableFiltering;
   private String defaultSynoMode;
   private Integer defaultAmong;
 
@@ -62,9 +61,6 @@ public class RenderOptions {
     if (jsonOptions.has("forceRandomSeed")) {
       forceRandomSeed = jsonOptions.getInt("forceRandomSeed");
     }
-    if (jsonOptions.has("disableFiltering")) {
-      disableFiltering = jsonOptions.getBoolean("disableFiltering");
-    }
     if (jsonOptions.has("defaultSynoMode")) {
       defaultSynoMode = jsonOptions.getString("defaultSynoMode");
     }
@@ -86,9 +82,6 @@ public class RenderOptions {
 
     if (this.forceRandomSeed != null) {
       res.put("forceRandomSeed", this.forceRandomSeed);
-    }
-    if (this.disableFiltering != null) {
-      res.put("disableFiltering", this.disableFiltering);
     }
     if (this.defaultSynoMode != null) {
       res.put("defaultSynoMode", this.defaultSynoMode);
@@ -122,28 +115,6 @@ public class RenderOptions {
   }
 
   /**
-   * sets disableFiltering param, which disables filtering.
-   * 
-   * @param disableFiltering put true to disable (default is false: filtering is enabled)
-   * @return this to set further options
-   */
-  public RenderOptions setDisableFiltering(Boolean disableFiltering) {
-    this.disableFiltering = disableFiltering;
-    return this;
-  }
-
-  /**
-   * sets the default synonym mode.
-   * 
-   * @param defaultSynoMode the default synonym mode
-   * @return this to set further options
-   */
-  public RenderOptions setDefaultSynoMode(String defaultSynoMode) {
-    this.defaultSynoMode = defaultSynoMode;
-    return this;
-  }
-
-  /**
    * sets the defaultAmong value.
    * 
    * @param defaultAmong the default among value
@@ -171,15 +142,6 @@ public class RenderOptions {
    */
   public Integer getRandomSeed() {
     return this.forceRandomSeed;
-  }
-
-  /**
-   * gets disableFiltering param.
-   * 
-   * @return disableFiltering param
-   */
-  public Boolean getDisableFiltering() {
-    return this.disableFiltering;
   }
 
   /**

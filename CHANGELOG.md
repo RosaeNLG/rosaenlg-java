@@ -7,6 +7,14 @@
 ### Changed
 {:/comment}
 
+## [1.5.6] 2019-14-12
+
+### Changed
+
+* uses RosaeNLG 1.5.6 (NB: 1.5.5 was not released)
+* removed `disableFiltering` option
+
+
 ## [1.5.4] 2019-12-04
 
 ### Changed

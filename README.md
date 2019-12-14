@@ -23,6 +23,7 @@ release process:
 - change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
 - `mvn clean` locally
 - `mvn deploy` locally
+- wait for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
 - push for CI to generate docker file
 
 misc:
