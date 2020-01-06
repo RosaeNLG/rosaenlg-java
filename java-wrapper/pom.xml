@@ -247,6 +247,23 @@
   </profiles>
   <build>
     <plugins>
+      <!-- clean before download -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>rosaenlg_tiny_*_comp.js</include>
+              </includes>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
       <!-- download all js automatically -->
       <plugin>
         <groupId>com.googlecode.maven-download-plugin</groupId>

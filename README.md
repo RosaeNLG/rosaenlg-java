@@ -22,7 +22,6 @@ release process:
 - in `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
 - change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
 - `mvn clean` locally
-- remove manually old resource files in `java-wrapper/src/main/resources`
 - `mvn deploy` locally
 - wait for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
 - push for CI to generate docker file
