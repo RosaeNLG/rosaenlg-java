@@ -277,7 +277,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/browser/rosaenlg_tiny_fr_FR_${rosaenlg.version}_comp.js</url>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_fr_FR_${rosaenlg.version}_comp.js</url>
               <outputDirectory>${jslib.outputdir}</outputDirectory>
             </configuration>
           </execution>
@@ -288,7 +288,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/browser/rosaenlg_tiny_en_US_${rosaenlg.version}_comp.js</url>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_en_US_${rosaenlg.version}_comp.js</url>
               <outputDirectory>${jslib.outputdir}</outputDirectory>
             </configuration>
           </execution>
@@ -299,7 +299,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/browser/rosaenlg_tiny_de_DE_${rosaenlg.version}_comp.js</url>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_de_DE_${rosaenlg.version}_comp.js</url>
               <outputDirectory>${jslib.outputdir}</outputDirectory>
             </configuration>
           </execution>
@@ -310,7 +310,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/browser/rosaenlg_tiny_it_IT_${rosaenlg.version}_comp.js</url>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_it_IT_${rosaenlg.version}_comp.js</url>
               <outputDirectory>${jslib.outputdir}</outputDirectory>
             </configuration>
           </execution>
@@ -321,7 +321,7 @@
               <goal>wget</goal>
             </goals>
             <configuration>
-              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/browser/rosaenlg_tiny_OTHER_${rosaenlg.version}_comp.js</url>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_OTHER_${rosaenlg.version}_comp.js</url>
               <outputDirectory>${jslib.outputdir}</outputDirectory>
             </configuration>
           </execution>
