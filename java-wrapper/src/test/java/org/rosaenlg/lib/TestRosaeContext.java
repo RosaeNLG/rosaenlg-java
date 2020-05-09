@@ -222,7 +222,7 @@ public class TestRosaeContext {
     assertTrue(compiledClient.contains("testName"), compiledClient);
 
     // resources are well embedded
-    String[] expected = new String[]{"chanteront", "\"travail\":\"M\"", "maison", "promènes"};
+    String[] expected = new String[]{"chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes"};
     for (int i = 0; i < expected.length; i++) {
       assertTrue(
           compiledClient.contains(expected[i]), 
@@ -252,7 +252,7 @@ public class TestRosaeContext {
     // logger.info(compiledClient);
 
     // resources are well embedded
-    String[] expected = new String[]{"chanteront", "\"travail\":\"M\"", "maison", "promènes"};
+    String[] expected = new String[]{"chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes"};
     for (int i = 0; i < expected.length; i++) {
       assertTrue(
           compiledClient.contains(expected[i]), 

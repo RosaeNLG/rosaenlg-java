@@ -315,6 +315,17 @@
             </configuration>
           </execution>
           <execution>
+            <id>download-rosaenlgjs-es_ES_comp</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>wget</goal>
+            </goals>
+            <configuration>
+              <url>https://unpkg.com/rosaenlg@${rosaenlg.version}/dist/rollup/rosaenlg_tiny_es_ES_${rosaenlg.version}_comp.js</url>
+              <outputDirectory>${jslib.outputdir}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
             <id>download-rosaenlgjs-OTHER_comp</id>
             <phase>validate</phase>
             <goals>

@@ -35,6 +35,7 @@ function getRosaenlg(language) {
     case 'en_US': return rosaenlg_en_US;
     case 'de_DE': return rosaenlg_de_DE;
     case 'it_IT': return rosaenlg_it_IT;
+    case 'es_ES': return rosaenlg_es_ES;
     default: return rosaenlg_OTHER;
   }
 }

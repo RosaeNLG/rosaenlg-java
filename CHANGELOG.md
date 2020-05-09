@@ -7,6 +7,13 @@
 ### Changed
 {:/comment}
 
+## [1.15.1] 2020-05-09
+
+### Changed
+
+* uses RosaeNLG 1.15.1 which includes Spanish support
+
+
 ## [1.13.0] 2020-03-30
 
 ### Changed
