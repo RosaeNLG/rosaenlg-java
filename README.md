@@ -19,7 +19,7 @@ _this part of doc is just for me_
 
 release process:
 - update `CHANGELOG.md`
-- in `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
+- in root `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
 - change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
 - `mvn clean` locally
 - `mvn deploy` locally
