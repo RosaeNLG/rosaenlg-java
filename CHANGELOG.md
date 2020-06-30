@@ -7,6 +7,14 @@
 ### Changed
 {:/comment}
 
+## [1.16.1] 2020-06-30
+
+### Changed
+
+* uses RosaeNLG 1.16.1
+* uses `org.everit.json.schema` 1.3.0 to validate JSON schemas
+
+
 ## [1.16.0] 2020-06-12
 
 ### Changed
