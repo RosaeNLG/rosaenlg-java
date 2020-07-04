@@ -12,7 +12,7 @@ stages:
   - docker login registry.gitlab.com -u gitlab-ci-token -p $CI_JOB_TOKEN
 
 variables:
-  ROSAENLG_VERSION: 1.16.1
+  ROSAENLG_VERSION: 1.16.2
   DOCKER_REGISTRY: registry.gitlab.com/rosaenlg-projects/rosaenlg-java
   DOCKER_SERVER_ROOT: ${DOCKER_REGISTRY}/java-server
   DOCKER_TEST_TAG: test_${CI_COMMIT_REF_SLUG}
