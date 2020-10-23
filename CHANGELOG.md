@@ -7,6 +7,13 @@
 ### Changed
 {:/comment}
 
+## [1.18.0] 2020-10-23
+
+### Changed
+
+* uses RosaeNLG 1.18.0
+* license change, now Apache 2.0
+
 ## [1.16.3] 2020-07-04
 
 ### Changed

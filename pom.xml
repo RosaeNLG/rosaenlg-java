@@ -15,8 +15,8 @@
   <url>https://gitlab.com/rosaenlg-projects/rosaenlg-java</url>
   <licenses>
     <license>
-      <name>MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <name>apache_v2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
   <developers>
@@ -39,7 +39,7 @@
   <inceptionYear>2019</inceptionYear>
 
   <properties>
-    <revision>1.16.3</revision>
+    <revision>1.18.0</revision>
     <rosaenlg.version>${revision}</rosaenlg.version>
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
