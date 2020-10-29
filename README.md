@@ -20,7 +20,7 @@ _this part of doc is just for me_
 release process:
 - update `CHANGELOG.md`
 - in root `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
-- change `ROSAENLG_VERSION` in `.gitlab-ci.yml`
+- change `ROSAENLG_VERSION` in `docker.yml`
 - `mvn clean` locally
 - `mvn deploy` locally
 - wait for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
