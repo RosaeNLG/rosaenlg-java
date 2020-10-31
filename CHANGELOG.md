@@ -7,6 +7,13 @@
 ### Changed
 {:/comment}
 
+## [1.18.1] 2020-10-30
+
+### Changed
+
+* uses RosaeNLG 1.18.1
+* released from Github to docker hub
+
 ## [1.18.0] 2020-10-23
 
 ### Changed

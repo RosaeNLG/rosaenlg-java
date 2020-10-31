@@ -3,7 +3,7 @@ name: build and push docker images
 on: push
 
 env:
-  ROSAENLG_VERSION: 1.18.0
+  ROSAENLG_VERSION: 1.18.1
 
 jobs:
   docker_server:
