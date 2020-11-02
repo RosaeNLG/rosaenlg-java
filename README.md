@@ -35,3 +35,9 @@ For the wrapper in case of issues with the download cache:
 <overwrite>true</overwrite>
 <skipCache>true</skipCache>
 ```
+
+## Test server locally
+
+in java-server folder:
+- `mvn spring-boot:run`
+- `http://localhost:8080/swagger-ui.html`

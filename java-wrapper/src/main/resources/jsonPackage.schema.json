@@ -1,68 +1,109 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://rosaenlg.org/jsonPackage.schema.json",
   "title": "RosaeNLG JsonPackage",
   "description": "A JSON package containing RosaeNLG templates",
   "type": "object",
   "properties": {
+    "format": {
+      "description": "version of the format",
+      "type": "string"
+    },
     "templateId": {
       "description": "ID of the template",
       "type": "string"
     },
-    "entryTemplate": {
-      "description": "entry point of the Pug template",
+    "type": {
+      "description": "Type of the template.\n* Use *custom* type (default value) when you have *src*\n* Use *existing* type otherwise, with *which* pointing to the proper shared template name.",
+      "type": "string",
+      "enum": ["existing", "custom"]
+    },
+    "which": {
+      "description": "Template name to refer to (target template must contain *src* and be *custom* type. Use only when type is *existing*.",
       "type": "string"
     },
-    "compileInfo": {
-      "description": "informations to compile the template",
+    "custom": {
+      "description": "Custom content for templates, generally when type is *existing*, to store specific personalization content for a generic template pointed by *which*",
+      "type": "object"
+    },
+    "src": {
+      "description": "source of the template",
       "type": "object",
       "properties": {
-        "language": {
-          "description": "language",
+        "entryTemplate": {
+          "description": "entry point of the Pug template",
           "type": "string"
         },
-        "compileDebug": {
-          "description": "activates Pug compile debug",
-          "type": "boolean"
+        "compileInfo": {
+          "description": "informations to compile the template",
+          "type": "object",
+          "properties": {
+            "language": {
+              "description": "language",
+              "type": "string",
+              "enum": ["en_US", "de_DE", "fr_FR", "it_IT", "es_ES", "OTHER"]
+            },
+            "compileDebug": {
+              "description": "activates Pug compile debug",
+              "type": "boolean"
+            }
+          },
+          "required": [ "language" ]
+        },
+        "templates": {
+          "description": "templates: map of template path and name to template content",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "autotest": {
+          "description": "informations to autotest the template",
+          "type": "object",
+          "properties": {
+            "activate": {
+              "description": "autotest is activated",
+              "type": "boolean"
+            },
+            "input": {
+              "description": "json input to make the test rendering",
+              "type": "object"
+            },
+            "expected": {
+              "description": "expected result: the rendered string must contain each of the string in the list",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 0
+            }
+          },
+          "required": [ "activate", "input", "expected" ]
         }
       },
-      "required": [ "language" ]
+      "required": ["entryTemplate", "compileInfo", "templates"]
     },
-
-    "templates": {
-      "description": "templates: map of template path and name to template content",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-
-    "autotest": {
-      "description": "informations to autotest the template",
+    "comp": {
+      "description": "the pre compiled template",
       "type": "object",
       "properties": {
-        "activate": {
-          "description": "autotest is activated",
-          "type": "boolean"
+        "compiled": {
+          "description": "the compiled template",
+          "type": "string"
         },
-        "input": {
-          "description": "json input to make the test rendering",
-          "type": "object"
+        "compiledWithVersion": {
+          "description": "version of RosaeNLG that compiled the template",
+          "type": "string"
         },
-        "expected": {
-          "description": "expected result: the rendered string must contain each of the string in the list",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1          
+        "compiledBy": {
+          "description": "what component compiled the template",
+          "type": "string"
+        },
+        "compiledWhen": {
+          "description": "when the template was compiled",
+          "type": "string"
         }
       },
-      "required": [ "activate", "input", "expected" ]
-    },
-    "compiled": {
-      "description": "the pre compiled templated",
-      "type": "string"
+      "required": ["compiled", "compiledWithVersion"]
     }
+
   },
-  "required": [ "templateId", "entryTemplate", "compileInfo", "templates" ]
+  "required": [ "templateId" ]
 }

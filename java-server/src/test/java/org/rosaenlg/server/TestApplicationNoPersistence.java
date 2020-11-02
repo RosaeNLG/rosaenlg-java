@@ -134,7 +134,8 @@ public class TestApplicationNoPersistence extends AbstractTest {
     ath.render(
         "chanson", 
         opts.toString(), 
-        new String[] { "Il chantera \"Non, je ne regrette rien\" d'Édith Piaf" });
+        new String[] { "Il chantera \"Non, je ne regrette rien\" d'Édith Piaf" },
+        null);
 
     ath.deleteOne("chanson");
   }
@@ -148,16 +149,16 @@ public class TestApplicationNoPersistence extends AbstractTest {
     ath.createOne("basic_a", templateOriginal);
     ath.checkTemplateList(1);
     String opts = "{ \"language\": \"en_US\" }";
-    ath.render("basic_a", opts, new String[] { "Aaa" });
+    ath.render("basic_a", opts, new String[] { "Aaa" }, null);
 
     String templateModified = templateOriginal.replaceAll("aaa", "ccc").replaceAll("Aaa", "Ccc");
     ath.createOne("basic_a", templateModified);
     ath.checkTemplateList(1);
-    ath.render("basic_a", opts, new String[] { "Ccc" });
+    ath.render("basic_a", opts, new String[] { "Ccc" }, null);
 
     ath.createOne("basic_a", templateOriginal);
     ath.checkTemplateList(1);
-    ath.render("basic_a", opts, new String[] { "Aaa" });
+    ath.render("basic_a", opts, new String[] { "Aaa" }, null);
 
     ath.deleteOne("basic_a");
 
@@ -219,6 +220,27 @@ public class TestApplicationNoPersistence extends AbstractTest {
     assertThrows(Exception.class, () -> {
       this.mvc.perform(builder);
     });
+  }
+
+  @Test
+  public void testRenderWithOutputData() throws Exception {
+    ath.checkTemplateList(0);
+    ath.createOne("outputdata");
+    ath.checkTemplateList(1);
+
+    JSONObject opts = new JSONObject();
+    opts.put("language", "fr_FR");
+    JSONObject input = new JSONObject();
+    input.put("field", 1);
+    opts.put("input", input);
+
+    ath.render(
+        "outputdata", 
+        opts.toString(), 
+        new String[] { "Bla bla" },
+        "{\"val\":2,\"obj\":{\"aaa\":\"bbb\"},\"foo\":\"bar\"}");
+
+    ath.deleteOne("outputdata");
   }
 
   @AfterEach

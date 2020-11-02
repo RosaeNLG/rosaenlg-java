@@ -1,9 +1,9 @@
 name: build and push docker images
 
-on: push
+on: workflow_dispatch
 
 env:
-  ROSAENLG_VERSION: 1.18.1
+  ROSAENLG_VERSION: 1.19.0
 
 jobs:
   docker_server:

@@ -33,13 +33,13 @@ import org.json.JSONObject;
 /**
  * RosaeNLG compilation options helper.
  * <p>
- * <a href="https://rosaenlg.org/rosaenlg/1.5.0/advanced/params.html#_compiling_parameters">Compile options</a>
+ * <a href="https://rosaenlg.org/rosaenlg/1.18.1/advanced/params.html#_compiling_parameters">Compile options</a>
  * </p>
  * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
  */
-public class CompileOptions implements Cloneable {
+public class CompileInfo implements Cloneable {
 
-  // private static final Logger logger = LoggerFactory.getLogger(CompileOptions.class);
+  // private static final Logger logger = LoggerFactory.getLogger(CompileInfo.class);
 
   private String language;
   private String name;
@@ -56,7 +56,7 @@ public class CompileOptions implements Cloneable {
 
   /** Default constructor, does nothing.
    */
-  public CompileOptions() {
+  public CompileInfo() {
   }
 
   
@@ -66,30 +66,30 @@ public class CompileOptions implements Cloneable {
    * Will find different properties in the json object and populate the object.
    * </p>
    * 
-   * @param compileOptionsJson json object containing the properties
+   * @param compileInfoJson json object containing the properties
    */
-  public CompileOptions(JSONObject compileOptionsJson) {
+  public CompileInfo(JSONObject compileInfoJson) {
     
-    if (compileOptionsJson.has("language")) {
-      this.language = compileOptionsJson.getString("language");
+    if (compileInfoJson.has("language")) {
+      this.language = compileInfoJson.getString("language");
     }
-    if (compileOptionsJson.has("name")) {
-      this.name = compileOptionsJson.getString("name");
+    if (compileInfoJson.has("name")) {
+      this.name = compileInfoJson.getString("name");
     }
-    if (compileOptionsJson.has("compileDebug")) {
-      this.compileDebug = compileOptionsJson.getBoolean("compileDebug");
+    if (compileInfoJson.has("compileDebug")) {
+      this.compileDebug = compileInfoJson.getBoolean("compileDebug");
     }
-    if (compileOptionsJson.has("embedResources")) {
-      this.embedResources = compileOptionsJson.getBoolean("embedResources");
+    if (compileInfoJson.has("embedResources")) {
+      this.embedResources = compileInfoJson.getBoolean("embedResources");
     }
-    if (compileOptionsJson.has("verbs")) {
-      this.verbs = jsonArrayToStringArray(compileOptionsJson.getJSONArray("verbs"));
+    if (compileInfoJson.has("verbs")) {
+      this.verbs = jsonArrayToStringArray(compileInfoJson.getJSONArray("verbs"));
     }
-    if (compileOptionsJson.has("adjectives")) {
-      this.adjectives = jsonArrayToStringArray(compileOptionsJson.getJSONArray("adjectives"));
+    if (compileInfoJson.has("adjectives")) {
+      this.adjectives = jsonArrayToStringArray(compileInfoJson.getJSONArray("adjectives"));
     }
-    if (compileOptionsJson.has("words")) {
-      this.words = jsonArrayToStringArray(compileOptionsJson.getJSONArray("words"));
+    if (compileInfoJson.has("words")) {
+      this.words = jsonArrayToStringArray(compileInfoJson.getJSONArray("words"));
     }
   }
 
@@ -138,7 +138,7 @@ public class CompileOptions implements Cloneable {
    * @param language the language
    * @return this to set further options
    */
-  public CompileOptions setLanguage(String language) {
+  public CompileInfo setLanguage(String language) {
     this.language = language;
     return this;
   }
@@ -153,7 +153,7 @@ public class CompileOptions implements Cloneable {
    * @param name name of the output function
    * @return this to set further options
    */
-  public CompileOptions setName(String name) {
+  public CompileInfo setName(String name) {
     this.name = name;
     return this;
   }
@@ -167,7 +167,7 @@ public class CompileOptions implements Cloneable {
    * @param compileDebug activates or not compileDebug
    * @return this to set further options
    */
-  public CompileOptions setCompileDebug(Boolean compileDebug) {
+  public CompileInfo setCompileDebug(Boolean compileDebug) {
     this.compileDebug = compileDebug;
     return this;
   }
@@ -181,7 +181,7 @@ public class CompileOptions implements Cloneable {
    * @param embedResources true to embed resources
    * @return this to set further options
    */
-  public CompileOptions setEmbedResources(Boolean embedResources) {
+  public CompileInfo setEmbedResources(Boolean embedResources) {
     this.embedResources = embedResources;
     return this;
   }
@@ -195,7 +195,7 @@ public class CompileOptions implements Cloneable {
    * @param words list of words to embed
    * @return this to set further options
    */
-  public CompileOptions setWords(List<String> words) {
+  public CompileInfo setWords(List<String> words) {
     this.words = words;
     return this;
   }
@@ -209,7 +209,7 @@ public class CompileOptions implements Cloneable {
    * @param verbs list of verbs to embed
    * @return this to set further options
    */
-  public CompileOptions setVerbs(List<String> verbs) {
+  public CompileInfo setVerbs(List<String> verbs) {
     this.verbs = verbs;
     return this;
   }
@@ -223,7 +223,7 @@ public class CompileOptions implements Cloneable {
    * @param adjectives list of adjectives to embed
    * @return this to set further options
    */
-  public CompileOptions setAdjectives(List<String> adjectives) {
+  public CompileInfo setAdjectives(List<String> adjectives) {
     this.adjectives = adjectives;
     return this;
   }

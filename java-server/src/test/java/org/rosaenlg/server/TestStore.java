@@ -95,7 +95,7 @@ public class TestStore {
 
     Store store = new Store("test-templates-testing");
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = store.render("basic_a", opts);
+    String rendered = store.render("basic_a", opts).getText();
     logger.debug("rendered: ", rendered);
     assertEquals(rendered, "<p>Aaa</p>");
   }

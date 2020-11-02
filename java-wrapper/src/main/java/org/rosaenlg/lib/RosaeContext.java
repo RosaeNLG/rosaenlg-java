@@ -62,7 +62,7 @@ public class RosaeContext {
   private String language;
   private String templateId;
   private String entryTemplate;
-  private CompileOptions compileInfo;
+  private CompileInfo compileInfo;
   private Map<String, String> templates = new HashMap<String, String>();
   private Autotest autotest;
 
@@ -109,7 +109,7 @@ public class RosaeContext {
    */
   public RosaeContext(
       String template,
-      CompileOptions compileInfo) throws Exception {
+      CompileInfo compileInfo) throws Exception {
 
     this.entryTemplate = "main";
     this.compileInfo = compileInfo;
@@ -135,7 +135,7 @@ public class RosaeContext {
   public RosaeContext(
       String entryTemplate, 
       File includesPath, 
-      CompileOptions compileInfo) throws Exception {
+      CompileInfo compileInfo) throws Exception {
 
     this.entryTemplate = entryTemplate;
     this.compileInfo = compileInfo;
@@ -165,7 +165,7 @@ public class RosaeContext {
    * Will create a new GraalVM context for this template, compile the template,
    * test if autotest is activated, and be ready to render multiple times.
    * See
-   * https://rosaenlg.org/rosaenlg/1.5.0/integration/gulp.html#_packagetemplatejson
+   * https://rosaenlg.org/rosaenlg/1.18.1/integration/rosaenlg_packager.html
    * to create such a package.
    * </p>
    * 
@@ -177,10 +177,10 @@ public class RosaeContext {
     JsonPackage jsonPackage = new JsonPackage(jsonPackageAsString);
     this.originalJsonPackage = jsonPackageAsString;
     this.templateId = jsonPackage.getTemplateId();
-    this.entryTemplate = jsonPackage.getEntryTemplate();
-    this.compileInfo = jsonPackage.getCompileInfo();
-    this.templates = jsonPackage.getTemplates();
-    this.autotest = jsonPackage.getAutotest();
+    this.entryTemplate = jsonPackage.getSrc().getEntryTemplate();
+    this.compileInfo = jsonPackage.getSrc().getCompileInfo();
+    this.templates = jsonPackage.getSrc().getTemplates();
+    this.autotest = jsonPackage.getSrc().getAutotest();
   
     this.init();
   }
@@ -232,7 +232,7 @@ public class RosaeContext {
     if (autotest != null && autotest.getActivate()) {
       logger.info("auto test is activated");
 
-      String rendered = this.render(autotest.getJsonInput());
+      String rendered = this.render(autotest.getJsonInput()).getText();
       for (int i = 0; i < autotest.getExpected().size(); i++) {
         if (!rendered.contains(autotest.getExpected().get(i))) {
           throw new Exception(
@@ -275,10 +275,10 @@ public class RosaeContext {
   /** Render the template with input data.
    * 
    * @param jsonOptionsAsString JSON string containing all the input data to render the template.
-   * @return String the rendered result
+   * @return RenderResult the rendered result
    * @throws Exception if an error occurs during rendering
    */
-  public synchronized String render(String jsonOptionsAsString) throws Exception {
+  public synchronized RenderResult render(String jsonOptionsAsString) throws Exception {
 
     // inject NlgLib into the options
     JSONObject jsonOptions = new JSONObject(jsonOptionsAsString);
@@ -295,11 +295,15 @@ public class RosaeContext {
     String paramForge = "() => { return " + finalOptions + ";}";
 
     Value realParam = context.eval("js", paramForge).execute();
-    String rendered = compiledTemplateFct.execute(realParam).asString();
-    if (rendered.startsWith(exceptionMarker)) {
-      throw new Exception(rendered.replace(exceptionMarker, ""));
+    String jsonRendered = compiledTemplateFct.execute(realParam).asString();
+
+    RenderResult renderResult = new RenderResult(jsonRendered);
+
+    String text = renderResult.getText();
+    if (text.startsWith(exceptionMarker)) {
+      throw new Exception(text.replace(exceptionMarker, ""));
     }
-    return rendered;    
+    return renderResult;    
   }
 
 
@@ -317,7 +321,7 @@ public class RosaeContext {
     Value compileFileClientFct = context.eval("js", "compileFileClient");
     assert compileFileClientFct.canExecute();
 
-    CompileOptions newCompileOpts = (CompileOptions)this.compileInfo.clone();
+    CompileInfo newCompileOpts = (CompileInfo)this.compileInfo.clone();
     newCompileOpts.setEmbedResources(true);    
     
     String compiled = compileFileClientFct.execute(

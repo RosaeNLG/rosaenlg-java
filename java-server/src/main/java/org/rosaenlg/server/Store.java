@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.io.FileUtils;
 
 import org.rosaenlg.lib.RosaeContext;
+import org.rosaenlg.lib.RenderResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -318,10 +319,10 @@ public class Store {
    * 
    * @param templateId the ID of the template
    * @param jsonOptions the options (input data) for the template
-   * @return String the rendered string
+   * @return RenderResult the rendered result (text + output data)
    * @throws Exception if the template does not exist, or if there was an exception during rendering
    */
-  public String render(String templateId, String jsonOptions) throws Exception {
+  public RenderResult render(String templateId, String jsonOptions) throws Exception {
     if (!templateLoaded(templateId)) {
       throw new Exception("template not found: " + templateId);
     }

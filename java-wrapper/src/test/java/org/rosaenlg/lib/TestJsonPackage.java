@@ -49,7 +49,7 @@ public class TestJsonPackage {
     JsonPackage jsonPackage = new JsonPackage(jsonPackageString);
 
     assertEquals(jsonPackage.getTemplateId(), "chanson");
-    assertNotNull(jsonPackage.getAutotest());
+    assertNotNull(jsonPackage.getSrc().getAutotest());
     assertEquals(jsonPackageString, jsonPackage.getInitialPackage());
   }
 
@@ -60,11 +60,11 @@ public class TestJsonPackage {
         "utf-8");
 
     JSONObject parsed = new JSONObject(jsonPackageString);
-    parsed.remove("autotest");
+    parsed.getJSONObject("src").remove("autotest");
 
     JsonPackage jsonPackage = new JsonPackage(parsed.toString());
 
-    assertNull(jsonPackage.getAutotest());
+    assertNull(jsonPackage.getSrc().getAutotest());
   }
 
 

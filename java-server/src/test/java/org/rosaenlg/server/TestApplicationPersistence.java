@@ -70,7 +70,7 @@ public class TestApplicationPersistence extends AbstractTest {
 
     // we can render
     String opts = "{ \"language\": \"en_US\" }";
-    ath.render("createDelete", opts, new String[] { "Aaa" });
+    ath.render("createDelete", opts, new String[] { "Aaa" }, null);
 
     // it is on the disk
     assertTrue(new File(TEST_FOLDER + "/createDelete.json").exists());
@@ -88,7 +88,7 @@ public class TestApplicationPersistence extends AbstractTest {
     String opts = "{ \"language\": \"en_US\" }";
 
     // we can render
-    ath.render("reload", opts, new String[] { "Aaa" });
+    ath.render("reload", opts, new String[] { "Aaa" }, null);
 
     // we modify the file
     File file = new File(TEST_FOLDER + "/reload.json");
@@ -98,13 +98,13 @@ public class TestApplicationPersistence extends AbstractTest {
     FileUtils.writeStringToFile(file, modifiedTemplate, "utf-8");
 
     // still can render, did not change
-    ath.render("reload", opts, new String[] { "Aaa" });
+    ath.render("reload", opts, new String[] { "Aaa" }, null);
 
     // reload
     ath.reload("reload");
 
     // can render, but changed
-    ath.render("reload", opts, new String[] { "Bbb" });
+    ath.render("reload", opts, new String[] { "Bbb" }, null);
 
     // put the original again
     FileUtils.writeStringToFile(file, originalTemplate, "utf-8");
@@ -113,7 +113,7 @@ public class TestApplicationPersistence extends AbstractTest {
     ath.reload();
     
     // back to original
-    ath.render("reload", opts, new String[] { "Aaa" });
+    ath.render("reload", opts, new String[] { "Aaa" }, null);
 
     ath.deleteOne("reload");
     assertFalse(new File(TEST_FOLDER + "/reload.json").exists());

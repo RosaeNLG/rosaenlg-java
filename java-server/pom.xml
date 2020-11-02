@@ -21,7 +21,7 @@
     <license.dir>${basedir}</license.dir>
     <java.version>1.8</java.version>
     <graalvm.version>19.2.0</graalvm.version>
-    <springframework.boot.version>2.2.1.RELEASE</springframework.boot.version>
+    <springframework.boot.version>2.3.4.RELEASE</springframework.boot.version>
   </properties>
 
   <dependencyManagement>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.2.0</version>
+      <version>1.4.8</version>
     </dependency>
     <!-- RosaeNLG wrapper -->
     <dependency>
@@ -50,18 +50,18 @@
       <artifactId>java-wrapper</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <!-- when using a local version of the wrapper -->
     <!--
-
+    <dependency>
+      <groupId>org.everit.json</groupId>
+      <artifactId>org.everit.json.schema</artifactId>
+      <version>1.5.1</version>
+    </dependency>    
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20190722</version>
     </dependency>
     <dependency>
       <groupId>org.graalvm.sdk</groupId>
@@ -96,12 +96,11 @@
     <dependency>
       <groupId>org.rosaenlg</groupId>
       <artifactId>java-wrapper</artifactId>
-      <version>1.4.0</version>
+      <version>1.18.1</version>
       <scope>system</scope>
-      <systemPath>c:/rosaenlg/java-wrapper/target/java-wrapper-1.4.0.jar</systemPath>
+      <systemPath>c:/rosaenlg/rosaenlg-java/java-wrapper/target/java-wrapper-1.18.1.jar</systemPath>
     </dependency>
-
-    -->
+    -->    
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -144,7 +143,7 @@
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
-      <version>9.0.27</version>
+      <version>9.0.39</version>
     </dependency>
   </dependencies>
 

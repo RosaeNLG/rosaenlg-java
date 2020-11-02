@@ -55,7 +55,7 @@ public class TestRosaeContext {
 
     String opts = "{ \"language\": \"en_US\" }";
     for (int i = 0; i < 10; i++) {
-      String rendered = rc.render(opts);
+      String rendered = rc.render(opts).getText();
       logger.debug("rendered: {}", rendered);
       assertEquals(rendered, "<p>Bla included</p>");
     }
@@ -77,7 +77,7 @@ public class TestRosaeContext {
 
       String opts = "{ \"language\": \"en_US\" }";
       for (int j = 0; j < 10; j++) {
-        String rendered = rc.render(opts);
+        String rendered = rc.render(opts).getText();
         assertTrue(rendered.contains(letter));
       }
 
@@ -104,7 +104,7 @@ public class TestRosaeContext {
 
       String opts = "{ \"language\": \"en_US\" }";
       for (int j = 0; j < 10; j++) {
-        String rendered = rc.render(opts);
+        String rendered = rc.render(opts).getText();
         assertTrue(rendered.contains("Aaa" + i));
       }
 
@@ -132,12 +132,13 @@ public class TestRosaeContext {
         new File("test-templates-repo/basic_a.json"), 
         "utf-8");
     JSONObject parsed = new JSONObject(jsonPackage);
-    assertTrue(parsed.has("autotest"));
-    parsed.remove("autotest");
+    assertTrue(parsed.has("src"));
+    assertTrue(parsed.getJSONObject("src").has("autotest"));
+    parsed.getJSONObject("src").remove("autotest");
     RosaeContext rc = new RosaeContext(parsed.toString());
 
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = rc.render(opts);
+    String rendered = rc.render(opts).getText();
     assertTrue(rendered.contains("Aaa"));
   }
 
@@ -147,21 +148,22 @@ public class TestRosaeContext {
         new File("test-templates-repo/basic_a.json"), 
         "utf-8");
     JSONObject parsed = new JSONObject(jsonPackage);
-    assertTrue(parsed.has("autotest"));
-    assertTrue(parsed.getJSONObject("autotest").getBoolean("activate"));
-    parsed.getJSONObject("autotest").remove("activate");
-    parsed.getJSONObject("autotest").put("activate", false);
+    assertTrue(parsed.has("src"));
+    assertTrue(parsed.getJSONObject("src").has("autotest"));
+    assertTrue(parsed.getJSONObject("src").getJSONObject("autotest").getBoolean("activate"));
+    parsed.getJSONObject("src").getJSONObject("autotest").remove("activate");
+    parsed.getJSONObject("src").getJSONObject("autotest").put("activate", false);
 
     RosaeContext rc = new RosaeContext(parsed.toString());
 
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = rc.render(opts);
+    String rendered = rc.render(opts).getText();
     assertTrue(rendered.contains("Aaa"));
   }
 
   @Test
   public void noPackagingWithInclude() throws Exception {
-    CompileOptions opts = new CompileOptions();
+    CompileInfo opts = new CompileInfo();
     opts.setLanguage("en_US");
 
     RosaeContext rc = new RosaeContext(
@@ -169,7 +171,7 @@ public class TestRosaeContext {
         new File("test-templates-repo/includes"),
         opts);
 
-    String rendered = rc.render(opts.toJson());
+    String rendered = rc.render(opts.toJson()).getText();
     assertEquals(rendered, "<p>Bla included</p>");
   }
 
@@ -197,7 +199,7 @@ public class TestRosaeContext {
   @Test
   public void compileClientWithEmbedSpecific() throws Exception {
 
-    CompileOptions opts = new CompileOptions();
+    CompileInfo opts = new CompileInfo();
     opts.setLanguage("fr_FR");
     opts.setName("testName");
     opts.setWords(Arrays.asList(new String[]{"travail", "maison"}));
@@ -229,7 +231,7 @@ public class TestRosaeContext {
   @Test
   public void compileClientWithEmbedSpecificUsingJsonOpts() throws Exception {
 
-    CompileOptions opts = new CompileOptions(
+    CompileInfo opts = new CompileInfo(
         new JSONObject(
           "{\"language\": \"fr_FR\", "
           + "\"words\": [\"travail\", \"maison\"], "
@@ -261,10 +263,10 @@ public class TestRosaeContext {
     String template = "p\n" + "  | il #[+verb(getAnonMS(), {verb: 'chanter', tense:'FUTUR'} )]\n"
         + "  | \"#{chanson.nom}\"\n" + "  | de #{chanson.auteur}\n";
 
-    CompileOptions compileOptions = new CompileOptions();
-    compileOptions.setLanguage("fr_FR");
+    CompileInfo compileInfo = new CompileInfo();
+    compileInfo.setLanguage("fr_FR");
 
-    RosaeContext rc = new RosaeContext(template, compileOptions);
+    RosaeContext rc = new RosaeContext(template, compileInfo);
 
     JSONObject opts = new JSONObject();
     opts.put("language", "fr_FR");
@@ -279,7 +281,7 @@ public class TestRosaeContext {
   @Test
   public void testCompileError() throws Exception {
     try {
-      CompileOptions opts = new CompileOptions();
+      CompileInfo opts = new CompileInfo();
       opts.setLanguage("en_US");
 
       new RosaeContext(
@@ -349,24 +351,24 @@ public class TestRosaeContext {
 
   @Test
   public void testRenderWithDynamicData() throws Exception {
-    CompileOptions opts = new CompileOptions();
+    CompileInfo opts = new CompileInfo();
     opts.setLanguage("en_US");
     RosaeContext rc = new RosaeContext(
         "tutorial_en_US_nodata.pug",
         new File("test-templates-repo"),
         opts);
 
-    String rendered1 = rc.render(getJsonPhone1());
+    String rendered1 = rc.render(getJsonPhone1()).getText();
     // System.out.println(rendered1);
     assertTrue(rendered1.contains("OnePlus 5T"));
     assertTrue(rendered1.contains("80.43"));
 
-    String rendered2 = rc.render(getJsonPhone2());
+    String rendered2 = rc.render(getJsonPhone2()).getText();
     // System.out.println(rendered2);
     assertTrue(rendered2.contains("OnePlus 5"));
     assertTrue(rendered2.contains("5.5"));
 
-    String rendered3 = rc.render(getJsonPhone3());
+    String rendered3 = rc.render(getJsonPhone3()).getText();
     // System.out.println(rendered3);
     assertTrue(rendered3.contains("OnePlus 3T"));
     assertTrue(rendered3.contains("73.14"));
@@ -376,7 +378,7 @@ public class TestRosaeContext {
   @Test
   public void testNoLanguage() throws Exception {
 
-    CompileOptions opts = new CompileOptions();
+    CompileInfo opts = new CompileInfo();
 
     Exception thrown = assertThrows(Exception.class,
         () -> {
@@ -392,7 +394,7 @@ public class TestRosaeContext {
   @Test
   public void testDocExemple() throws Exception {
 
-    CompileOptions compileOpts = new CompileOptions();
+    CompileInfo compileOpts = new CompileInfo();
     compileOpts.setLanguage("fr_FR");
 
     final RosaeContext rc = new RosaeContext(
@@ -407,11 +409,35 @@ public class TestRosaeContext {
     chanson.put("auteur", "Édith Piaf");
     renderOpts.put("chanson", chanson);
 
-    String rendered = rc.render(renderOpts.toString());
+    String rendered = rc.render(renderOpts.toString()).getText();
 
     assertTrue(
         rendered.contains("Il chantera \"Non, je ne regrette rien\" d'Édith Piaf"), 
         rendered);
   }
 
+  @Test
+  public void testOutputData() throws Exception {
+
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("en_US");
+
+    final RosaeContext rc = new RosaeContext(
+        "outputdata.pug",
+        new File("test-templates-repo"),
+        compileOpts);
+
+    JSONObject renderOpts = new JSONObject();
+    renderOpts.put("language", "en_US");
+    JSONObject input = new JSONObject();
+    input.put("field", 1);
+    renderOpts.put("input", input);
+
+    RenderResult res = rc.render(renderOpts.toString());
+    assertTrue(
+        res.getText().contains("Bla bla"), 
+        res.getText());
+
+    assertEquals("{\"val\":2,\"obj\":{\"aaa\":\"bbb\"},\"foo\":\"bar\"}", res.getOutputData());
+  }
 }

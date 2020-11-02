@@ -3,6 +3,7 @@ package org.rosaenlg.lib;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /*-
@@ -32,23 +33,26 @@ import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Will contain a deserialized JSON package of a template.
  * <p>
  * To generate a JSON package from plain templates using gulp, see <a href=
- * "https://gitlab.com/rosaenlg-projects/rosaenlg/tree/master/packages/gulp-rosaenlg"></a>
+ * "https://rosaenlg.org/rosaenlg/1.18.1/integration/rosaenlg_packager.html">RosaeNLG Packager</a>
  * </p>
  * 
  * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
  */
 public class JsonPackage {
 
+  private static final Logger logger = LoggerFactory.getLogger(JsonPackage.class);
+
   private String initialPackage;
+
   private String templateId;
-  private String entryTemplate;
-  private CompileOptions compileInfo;
-  private Map<String, String> templates = new HashMap<String, String>();
-  private Autotest autotest;
+  private JsonPackageSrc src;
 
   /** Constructor using a JSON string.
    * 
@@ -61,29 +65,24 @@ public class JsonPackage {
 
     JSONObject jsonPackage = new JSONObject(jsonPackageAsString);
 
-    {
+    try {
       InputStream inputStreamSchema = getClass().getResourceAsStream("/jsonPackage.schema.json");
       JSONObject rawSchema = new JSONObject(new JSONTokener(inputStreamSchema));
       Schema schema = SchemaLoader.load(rawSchema);
       schema.validate(jsonPackage);
+    } catch (ValidationException ve) {
+      logger.error("Errors in JSON template validation:");
+      List<ValidationException> causes = ve.getCausingExceptions();
+      for (int i = 0; i < causes.size(); i++) {
+        logger.error(causes.get(i).toString());
+      }      
+      throw ve;
     }
 
     this.templateId = jsonPackage.getString("templateId");
-    this.entryTemplate = jsonPackage.getString("entryTemplate");
-    
-    JSONObject compileInfoJson = jsonPackage.getJSONObject("compileInfo");
-    this.compileInfo = new CompileOptions(compileInfoJson);
 
-    JSONObject templatesJson = jsonPackage.getJSONObject("templates");
-    Iterator<String> keys = templatesJson.keys();
-    while (keys.hasNext()) {
-      String key = keys.next();
-      templates.put(key, templatesJson.getString(key));
-    }
+    this.src = new JsonPackageSrc(jsonPackage.getJSONObject("src"));
 
-    if (jsonPackage.has("autotest")) {
-      this.autotest = new Autotest(jsonPackage.getJSONObject("autotest"));
-    }
   }
 
   
@@ -94,45 +93,16 @@ public class JsonPackage {
   public String getTemplateId() {
     return this.templateId;
   }
-  
-  /** Returns the entry template.
+
+  /** Returns the template src.
    * 
-   * <p>The entry template is the one that is indicated when compiling, and which can include other
-   * templates (in the same JSON package).
-   * </p>
-   * 
-   * @return String the name of the entry template
+   * @return JsonPackageSrc template src
    */
-  public String getEntryTemplate() {
-    return this.entryTemplate;
+  public JsonPackageSrc getSrc() {
+    return this.src;
   }
-  
-  /** Getter on the compile options.
-   * @return CompileOptions
-   */
-  public CompileOptions getCompileInfo() {
-    return this.compileInfo;
-  }
-  
-  /** Getter on the template content.
-   * 
-   * <p>
-   * Key value where the key is the template name, and the value the content of the template.
-   * </p>
-   * 
-   * @return template name and template content map
-   */
-  public Map<String, String> getTemplates() {
-    return this.templates;
-  }
-  
-  /** Getter on the auto test part of the package.
-   * @return Autotest the auto test, if exists
-   */
-  public Autotest getAutotest() {
-    return this.autotest;
-  }
-  
+
+
   /** Returns the initial value of the template, as a String.
    * @return String the initial template
    */

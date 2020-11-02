@@ -44,11 +44,39 @@ function compileFileClient(path, language, jsonStaticFs, jsonOptions, exceptionM
   }
 }
 
+function JSONStringify(object) {
+  var cache = [];        
+  var str = JSON.stringify(object,
+      // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON" 
+      function(key, value) {
+          if (typeof value === 'object' && value !== null) {
+              if (cache.indexOf(value) !== -1) {
+                  // Circular reference found, discard key
+                  return;
+              }
+              // Store value in our collection
+              cache.push(value);
+          }
+          return value;
+      }, 4);
+  cache = null; // enable garbage collection
+  return str;
+};
+
 function compileFile(path, language, jsonStaticFs, jsonOptions, exceptionMarker) { 
   try {
     const opts = JSON.parse(jsonOptions);
     opts.staticFs = JSON.parse(jsonStaticFs);
-    return getRosaenlg(language).compileFile(cleanPath(path), opts);
+    const fct = getRosaenlg(language).compileFile(cleanPath(path), opts)
+    return (opts) => {
+      opts.outputData = {}; // must be created here
+      const text = fct(opts);
+      const outputData = opts.outputData;
+      return JSON.stringify({
+        text: text,
+        outputData: outputData,
+      });
+    };
   } catch (e) {
     return exceptionMarker + e.toString();
   }

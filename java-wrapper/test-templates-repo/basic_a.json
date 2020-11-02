@@ -1,21 +1,23 @@
 {
   "templateId": "basic_a",
-  "entryTemplate": "test.pug",
-  "compileInfo": {
-    "activate": false,
-    "compileDebug": false,
-    "language": "en_US"
-  },
-  "templates": {
-    "test.pug": "p\r\n  | aaa\r\n"
-  },
-  "autotest": {
-    "activate": true,
-    "input": {
+  "src": {
+    "entryTemplate": "test.pug",
+    "compileInfo": {
+      "activate": false,
+      "compileDebug": false,
       "language": "en_US"
     },
-    "expected": [
-      "Aaa"
-    ]
+    "templates": {
+      "test.pug": "p\r\n  | aaa\r\n"
+    },
+    "autotest": {
+      "activate": true,
+      "input": {
+        "language": "en_US"
+      },
+      "expected": [
+        "Aaa"
+      ]
+    }
   }
 }

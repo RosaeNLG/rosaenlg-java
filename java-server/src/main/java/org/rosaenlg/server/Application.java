@@ -38,11 +38,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(
     title = "RosaeNLG API", 
-    version = "1.4.1", 
-    description = "API over the Natural Language Generation library RosaeNLG."
+    version = "1.18.1",
+    description = "API over the Natural Language Generation library RosaeNLG. "
       + "Server is written in Java.", 
-    license = @License(name = "MIT", url = "http://www.opensource.org/licenses/mit-license.php"), 
-    contact = @Contact(url = "https://rosaenlg.org", name = "Ludan Stoecklé", email = "ludan.stoeckle@rosaenlg.org")),
+    license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html"), 
+    contact = @Contact(url = "https://rosaenlg.org", name = "Ludan Stoecklé", email = "contact@rosaenlg.org")),
     externalDocs = @ExternalDocumentation(description = "RosaeNLG reference documentation", url = "https://rosaenlg.org"))
 public class Application extends SpringBootServletInitializer {
 

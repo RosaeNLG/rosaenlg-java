@@ -39,10 +39,10 @@ public class Cli {
     String template = "p\n" + "  | il #[+verb(getAnonMS(), {verb: 'chanter', tense:'FUTUR'} )]\n"
         + "  | \"#{chanson.nom}\"\n" + "  | de #{chanson.auteur}\n";
 
-    CompileOptions compileOptions = new CompileOptions();
-    compileOptions.setLanguage("fr_FR");
+    CompileInfo compileInfo = new CompileInfo();
+    compileInfo.setLanguage("fr_FR");
 
-    final RosaeContext rosaeContext = new RosaeContext(template, compileOptions);
+    final RosaeContext rosaeContext = new RosaeContext(template, compileInfo);
 
     JSONObject opts = new JSONObject();
     opts.put("language", "fr_FR");
@@ -51,7 +51,7 @@ public class Cli {
     chanson.put("auteur", "Édith Piaf");
     opts.put("chanson", chanson);
 
-    String rendered = rosaeContext.render(opts.toString());
+    String rendered = rosaeContext.render(opts.toString()).getText();
     System.out.println(rendered);
   }
 }

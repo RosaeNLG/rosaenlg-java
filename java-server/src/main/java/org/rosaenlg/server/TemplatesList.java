@@ -32,8 +32,6 @@ public class TemplatesList {
   private static final Logger logger = LoggerFactory.getLogger(TemplatesList.class);
 
   private final List<String> ids = new ArrayList<String>();
-  private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
   
   /** Constructor.
    * @param ids list of string of template IDs
@@ -51,11 +49,4 @@ public class TemplatesList {
     return ids;
   }
   
-  /** Getter on timestamp.
-   * @return Timestamp
-   */
-  public Timestamp getTimestamp() {
-    return timestamp;
-  }
-
 }

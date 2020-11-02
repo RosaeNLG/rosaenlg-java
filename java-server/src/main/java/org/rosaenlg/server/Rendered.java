@@ -21,6 +21,7 @@ package org.rosaenlg.server;
  */
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 
 import java.sql.Timestamp;
 
@@ -34,30 +35,30 @@ public class Rendered {
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(Rendered.class);
 
-  private String templateId;
   private String renderedText;
+  
+  @JsonRawValue
+  private String outputData;
+
+  private long ms;
 
   private RenderOptionsForSerialize renderOptions;
 
-  private long counter;
-  private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
   
   /** Constructor.
-   * @param templateId the template ID
    * @param renderedText the rendered text
-   * @param counter the value of the counter
    * @param renderOptions the rendering options
+   * @param ms time to render in ms
    */
   public Rendered(
-      String templateId, 
-      String renderedText, 
-      long counter, 
-      RenderOptionsForSerialize renderOptions) {
-    this.templateId = templateId;
+      String renderedText,
+      String outputData,
+      RenderOptionsForSerialize renderOptions,
+      long ms) {
     this.renderedText = renderedText;
-    this.counter = counter;
+    this.outputData = outputData;
     this.renderOptions = renderOptions;
+    this.ms = ms;
   }
 
   
@@ -67,15 +68,6 @@ public class Rendered {
   public RenderOptionsForSerialize getRenderOptions() {
     return renderOptions;
   }
-
-  
-  /** Getter on template ID.
-   * @return String the template ID
-   */
-  public String getTemplateId() {
-    return templateId;
-  }
-
   
   /** Getter on rendered text.
    * @return String rendered text
@@ -84,20 +76,11 @@ public class Rendered {
     return renderedText;
   }
 
-  
-  /** Getter on countner.
-   * @return long counter current value
+  /** Getter on ms.
+   * @return long ms
    */
-  public long getCounter() {
-    return counter;
-  }
-
-  
-  /** Getter on timestamp.
-   * @return Timestamp
-   */
-  public Timestamp getTimestamp() {
-    return timestamp;
+  public long getMs() {
+    return ms;
   }
 
 }

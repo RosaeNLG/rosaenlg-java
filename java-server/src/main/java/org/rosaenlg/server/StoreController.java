@@ -28,13 +28,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-// import java.io.File;
-import java.util.concurrent.atomic.AtomicLong;
-
-// import org.apache.commons.io.FileUtils;
+import java.lang.System;
 
 import org.json.JSONObject;
 import org.rosaenlg.lib.JsonPackage;
+import org.rosaenlg.lib.RenderResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,6 @@ public class StoreController {
 
   private static final Logger logger = LoggerFactory.getLogger(StoreController.class);
 
-  private final AtomicLong renderCounter = new AtomicLong();
   private Store store;
 
   
@@ -244,9 +241,13 @@ public class StoreController {
         body.substring(0, Math.min(20, body.length()))
     );
 
+    long start = System.currentTimeMillis();
+
     // FileUtils.write(new File("test-templates-testing/jsonData_received.json"), body, "UTF-8");
 
-    String renderedText = this.store.render(templateId, body);
+    RenderResult renderResult = this.store.render(templateId, body);
+
+    String renderedText = renderResult.getText();
     logger.info(
         "rendered text: {}", 
         renderedText.substring(0, Math.min(20, renderedText.length())
@@ -261,11 +262,13 @@ public class StoreController {
 
     RenderOptionsForSerialize renderOptions = new RenderOptionsForSerialize(new JSONObject(body));
 
+    long finish = System.currentTimeMillis();
+
     Rendered rendered = new Rendered(
-        templateId, 
-        renderedText, 
-        renderCounter.incrementAndGet(), 
-        renderOptions);
+        renderedText,
+        renderResult.getOutputData(),
+        renderOptions,
+        finish - start);
     return rendered;
   }
 

@@ -7,6 +7,22 @@
 ### Changed
 {:/comment}
 
+## [1.19.0] 2020-11-02
+
+### Added
+
+* now supports `outputData` feature
+
+### Fixed
+
+* outdated dependencies update
+* updated JSON RosaeNLG package format, now same as node.js version (sources in `src`)
+
+### Changed
+
+* uses RosaeNLG 1.19.0
+
+
 ## [1.18.1] 2020-10-30
 
 ### Changed

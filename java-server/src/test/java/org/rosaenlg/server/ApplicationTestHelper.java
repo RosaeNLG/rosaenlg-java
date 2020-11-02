@@ -120,7 +120,11 @@ public class ApplicationTestHelper {
     this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk());
   }
 
-  protected void render(String templateId, String jsonData, String[] expected) throws Exception {
+  protected void render(
+      String templateId,
+      String jsonData,
+      String[] expected,
+      String jsonOuputDataExpected) throws Exception {
 
     logger.debug("in render test {} with {}", templateId, jsonData);
 
@@ -154,12 +158,23 @@ public class ApplicationTestHelper {
 
     // FileUtils.write(new File("test-templates-testing/content.txt"), content, "UTF-8");
 
-
     logger.debug("rendered content: {}", content);
     JSONObject jsonContent = new JSONObject(content);
+
     String renderedText = jsonContent.getString("renderedText");
     for (int i = 0; i < expected.length; i++) {
       assertTrue(renderedText.contains(expected[i]), expected[i] + " / " + renderedText);
+    }
+
+    long ms = jsonContent.getLong("ms");
+    assertTrue(ms > 0);
+
+    if (jsonOuputDataExpected != null) {
+      String realJsonOutputData = jsonContent.getJSONObject("outputData").toString();
+      assertEquals(
+        jsonOuputDataExpected, 
+        realJsonOutputData, 
+        realJsonOutputData);
     }
   }
 
