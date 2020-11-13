@@ -167,7 +167,7 @@ public class ApplicationTestHelper {
     }
 
     long ms = jsonContent.getLong("ms");
-    assertTrue(ms > 0);
+    assertTrue(ms >= 0);
 
     if (jsonOuputDataExpected != null) {
       String realJsonOutputData = jsonContent.getJSONObject("outputData").toString();

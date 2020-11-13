@@ -3,7 +3,7 @@ name: build and push docker images
 on: workflow_dispatch
 
 env:
-  ROSAENLG_VERSION: 1.19.0
+  ROSAENLG_VERSION: 1.20.0
 
 jobs:
   docker_server:
@@ -63,7 +63,9 @@ jobs:
         context: docker/
         file: docker/Dockerfile
         push: true
-        tags: ${{ env.DOCKER_FINAL_TAG }}
+        tags: |
+          ${{ env.DOCKER_FINAL_TAG }}
+          rosaenlg/server-java:latest
         build-args: |
           ROSAENLG_VERSION=${{ env.ROSAENLG_VERSION }}
       env:

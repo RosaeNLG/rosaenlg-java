@@ -131,7 +131,8 @@ public class TestApplicationPersistence extends AbstractTest {
   @BeforeEach
   protected void checkEmptyList() throws Exception {
     ath.checkTemplateList(0);
-    assertEquals(new File(TEST_FOLDER).listFiles().length, 0);
+    File[] list = new File(TEST_FOLDER).listFiles();
+    assertEquals(list.length, 0, list.toString());
   }
 
 }
