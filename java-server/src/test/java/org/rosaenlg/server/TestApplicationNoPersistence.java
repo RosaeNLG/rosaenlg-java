@@ -44,6 +44,10 @@ public class TestApplicationNoPersistence extends AbstractTest {
   private static final Logger logger = LoggerFactory.getLogger(TestApplicationNoPersistence.class);
   private ApplicationTestHelper ath;
 
+  static {
+    System.clearProperty("rosaenlg.homedir");
+  }
+
   @Override
   @BeforeAll
   public void setUp() {

@@ -28,7 +28,7 @@ import org.json.JSONObject;
  * <a href="https://rosaenlg.org/rosaenlg/1.5.0/advanced/params.html#_rendering_parameters">Runtime options</a>
  * </p>
  * 
- * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
+ * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class RenderOptions {
   private String language;

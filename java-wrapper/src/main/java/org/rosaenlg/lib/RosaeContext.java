@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * Wrapper around RosaeNLG.
  * 
  * @see <a href="https://rosaenlg.org">RosaeNLG documentation</a>
- * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
+ * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class RosaeContext {
 

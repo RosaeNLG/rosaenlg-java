@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 /**
  * RosaeNLG render result holder.
- * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
+ * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class RenderResult {
 

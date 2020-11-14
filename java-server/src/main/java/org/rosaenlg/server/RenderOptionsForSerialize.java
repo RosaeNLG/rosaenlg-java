@@ -26,10 +26,19 @@ import org.json.JSONObject;
 import org.rosaenlg.lib.RenderOptions;
 
 
+/**
+ * Render options reponse. Only exists to avoid null fields in the output.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-// only exists to avoid null fields in the output
 public class RenderOptionsForSerialize extends RenderOptions {
 
+
+  /** Constructor.
+   * 
+   * @param jsonData the deserialized JSON data
+   */
   public RenderOptionsForSerialize(JSONObject jsonData) {
     super(jsonData);
   }

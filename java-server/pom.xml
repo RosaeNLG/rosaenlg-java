@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -19,11 +19,16 @@
 
   <properties>
     <license.dir>${basedir}</license.dir>
-    <java.version>1.8</java.version>
-    <graalvm.version>19.2.0</graalvm.version>
     <springframework.boot.version>2.3.4.RELEASE</springframework.boot.version>
   </properties>
 
+  <repositories>
+    <repository>
+        <id>local-maven-repo</id>
+        <url>file:///${project.parent.basedir}/java-wrapper/target</url>
+    </repository>
+  </repositories>
+  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -44,20 +49,21 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.4.8</version>
     </dependency>
-    <!-- RosaeNLG wrapper -->
+    <!-- RosaeNLG wrapper
+    should take either what is in the local repo (from the build)
+    or what is in the central repo -->
     <dependency>
       <groupId>org.rosaenlg</groupId>
       <artifactId>java-wrapper</artifactId>
       <version>${project.version}</version>
     </dependency>
 
-    <!-- when using a local version of the wrapper -->
-    <!--
+    <!-- useful only when using a local version of the wrapper -->
     <dependency>
       <groupId>org.everit.json</groupId>
       <artifactId>org.everit.json.schema</artifactId>
       <version>1.5.1</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -93,19 +99,18 @@
       <version>${graalvm.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>org.rosaenlg</groupId>
-      <artifactId>java-wrapper</artifactId>
-      <version>1.18.1</version>
-      <scope>system</scope>
-      <systemPath>c:/rosaenlg/rosaenlg-java/java-wrapper/target/java-wrapper-1.18.1.jar</systemPath>
-    </dependency>
-    -->    
+
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <version>${springframework.boot.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

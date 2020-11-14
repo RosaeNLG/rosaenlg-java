@@ -35,6 +35,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
+/**
+ * Application.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(
     title = "RosaeNLG API", 
@@ -54,6 +59,13 @@ public class Application extends SpringBootServletInitializer {
     return builder.sources(Application.class);
   }
 
+
+
+  /** Main. Is it called?
+   * 
+   * @param args will be given to SpringApplication.run
+   * @throws Exception in case of problem
+   */
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Application.class, args);
   }

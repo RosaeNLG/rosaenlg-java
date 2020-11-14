@@ -46,6 +46,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/**
+ * The RosaeNLG Java server API implementation.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 @RestController
 public class StoreController {
 

@@ -22,6 +22,11 @@ package org.rosaenlg.lib;
 
 import org.json.JSONObject;
 
+/**
+ * Command line, for development and tests purposes only.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 public class Cli {
 
   /**

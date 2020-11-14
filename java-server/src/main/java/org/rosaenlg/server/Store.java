@@ -40,6 +40,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Stores RosaeNLG contexts. Manages their lifecycle.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 @Component
 public class Store {
 
@@ -66,20 +71,16 @@ public class Store {
     String propDir = System.getProperty("rosaenlg.homedir");
     if (propDir != null) {
       logger.info("using system property: {}", propDir);
-      this.templatesPath = Paths.get(propDir);
+      this.init(Paths.get(propDir));
     } else {
       String envDir = System.getenv("ROSAENLG_HOMEDIR");
       if (envDir != null) {
         logger.info("using env property: {}", envDir);
-        this.templatesPath = Paths.get(envDir);
+        this.init(Paths.get(envDir));
       } else {
         logger.info("did not find env nor system property");
       }
     }
-    if (this.templatesPath != null) {
-      this.reloadExistingTemplates();
-    }
-
   }
 
   /** Store constructor for test purposes.
@@ -94,11 +95,26 @@ public class Store {
    */
   public Store(String templatePathString) throws Exception {
     if (templatePathString != null) {
-      this.templatesPath = Paths.get(templatePathString);
-      this.reloadExistingTemplates();
+      this.init(Paths.get(templatePathString));
     }
   }
-    
+
+  /** Inits store and reloads constructor.
+   * 
+   * @throws Exception if templatesPath is set but templates cannot be loaded
+   * @param templatePath the path on the disk where to store the templates
+   */
+  private void init(Path templatePath) throws Exception {
+    try {
+      this.templatesPath = templatePath;
+      this.reloadExistingTemplates();
+    } catch (Exception e) {
+      logger.warn("could not get path {}: {}", templatePath, e.toString());
+      throw new Exception("could not get path: " + templatePath);
+    }
+  }
+
+
   /** Reloads all the templates from the disk.
    * 
    * @throws Exception if no templates path is configured

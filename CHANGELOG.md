@@ -22,9 +22,11 @@
 
 ### Fixed
 
+* clearer message when path of templates does not exist
 
 ### Changed
 
+* Java 15
 
 ## [1.20.0] 2020-11-13
 

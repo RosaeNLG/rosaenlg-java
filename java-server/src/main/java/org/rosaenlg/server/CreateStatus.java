@@ -20,6 +20,19 @@ package org.rosaenlg.server;
  * #L%
  */
 
+/**
+ * Creation status: created or updated.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 public enum CreateStatus {
-    CREATED, UPDATED
+    /**
+    * created
+    */
+    CREATED, 
+    
+    /**
+    * updated
+    */
+    UPDATED
 }

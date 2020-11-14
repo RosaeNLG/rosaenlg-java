@@ -29,6 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * Template rendering response.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Rendered {
 
@@ -47,6 +52,7 @@ public class Rendered {
   
   /** Constructor.
    * @param renderedText the rendered text
+   * @param outputData the output data
    * @param renderOptions the rendering options
    * @param ms time to render in ms
    */

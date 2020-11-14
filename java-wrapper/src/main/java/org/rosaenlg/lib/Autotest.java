@@ -26,6 +26,12 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
+/**
+ * Autotest structure.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 public class Autotest {
 
   private boolean activate;

@@ -22,7 +22,7 @@
   <developers>
     <developer>
       <name>Ludan Stoecklé</name>
-      <email>ludan.stoeckle@rosaenlg.org</email>
+      <email>contact@rosaenlg.org</email>
       <organization>RosaeNLG</organization>
       <organizationUrl>https://www.linkedin.com/in/ludanstoeckle/</organizationUrl>
     </developer>
@@ -44,10 +44,12 @@
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- java 1.8 -->
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <!--java.version>1.8</java.version-->
+    <!-- java 15 -->
+    <maven.compiler.target>15</maven.compiler.target>
+    <maven.compiler.source>15</maven.compiler.source>
+    <java.version>15</java.version>
+
+    <graalvm.version>20.2.0</graalvm.version>
 
     <!--sonar.projectKey>rosaenlg-java</sonar.projectKey-->
     <sonar.organization>rosaenlg</sonar.organization>
@@ -100,8 +102,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>15</source>
+          <target>15</target>
         </configuration>
       </plugin>
       <!-- release on ossrh -->
@@ -150,6 +152,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.9.1</version>
+        <configuration>
+          <source>1.8</source>
+        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -191,7 +196,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.5</version>
+        <version>0.8.6</version>
         <executions>
           <execution>
             <goals>

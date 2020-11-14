@@ -23,6 +23,11 @@ package org.rosaenlg.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Template creation or update response.
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 public class CreateTemplateStatus {
 
   @SuppressWarnings("unused")

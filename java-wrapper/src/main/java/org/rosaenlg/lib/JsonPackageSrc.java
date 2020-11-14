@@ -41,7 +41,7 @@ import org.json.JSONTokener;
  * "https://rosaenlg.org/rosaenlg/1.18.1/integration/rosaenlg_packager.html">RosaeNLG Packager</a>
  * </p>
  * 
- * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
+ * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class JsonPackageSrc {
 

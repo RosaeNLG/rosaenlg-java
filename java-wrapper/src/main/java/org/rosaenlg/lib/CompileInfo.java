@@ -35,7 +35,7 @@ import org.json.JSONObject;
  * <p>
  * <a href="https://rosaenlg.org/rosaenlg/1.18.1/advanced/params.html#_compiling_parameters">Compile options</a>
  * </p>
- * @author Ludan Stoecklé ludan.stoeckle@rosaenlg.org
+ * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class CompileInfo implements Cloneable {
 

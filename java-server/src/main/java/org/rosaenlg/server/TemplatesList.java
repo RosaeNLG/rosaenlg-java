@@ -27,6 +27,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A list of projects (= templates).
+ *
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
 public class TemplatesList {
 
   private static final Logger logger = LoggerFactory.getLogger(TemplatesList.class);

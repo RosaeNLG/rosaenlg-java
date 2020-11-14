@@ -29,6 +29,7 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,6 @@ public class TestApplicationPersistence extends AbstractTest {
     System.setProperty("rosaenlg.homedir", TEST_FOLDER);
   }
 
-  //@SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(TestApplicationPersistence.class);
   private ApplicationTestHelper ath;
 
