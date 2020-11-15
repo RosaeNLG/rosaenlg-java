@@ -30,14 +30,7 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      # - name: Some debug
-      #   run: |
-      #     # mvn compile
-      #     mvn -v
-      #     mvn resources:resources
-      #     pwd
-      #     ls -l java-wrapper/target/classes
-      #     cat java-wrapper/target/classes/project.properties
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -47,10 +40,10 @@ jobs:
 
           # wrapper
           cd java-wrapper
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           cd ..
 
           # server
           cd java-server
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           cd ..
