@@ -13,18 +13,28 @@ This repo contains:
 - [Server JavaDoc](https://www.javadoc.io/doc/org.rosaenlg/java-server/)
 
 
-## Contrib
+## Release
 
-_this part of doc is just for me_
+_this part of doc is mostly for me_
 
-release process:
-- update `CHANGELOG.md`
-- in root `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
-- change `ROSAENLG_VERSION` in `docker.yml`
-- `mvn clean` locally
-- `mvn deploy` locally
-- wait for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
-- push for CI to generate docker file
+- locally:
+  - update `CHANGELOG.md`
+  - in root `pom.xml` change `<revision>...</revision>` to proper version of RosaeNLG
+  - change `ROSAENLG_VERSION` in `docker.yml`
+  - `mvn clean`
+  - `mvn package`
+  - commit
+  - create branch vXX.XX.XX
+  - push branch
+- publication will trigger on vXX.XX.XX branch thanks to GitHub Actions
+- Docker images:
+  - wait for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
+  - trigger docker on GitHub Actions to generate docker images
+
+
+
+
+## Maven tricks
 
 misc:
 - test packaging skipping tests: `mvn package -Dmaven.test.skip=true`
@@ -35,6 +45,7 @@ For the wrapper in case of issues with the download cache:
 <overwrite>true</overwrite>
 <skipCache>true</skipCache>
 ```
+
 
 ## Test server locally
 

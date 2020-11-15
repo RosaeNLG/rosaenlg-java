@@ -110,7 +110,7 @@ public class Store {
       this.reloadExistingTemplates();
     } catch (Exception e) {
       logger.warn("could not get path {}: {}", templatePath, e.toString());
-      throw new Exception("could not get path: " + templatePath);
+      throw e;
     }
   }
 

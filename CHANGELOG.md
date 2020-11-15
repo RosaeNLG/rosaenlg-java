@@ -19,6 +19,7 @@
 ### Added
 
 * sonar checks
+* central repo publication using GitHub Actions
 
 ### Fixed
 

@@ -48,12 +48,7 @@
     <maven.compiler.target>15</maven.compiler.target>
     <maven.compiler.source>15</maven.compiler.source>
     <java.version>15</java.version>
-
     <graalvm.version>20.2.0</graalvm.version>
-
-    <!--sonar.projectKey>rosaenlg-java</sonar.projectKey-->
-    <sonar.organization>rosaenlg</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
   <distributionManagement>
@@ -122,14 +117,21 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
+        <version>1.6</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>
-            <phase>deploy</phase>
+            <phase>verify</phase>
             <goals>
               <goal>sign</goal>
             </goals>
+            <configuration>
+              <!-- Prevent `gpg` from using pinentry programs -->
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -20,15 +20,19 @@
   <properties>
     <license.dir>${basedir}</license.dir>
     <springframework.boot.version>2.3.4.RELEASE</springframework.boot.version>
+
+    <sonar.organization>rosaenlg</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.projectKey>java-server</sonar.projectKey>
   </properties>
 
   <repositories>
     <repository>
-        <id>local-maven-repo</id>
-        <url>file:///${project.parent.basedir}/java-wrapper/target</url>
+      <id>local-maven-repo</id>
+      <url>file:///${project.parent.basedir}/java-wrapper/target</url>
     </repository>
   </repositories>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -155,6 +159,24 @@
 
   <build>
     <plugins>
+      <!-- create tests folder -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <configuration>
+              <target>
+                <mkdir dir="${project.basedir}/test-templates-testing" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <!-- add license to files, one shot -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

@@ -1,6 +1,10 @@
-name: sonar
+name: sonar check
 
-on: push
+on:
+  push:
+    branches:
+      - '*'
+      - '!v*.*.*'
 
 jobs:
   build:
@@ -39,6 +43,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # test template
-          mkdir java-server/test-templates-testing
+          # need to do it for each module, was not able to configure sonar properly
+
+          # wrapper
+          cd java-wrapper
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          cd ..
+
+          # server
+          cd java-server
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          cd ..
