@@ -12,7 +12,7 @@ RUN mv /app/java-server-${ROSAENLG_VERSION}.war /app/java-server.war
 # RUN mv java-server-1.5.0-20191104.123523-1.war /app/java-server-1.5.0-SNAPSHOT.war
 
 
-FROM gcr.io/distroless/java:8
+FROM gcr.io/distroless/java:11
 
 COPY --from=build-env /app /app
 WORKDIR /app

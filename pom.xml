@@ -39,15 +39,15 @@
   <inceptionYear>2019</inceptionYear>
 
   <properties>
-    <revision>1.20.1</revision>
+    <revision>1.20.2</revision>
     <rosaenlg.version>${revision}</rosaenlg.version>
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- java 15 -->
-    <maven.compiler.target>15</maven.compiler.target>
-    <maven.compiler.source>15</maven.compiler.source>
-    <java.version>15</java.version>
+    <!-- java 11 -->
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <java.version>11</java.version>
     <graalvm.version>20.2.0</graalvm.version>
   </properties>
 
@@ -109,8 +109,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>15</source>
-          <target>15</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
       <!-- release on ossrh -->

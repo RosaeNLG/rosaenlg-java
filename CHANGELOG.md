@@ -13,6 +13,17 @@
 
 -->
 
+## [1.20.2] 2020-11-19
+
+### Fixed
+
+* no docker version could be built because of wrong Java version
+
+### Changed
+
+* Java 11
+* uses RosaeNLG 1.20.2
+
 
 ## [1.20.1] 2020-11-19
 
