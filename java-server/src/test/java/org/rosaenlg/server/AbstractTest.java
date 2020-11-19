@@ -42,7 +42,7 @@ public abstract class AbstractTest {
   @Autowired
   WebApplicationContext webApplicationContext;
 
-  protected void setUp() {
+  void setUp() {
     mvc = MockMvcBuilders
       .webAppContextSetup(webApplicationContext)
       // https://stackoverflow.com/questions/56684458/mockmvc-changing-default-character-encoding-of-mockhttpservletresponse-from-iso

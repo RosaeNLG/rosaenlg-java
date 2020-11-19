@@ -39,7 +39,7 @@
   <inceptionYear>2019</inceptionYear>
 
   <properties>
-    <revision>1.20.0</revision>
+    <revision>1.20.1</revision>
     <rosaenlg.version>${revision}</rosaenlg.version>
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

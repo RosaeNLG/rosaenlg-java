@@ -25,10 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.File;
 import java.util.Arrays;
 
-import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,40 +39,39 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class TestRosaeContext {
+class TestRosaeContext {
 
   // @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(TestRosaeContext.class);
 
+  private String readInRepo(String templateId) throws Exception {
+    return new String(Files.readAllBytes(Paths.get("test-templates-repo", templateId + ".json")),
+        StandardCharsets.UTF_8);
+  }
+
   @Test
-  public void createRender() throws Exception {
-    
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/test_inc_no_comp.json"), 
-        "utf-8");
+  void createRender() throws Exception {
+
+    String jsonPackage = this.readInRepo("test_inc_no_comp");
     RosaeContext rc = new RosaeContext(jsonPackage);
 
-    assertEquals(rc.getTemplateId(), "test_inc_no_comp");
+    assertEquals("test_inc_no_comp", rc.getTemplateId());
 
     String opts = "{ \"language\": \"en_US\" }";
     for (int i = 0; i < 10; i++) {
       String rendered = rc.render(opts).getText();
       logger.debug("rendered: {}", rendered);
-      assertEquals(rendered, "<p>Bla included</p>");
+      assertEquals("<p>Bla included</p>", rendered);
     }
   }
 
-
   @Test
-  public void createRender2Different() throws Exception {
-    String[] letters = {"a", "b"};
+  void createRender2Different() throws Exception {
+    String[] letters = { "a", "b" };
     for (int i = 0; i < letters.length; i++) {
       String letter = letters[i];
 
-      String jsonPackage = FileUtils.readFileToString(
-          new File("test-templates-repo/basic_" + letter + ".json"),
-          "utf-8");
+      String jsonPackage = this.readInRepo("basic_" + letter);
       RosaeContext rc = new RosaeContext(jsonPackage);
 
       assertEquals(rc.getTemplateId(), "basic_" + letter);
@@ -85,18 +86,14 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void createRenderLots() throws Exception {
+  void createRenderLots() throws Exception {
 
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/basic_a.json"),
-        "utf-8");
+    String jsonPackage = this.readInRepo("basic_a");
 
     for (int i = 0; i < 5; i++) {
       // hack the template
-      String newJsonPackage = jsonPackage
-          .replace("basic_a", "basic_a" + i)
-          .replace("aaa", "aaa" + i)
-          .replace("Aaa", "Aaa" + i);
+      String newJsonPackage = jsonPackage.replace("basic_a", "basic_a" + i).replace("aaa", "aaa" + i).replace("Aaa",
+          "Aaa" + i);
 
       RosaeContext rc = new RosaeContext(newJsonPackage);
 
@@ -112,10 +109,8 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void failAutotest() throws Exception {
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/basic_a.json"),
-        "utf-8");
+  void failAutotest() throws Exception {
+    String jsonPackage = this.readInRepo("basic_a");
 
     // hack the template
     String newJsonPackage = jsonPackage.replace("Aaa", "Xxx");
@@ -123,14 +118,26 @@ public class TestRosaeContext {
     assertThrows(Exception.class, () -> {
       new RosaeContext(newJsonPackage);
     });
-
   }
 
   @Test
-  public void noAutotestAtAll() throws Exception {
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/basic_a.json"), 
-        "utf-8");
+  void failAutotestCannotRender() throws Exception {
+    String jsonPackage = this.readInRepo("chanson");
+
+    // hack the template
+    String newJsonPackage = jsonPackage.replace("\"chanson\":", "\"XXXXXX\":");
+
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new RosaeContext(newJsonPackage);
+    });
+    assert(thrown instanceof AutotestException);
+    assert(thrown.getMessage().contains("render"));
+  }
+
+
+  @Test
+  void noAutotestAtAll() throws Exception {
+    String jsonPackage = this.readInRepo("basic_a");
     JSONObject parsed = new JSONObject(jsonPackage);
     assertTrue(parsed.has("src"));
     assertTrue(parsed.getJSONObject("src").has("autotest"));
@@ -143,10 +150,8 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void autotestHereNotActivated() throws Exception {
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/basic_a.json"), 
-        "utf-8");
+  void autotestHereNotActivated() throws Exception {
+    String jsonPackage = this.readInRepo("basic_a");
     JSONObject parsed = new JSONObject(jsonPackage);
     assertTrue(parsed.has("src"));
     assertTrue(parsed.getJSONObject("src").has("autotest"));
@@ -162,25 +167,35 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void noPackagingWithInclude() throws Exception {
+  void noPackagingWithInclude() throws Exception {
     CompileInfo opts = new CompileInfo();
     opts.setLanguage("en_US");
 
-    RosaeContext rc = new RosaeContext(
-        "test.pug",
-        new File("test-templates-repo/includes"),
-        opts);
+    RosaeContext rc = new RosaeContext("test.pug", new File("test-templates-repo/includes"), opts);
 
     String rendered = rc.render(opts.toJson()).getText();
-    assertEquals(rendered, "<p>Bla included</p>");
+    assertEquals("<p>Bla included</p>", rendered);
   }
 
   @Test
-  public void compileClientWithEmbed() throws Exception {
-    
-    String jsonPackage = FileUtils.readFileToString(
-        new File("test-templates-repo/verb_fr.json"), 
-        "utf-8");
+  void compileClientWithSpecificName() throws Exception {
+
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("fr_FR");
+    compileOpts.setName("doraemon");
+
+    final RosaeContext rc = new RosaeContext("chanson.pug", new File("test-templates-repo"), compileOpts);
+    String compiledClient = rc.getCompiledClient();
+
+    assertTrue(compiledClient.contains("doraemon"));
+
+    rc.destroy();
+  }
+
+  @Test
+  void compileClientWithEmbed() throws Exception {
+
+    String jsonPackage = this.readInRepo("verb_fr");
     RosaeContext rc = new RosaeContext(jsonPackage);
 
     assertTrue(rc.getJsonPackageAsString().contains("tense:'FUTUR'"));
@@ -191,24 +206,20 @@ public class TestRosaeContext {
     assertTrue(compiledClient.contains("chanteront"));
 
     rc.destroy();
-    
+
     // logger.info(compiledClient);
   }
 
-
   @Test
-  public void compileClientWithEmbedSpecific() throws Exception {
+  void compileClientWithEmbedSpecificWordsVerbs() throws Exception {
 
     CompileInfo opts = new CompileInfo();
     opts.setLanguage("fr_FR");
     opts.setName("testName");
-    opts.setWords(Arrays.asList(new String[]{"travail", "maison"}));
-    opts.setVerbs(Arrays.asList(new String[]{"promener"}));
+    opts.setWords(Arrays.asList(new String[] { "travail", "maison" }));
+    opts.setVerbs(Arrays.asList(new String[] { "promener" }));
 
-    RosaeContext rc = new RosaeContext(
-        "verb_fr.pug",
-        new File("test-templates-repo"),
-        opts);
+    RosaeContext rc = new RosaeContext("verb_fr.pug", new File("test-templates-repo"), opts);
 
     String compiledClient = rc.getCompiledClient();
 
@@ -218,47 +229,60 @@ public class TestRosaeContext {
     assertTrue(compiledClient.contains("testName"), compiledClient);
 
     // resources are well embedded
-    String[] expected = new String[]{"chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes"};
+    String[] expected = new String[] { "chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes" };
     for (int i = 0; i < expected.length; i++) {
-      assertTrue(
-          compiledClient.contains(expected[i]), 
-          "expected: " + expected[i]);
+      assertTrue(compiledClient.contains(expected[i]), "expected: " + expected[i]);
     }
-    
+
   }
 
+  @Test
+  void compileClientWithEmbedSpecificAdjectives() throws Exception {
+
+    CompileInfo opts = new CompileInfo();
+    opts.setLanguage("de_DE");
+    opts.setName("testName");
+    opts.setAdjectives(Arrays.asList(new String[] { "klug", "hoch" }));
+
+    RosaeContext rc = new RosaeContext("adj_de.pug", new File("test-templates-repo"), opts);
+
+    String compiledClient = rc.getCompiledClient();
+
+    // logger.info(compiledClient);
+
+    // name is ok
+    assertTrue(compiledClient.contains("testName"), compiledClient);
+
+    // resources are well embedded
+    String[] expected = new String[] { "hohe", "kluge" };
+    for (int i = 0; i < expected.length; i++) {
+      assertTrue(compiledClient.contains(expected[i]), "expected: " + expected[i]);
+    }
+
+  }
 
   @Test
-  public void compileClientWithEmbedSpecificUsingJsonOpts() throws Exception {
+  void compileClientWithEmbedSpecificUsingJsonOpts() throws Exception {
 
-    CompileInfo opts = new CompileInfo(
-        new JSONObject(
-          "{\"language\": \"fr_FR\", "
-          + "\"words\": [\"travail\", \"maison\"], "
-          + "\"verbs\": [\"promener\"]}"
-        ));
+    CompileInfo opts = new CompileInfo(new JSONObject(
+        "{\"language\": \"fr_FR\", " + "\"words\": [\"travail\", \"maison\"], " + "\"verbs\": [\"promener\"]}"));
     logger.info(opts.toJson());
-    RosaeContext rc = new RosaeContext(
-        "verb_fr.pug",
-        new File("test-templates-repo"),
-        opts);
+    RosaeContext rc = new RosaeContext("verb_fr.pug", new File("test-templates-repo"), opts);
 
     String compiledClient = rc.getCompiledClient();
 
     // logger.info(compiledClient);
 
     // resources are well embedded
-    String[] expected = new String[]{"chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes"};
+    String[] expected = new String[] { "chanteront", "\"travail\":{\"gender\":\"M\"", "maison", "promènes" };
     for (int i = 0; i < expected.length; i++) {
-      assertTrue(
-          compiledClient.contains(expected[i]), 
-          "expected: " + expected[i]);
+      assertTrue(compiledClient.contains(expected[i]), "expected: " + expected[i]);
     }
-    
+
   }
-  
+
   @Test
-  public void renderError() throws Exception {
+  void renderError() throws Exception {
 
     String template = "p\n" + "  | il #[+verb(getAnonMS(), {verb: 'chanter', tense:'FUTUR'} )]\n"
         + "  | \"#{chanson.nom}\"\n" + "  | de #{chanson.auteur}\n";
@@ -271,27 +295,23 @@ public class TestRosaeContext {
     JSONObject opts = new JSONObject();
     opts.put("language", "fr_FR");
 
-    Exception thrown = assertThrows(Exception.class,
-        () -> {
-          rc.render(opts.toString());
-        });
-    assertTrue(thrown.getMessage().contains("Cannot read property 'nom' of undefined"));
+    Exception thrown = assertThrows(Exception.class, () -> {
+      rc.render(opts.toString());
+    });
+    assertTrue(thrown instanceof RenderingException);
+    assertTrue(thrown.getCause().getMessage().contains("Cannot read property 'nom' of undefined"));
   }
 
   @Test
-  public void testCompileError() throws Exception {
+  void testCompileError() throws Exception {
     try {
       CompileInfo opts = new CompileInfo();
       opts.setLanguage("en_US");
 
-      new RosaeContext(
-          "comp_errors.pug",
-          new File("test-templates-repo"),
-          opts);
+      new RosaeContext("comp_errors.pug", new File("test-templates-repo"), opts);
 
       fail("Exception did not throw!");
     } catch (Exception e) {
-      // System.out.println(e.getMessage());
       assertTrue(e.getMessage().contains("Unexpected token"));
       assertTrue(e.getMessage().contains("  > 5|   if true +!= false"));
       assertTrue(e.getMessage().contains("------------------^"));
@@ -350,13 +370,10 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void testRenderWithDynamicData() throws Exception {
+  void testRenderWithDynamicData() throws Exception {
     CompileInfo opts = new CompileInfo();
     opts.setLanguage("en_US");
-    RosaeContext rc = new RosaeContext(
-        "tutorial_en_US_nodata.pug",
-        new File("test-templates-repo"),
-        opts);
+    RosaeContext rc = new RosaeContext("tutorial_en_US_nodata.pug", new File("test-templates-repo"), opts);
 
     String rendered1 = rc.render(getJsonPhone1()).getText();
     // System.out.println(rendered1);
@@ -376,31 +393,24 @@ public class TestRosaeContext {
   }
 
   @Test
-  public void testNoLanguage() throws Exception {
+  void testNoLanguage() throws Exception {
 
     CompileInfo opts = new CompileInfo();
 
-    Exception thrown = assertThrows(Exception.class,
-        () -> {
-          new RosaeContext(
-            "verb_fr.pug",
-            new File("test-templates-repo"),
-            opts);
-        });
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new RosaeContext("verb_fr.pug", new File("test-templates-repo"), opts);
+    });
     // logger.info(thrown.toString());
     assertTrue(thrown.getMessage().contains("language"), thrown.toString());
   }
 
   @Test
-  public void testDocExemple() throws Exception {
+  void testDocExemple() throws Exception {
 
     CompileInfo compileOpts = new CompileInfo();
     compileOpts.setLanguage("fr_FR");
 
-    final RosaeContext rc = new RosaeContext(
-        "chanson.pug",
-        new File("test-templates-repo"),
-        compileOpts);
+    final RosaeContext rc = new RosaeContext("chanson.pug", new File("test-templates-repo"), compileOpts);
 
     JSONObject renderOpts = new JSONObject();
     renderOpts.put("language", "fr_FR");
@@ -411,21 +421,16 @@ public class TestRosaeContext {
 
     String rendered = rc.render(renderOpts.toString()).getText();
 
-    assertTrue(
-        rendered.contains("Il chantera \"Non, je ne regrette rien\" d'Édith Piaf"), 
-        rendered);
+    assertTrue(rendered.contains("Il chantera \"Non, je ne regrette rien\" d'Édith Piaf"), rendered);
   }
 
   @Test
-  public void testOutputData() throws Exception {
+  void testOutputData() throws Exception {
 
     CompileInfo compileOpts = new CompileInfo();
     compileOpts.setLanguage("en_US");
 
-    final RosaeContext rc = new RosaeContext(
-        "outputdata.pug",
-        new File("test-templates-repo"),
-        compileOpts);
+    final RosaeContext rc = new RosaeContext("outputdata.pug", new File("test-templates-repo"), compileOpts);
 
     JSONObject renderOpts = new JSONObject();
     renderOpts.put("language", "en_US");
@@ -434,10 +439,34 @@ public class TestRosaeContext {
     renderOpts.put("input", input);
 
     RenderResult res = rc.render(renderOpts.toString());
-    assertTrue(
-        res.getText().contains("Bla bla"), 
-        res.getText());
+    assertTrue(res.getText().contains("Bla bla"), res.getText());
 
     assertEquals("{\"val\":2,\"obj\":{\"aaa\":\"bbb\"},\"foo\":\"bar\"}", res.getOutputData());
   }
+
+  @Test
+  void languageDoesNotExist() throws Exception {
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("toto");
+
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new RosaeContext("bla", new File("test-templates-repo"), compileOpts);
+    });
+
+    assertTrue(thrown instanceof LoadLanguageException);
+
+  }
+
+  @Test
+  void germanWithEmbeddedAdj() 
+  throws Exception {
+    String jsonPackage = this.readInRepo("adj_de");
+    RosaeContext rc = new RosaeContext(jsonPackage);
+
+    String opts = "{ \"language\": \"de_DE\" }";
+    String rendered = rc.render(opts).getText();
+    assertEquals("Die hohe und kluge Person", rendered);
+  }
+
+  
 }

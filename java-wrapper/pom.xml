@@ -203,7 +203,8 @@
       <plugin>
         <groupId>com.googlecode.maven-download-plugin</groupId>
         <artifactId>download-maven-plugin</artifactId>
-        <version>1.4.2</version>
+        <!-- MUST keep this versions, >= 1.4.0 will end up with an error -->
+        <version>1.2.0</version>
         <executions>
           <execution>
             <id>download-rosaenlgjs-fr_FR_comp</id>

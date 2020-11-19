@@ -1,9 +1,7 @@
 package org.rosaenlg.lib;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /*-
@@ -26,13 +24,7 @@ import java.util.Map;
  * #L%
  */
 
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
-
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
 
 /**
  * Will contain a deserialized JSON package of a template, "src" part.
@@ -47,7 +39,7 @@ public class JsonPackageSrc {
 
   private String entryTemplate;
   private CompileInfo compileInfo;
-  private Map<String, String> templates = new HashMap<String, String>();
+  private Map<String, String> templates = new HashMap<>();
   private Autotest autotest;
 
   /** Constructor using a JSON object.

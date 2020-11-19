@@ -1,10 +1,7 @@
 package org.rosaenlg.lib;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /*-
  * #%L
@@ -59,7 +56,7 @@ public class JsonPackage {
    * @param jsonPackageAsString the string containing the JSON package
    * @throws ValidationException if the JSON schema is not respected
    */
-  public JsonPackage(String jsonPackageAsString) throws ValidationException {
+  public JsonPackage(String jsonPackageAsString) {
 
     this.initialPackage = jsonPackageAsString;
 

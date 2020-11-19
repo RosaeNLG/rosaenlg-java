@@ -28,8 +28,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-import java.lang.System;
-
 import org.json.JSONObject;
 import org.rosaenlg.lib.JsonPackage;
 import org.rosaenlg.lib.RenderResult;
@@ -139,8 +137,7 @@ public class StoreController {
       @org.springframework.web.bind.annotation.RequestBody
       String body) throws Exception {
     logger.debug("createTemplate()");
-    CreateTemplateStatus status = this.store.saveTemplateOnDiskAndLoad(body);
-    return status;
+    return this.store.saveTemplateOnDiskAndLoad(body);
   }
   
   
@@ -209,7 +206,7 @@ public class StoreController {
    * @param templateId the ID of the template
    * @param body the JSON request containing the data and the parameters
    * @return Rendered the rendered text
-   * @throws Exception template does not exist or issue during rendering
+   * @throws RenderException when rendering fails
    */
   @Operation(
       summary = "Renders a template using data.",
@@ -238,50 +235,34 @@ public class StoreController {
   @PostMapping(value = "/templates/{templateId}/render")
   public Rendered render(
       @PathVariable(value = "templateId") String templateId, 
-      @org.springframework.web.bind.annotation.RequestBody String body) throws Exception {
+      @org.springframework.web.bind.annotation.RequestBody String body) throws RenderException {
     
-    logger.info(
-        "render() on {} with {}...", 
-        templateId, 
-        body.substring(0, Math.min(20, body.length()))
-    );
+    logger.info("render() on {}", templateId);
 
     long start = System.currentTimeMillis();
-
-    // FileUtils.write(new File("test-templates-testing/jsonData_received.json"), body, "UTF-8");
 
     RenderResult renderResult = this.store.render(templateId, body);
 
     String renderedText = renderResult.getText();
-    logger.info(
-        "rendered text: {}", 
-        renderedText.substring(0, Math.min(20, renderedText.length())
-    ));
-
-    /*
-    FileUtils.write(
-        new File("test-templates-testing/rendered_before_sent.txt"), 
-        renderedText, 
-        "UTF-8");
-    */
+    logger.info("render text done");
 
     RenderOptionsForSerialize renderOptions = new RenderOptionsForSerialize(new JSONObject(body));
 
     long finish = System.currentTimeMillis();
 
-    Rendered rendered = new Rendered(
+    return new Rendered(
         renderedText,
         renderResult.getOutputData(),
         renderOptions,
         finish - start);
-    return rendered;
   }
 
   
   /** Reloads a specific template from the disk (if a permanent storage is set).
    * 
    * @param templateId the ID of the template to reload
-   * @throws Exception when a problem happens
+   * @throws NoTemplatesPathException when templates path is not set
+   * @throws LoadTemplateException when templates cannot be loaded
    */
   @Operation(
       summary = "Reloads a specific template from the disk.",
@@ -299,7 +280,7 @@ public class StoreController {
   )
   @GetMapping(value = "/templates/{templateId}/reload")
   public void reloadTemplate(
-      @PathVariable(value = "templateId") String templateId) throws Exception {
+      @PathVariable(value = "templateId") String templateId) throws NoTemplatesPathException, LoadTemplateException {
     logger.debug("reloadTemplate() on {}", templateId);
     this.store.reloadExistingTemplate(templateId);
   }

@@ -36,6 +36,12 @@ public class RenderOptions {
   private String defaultSynoMode;
   private Integer defaultAmong;
 
+  private static final String KEY_LANGUAGE = "language";
+  private static final String KEY_FORCERANDOMSEED = "forceRandomSeed";
+  private static final String KEY_DEFAULTSYNOMODE = "defaultSynoMode";
+  private static final String KEY_DEFAULTAMONG = "defaultAmong";
+
+
   /**
    * Create an empty object.
    * 
@@ -51,15 +57,15 @@ public class RenderOptions {
    */
   public RenderOptions(JSONObject jsonOptions) {
 
-    language = jsonOptions.getString("language");
-    if (jsonOptions.has("forceRandomSeed")) {
-      forceRandomSeed = jsonOptions.getInt("forceRandomSeed");
+    language = jsonOptions.getString(KEY_LANGUAGE);
+    if (jsonOptions.has(KEY_FORCERANDOMSEED)) {
+      forceRandomSeed = jsonOptions.getInt(KEY_FORCERANDOMSEED);
     }
-    if (jsonOptions.has("defaultSynoMode")) {
-      defaultSynoMode = jsonOptions.getString("defaultSynoMode");
+    if (jsonOptions.has(KEY_DEFAULTSYNOMODE)) {
+      defaultSynoMode = jsonOptions.getString(KEY_DEFAULTSYNOMODE);
     }
-    if (jsonOptions.has("defaultAmong")) {
-      defaultAmong = jsonOptions.getInt("defaultAmong");
+    if (jsonOptions.has(KEY_DEFAULTAMONG)) {
+      defaultAmong = jsonOptions.getInt(KEY_DEFAULTAMONG);
     }
   }
 
@@ -72,16 +78,16 @@ public class RenderOptions {
   public String toJson() {
     JSONObject res = new JSONObject();
     // must not be null
-    res.put("language", this.language);
+    res.put(KEY_LANGUAGE, this.language);
 
     if (this.forceRandomSeed != null) {
-      res.put("forceRandomSeed", this.forceRandomSeed);
+      res.put(KEY_FORCERANDOMSEED, this.forceRandomSeed);
     }
     if (this.defaultSynoMode != null) {
-      res.put("defaultSynoMode", this.defaultSynoMode);
+      res.put(KEY_DEFAULTSYNOMODE, this.defaultSynoMode);
     }
     if (this.defaultAmong != null) {
-      res.put("defaultAmong", this.defaultAmong);
+      res.put(KEY_DEFAULTAMONG, this.defaultAmong);
     }
     return res.toString();
   }

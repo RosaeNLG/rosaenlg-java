@@ -3,7 +3,7 @@ name: build, test and push docker images on docker hub
 on: workflow_dispatch
 
 env:
-  ROSAENLG_VERSION: 1.20.0
+  ROSAENLG_VERSION: 1.20.1
 
 jobs:
   docker_server:

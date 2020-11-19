@@ -1,0 +1,15 @@
+{
+  "templateId": "adj_de",
+  "src": {
+    "entryTemplate": "adj_de.pug",
+    "compileInfo": {
+      "activate": false,
+      "compileDebug": false,
+      "language": "de_DE",
+      "adjectives": ["hoch"]
+    },
+    "templates": {
+      "adj_de.pug": "| #[+value('Person', { det:'DEFINITE', adj:['ho'+'ch', 'klug']})]"
+    }
+  }
+}

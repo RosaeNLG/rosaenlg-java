@@ -26,10 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class TestApplicationPersistence extends AbstractTest {
+class TestApplicationPersistence extends AbstractTest {
 
   private static final String TEST_FOLDER = "test-templates-testing";
 
@@ -50,7 +52,7 @@ public class TestApplicationPersistence extends AbstractTest {
 
   @Override
   @BeforeAll
-  public void setUp() {
+  void setUp() {
     logger.debug("rosaenlg.homedir system property: {}", System.getProperty("rosaenlg.homedir"));
     super.setUp();
     // mvc does not exist before
@@ -58,14 +60,14 @@ public class TestApplicationPersistence extends AbstractTest {
   }
 
   @Test
-  public void fileIsSaved() throws Exception {
+  void fileIsSaved() throws Exception {
     ath.createOneFrom("basic_a", "basic_fileIsSaved");
     assertTrue(new File(TEST_FOLDER + "/basic_fileIsSaved.json").exists());
     ath.deleteOne("basic_fileIsSaved");
   }
 
   @Test
-  public void createDelete() throws Exception {
+  void createDelete() throws Exception {
     ath.createOneFrom("basic_a", "createDelete");
 
     // we can render
@@ -82,7 +84,7 @@ public class TestApplicationPersistence extends AbstractTest {
   }
 
   @Test
-  public void reload() throws Exception {
+  void reload() throws Exception {
     ath.createOneFrom("basic_a", "reload");
 
     String opts = "{ \"language\": \"en_US\" }";
@@ -91,11 +93,14 @@ public class TestApplicationPersistence extends AbstractTest {
     ath.render("reload", opts, new String[] { "Aaa" }, null);
 
     // we modify the file
-    File file = new File(TEST_FOLDER + "/reload.json");
-    String originalTemplate = FileUtils.readFileToString(file, "utf-8");
+    Path path = Paths.get(TEST_FOLDER, "reload.json");
+    
+    String originalTemplate = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+
     logger.debug("original template: {}", originalTemplate);
     String modifiedTemplate = originalTemplate.replace("aaa", "bbb").replace("Aaa", "Bbb");
-    FileUtils.writeStringToFile(file, modifiedTemplate, "utf-8");
+
+    Files.write(path, modifiedTemplate.getBytes(StandardCharsets.UTF_8));
 
     // still can render, did not change
     ath.render("reload", opts, new String[] { "Aaa" }, null);
@@ -107,7 +112,7 @@ public class TestApplicationPersistence extends AbstractTest {
     ath.render("reload", opts, new String[] { "Bbb" }, null);
 
     // put the original again
-    FileUtils.writeStringToFile(file, originalTemplate, "utf-8");
+    Files.write(path, originalTemplate.getBytes(StandardCharsets.UTF_8));
 
     // reload all
     ath.reload();
@@ -120,7 +125,7 @@ public class TestApplicationPersistence extends AbstractTest {
   }
 
   @Test
-  public void deleteNotExists() throws Exception {
+  void deleteNotExists() throws Exception {
     assertThrows(Exception.class, () -> {
       ath.deleteOne("toto");
     });
@@ -132,7 +137,7 @@ public class TestApplicationPersistence extends AbstractTest {
   protected void checkEmptyList() throws Exception {
     ath.checkTemplateList(0);
     File[] list = new File(TEST_FOLDER).listFiles();
-    assertEquals(list.length, 0, list.toString());
+    assertEquals(0, list.length, list.toString());
   }
 
 }

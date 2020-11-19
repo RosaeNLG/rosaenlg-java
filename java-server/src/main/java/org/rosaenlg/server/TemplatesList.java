@@ -20,7 +20,6 @@ package org.rosaenlg.server;
  * #L%
  */
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +35,13 @@ public class TemplatesList {
 
   private static final Logger logger = LoggerFactory.getLogger(TemplatesList.class);
 
-  private final List<String> ids = new ArrayList<String>();
+  private final List<String> ids = new ArrayList<>();
   
   /** Constructor.
    * @param ids list of string of template IDs
    */
   public TemplatesList(List<String> ids) {
-    logger.debug("constructor with {}", ids.toString());
+    logger.debug("constructor with {}", ids);
     this.ids.addAll(ids);
   }
 

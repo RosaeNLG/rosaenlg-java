@@ -23,8 +23,6 @@ package org.rosaenlg.server;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
-import java.sql.Timestamp;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

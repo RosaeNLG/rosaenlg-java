@@ -21,7 +21,8 @@ package org.rosaenlg.server;
  */
 
 import java.io.File;
-import org.apache.commons.io.FileUtils;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FilesHelper {
   private String repoPath;
@@ -33,10 +34,7 @@ public class FilesHelper {
   }
 
   protected void copyToTest(String filename) throws Exception {
-    FileUtils.copyFile(
-        new File(repoPath + File.separator + filename), 
-        new File(testPath + File.separator + filename)
-    );
+    Files.copy(Paths.get(repoPath, filename), Paths.get(testPath, filename));
   }
 
   protected void deleteTest(String filename) throws Exception {
@@ -44,7 +42,12 @@ public class FilesHelper {
   }
 
   protected void cleanTest() throws Exception {
-    FileUtils.cleanDirectory(new File(testPath));
+    File directory = new File(this.testPath);
+    File[] files = directory.listFiles();
+    for (File file: files) {
+       if (!file.delete()) {
+         throw new Exception("could not delete file " + file);
+       }
+    }
   }
-
 }

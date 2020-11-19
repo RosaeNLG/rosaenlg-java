@@ -20,7 +20,6 @@ package org.rosaenlg.server;
  * #L%
  */
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -36,9 +35,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.util.NestedServletException;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class TestApplicationNoPersistence extends AbstractTest {
+class TestApplicationNoPersistence extends AbstractTest {
 
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(TestApplicationNoPersistence.class);
@@ -50,14 +50,14 @@ public class TestApplicationNoPersistence extends AbstractTest {
 
   @Override
   @BeforeAll
-  public void setUp() {
+  void setUp() {
     super.setUp();
     // mvc does not exist before
     ath = new ApplicationTestHelper(this.mvc);
   }
 
   @Test
-  public void testRenderWithParam() throws Exception {
+  void testRenderWithParam() throws Exception {
     ath.checkTemplateList(0);
     ath.createOne("chanson");
     ath.checkTemplateList(1);
@@ -69,17 +69,26 @@ public class TestApplicationNoPersistence extends AbstractTest {
     chanson.put("auteur", "Édith Piaf");
     opts.put("chanson", chanson);
 
-    ath.render(
-        "chanson", 
-        opts.toString(), 
-        new String[] { "Il chantera \"Non, je ne regrette rien\" d'Édith Piaf" },
+    ath.render("chanson", opts.toString(), new String[] { "Il chantera \"Non, je ne regrette rien\" d'Édith Piaf" },
         null);
 
     ath.deleteOne("chanson");
   }
 
   @Test
-  public void testUpdate() throws Exception {
+  void testRenderTemplateDoesNotExist() throws Exception {
+    ath.checkTemplateList(0);
+
+    MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/templates/{templateId}/render", "blablabla")
+        .characterEncoding("UTF-8").contentType(MediaType.APPLICATION_JSON_VALUE)
+        .accept(MediaType.APPLICATION_JSON_VALUE).content("");
+
+    this.mvc.perform(builder).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+  }
+
+  @Test
+  void testUpdate() throws Exception {
     ath.checkTemplateList(0);
 
     String templateOriginal = ath.getTemplate("basic_a");
@@ -103,14 +112,11 @@ public class TestApplicationNoPersistence extends AbstractTest {
   }
 
   @Test
-  public void getTemplate() throws Exception {
+  void getTemplate() throws Exception {
     ath.createOne("basic_a");
 
-    MvcResult mvcResult = mvc
-        .perform(
-            MockMvcRequestBuilders.get("/templates/{templateId}/template", "basic_a")
-              .accept(MediaType.APPLICATION_JSON_VALUE))
-        .andReturn();
+    MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/templates/{templateId}/template", "basic_a")
+        .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
     int status = mvcResult.getResponse().getStatus();
     assertEquals(200, status);
@@ -125,28 +131,48 @@ public class TestApplicationNoPersistence extends AbstractTest {
 
     ath.deleteOne("basic_a");
   }
-  
+
   @Test
-  public void testReloadException() throws Exception {
+  void getTemplateNotExists() throws Exception {
+
+    Exception thrown = assertThrows(Exception.class, () -> {
+      this.mvc.perform(MockMvcRequestBuilders.get("/templates/{templateId}/template", "blablabla")
+          .accept(MediaType.APPLICATION_JSON_VALUE));
+    });
+
+    assertTrue(((NestedServletException) thrown).getRootCause() instanceof FullTemplateException);
+  }
+
+  @Test
+  void testReloadException() throws Exception {
     ath.createOne("basic_a");
-    assertThrows(Exception.class, () -> {
+
+    try {
       ath.reload("basic_a");
-    });
-    assertThrows(Exception.class, () -> {
+    } catch (Exception e) {
+      assertTrue(e instanceof NestedServletException);
+      assertTrue(((NestedServletException) e).getRootCause() instanceof NoTemplatesPathException);
+    }
+
+    try {
       ath.reload();
-    });
+    } catch (Exception e) {
+      assertTrue(e instanceof NestedServletException);
+      assertTrue(((NestedServletException) e).getRootCause() instanceof NoTemplatesPathException);
+    }
+
     ath.deleteOne("basic_a");
   }
 
   @Test
-  public void deleteNotExists() throws Exception {
+  void deleteNotExists() throws Exception {
     assertThrows(Exception.class, () -> {
       ath.deleteOne("toto");
     });
   }
 
   @Test
-  public void createTemplateWithNoId() throws Exception {
+  void createTemplateWithNoId() throws Exception {
     String original = ath.getTemplate("basic_a");
     JSONObject parsed = new JSONObject(original);
     parsed.remove("templateId");
@@ -161,7 +187,7 @@ public class TestApplicationNoPersistence extends AbstractTest {
   }
 
   @Test
-  public void testRenderWithOutputData() throws Exception {
+  void testRenderWithOutputData() throws Exception {
     ath.checkTemplateList(0);
     ath.createOne("outputdata");
     ath.checkTemplateList(1);
@@ -172,17 +198,14 @@ public class TestApplicationNoPersistence extends AbstractTest {
     input.put("field", 1);
     opts.put("input", input);
 
-    ath.render(
-        "outputdata", 
-        opts.toString(), 
-        new String[] { "Bla bla" },
+    ath.render("outputdata", opts.toString(), new String[] { "Bla bla" },
         "{\"val\":2,\"obj\":{\"aaa\":\"bbb\"},\"foo\":\"bar\"}");
 
     ath.deleteOne("outputdata");
   }
 
   @AfterEach
-  public void checkEmptyList() throws Exception {
+  void checkEmptyList() throws Exception {
     ath.checkTemplateList(0);
   }
 

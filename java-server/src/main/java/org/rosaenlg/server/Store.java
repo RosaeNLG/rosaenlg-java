@@ -21,15 +21,17 @@ package org.rosaenlg.server;
  */
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.io.FileUtils;
 
 import org.rosaenlg.lib.RosaeContext;
 import org.rosaenlg.lib.RenderResult;
@@ -52,7 +54,7 @@ public class Store {
 
   private Path templatesPath;
 
-  private Map<String, RosaeContext> rosaeContexts = new ConcurrentHashMap<String, RosaeContext>();
+  private Map<String, RosaeContext> rosaeContexts = new ConcurrentHashMap<>();
 
   /** Main store constructor.
    * 
@@ -105,28 +107,23 @@ public class Store {
    * @param templatePath the path on the disk where to store the templates
    */
   private void init(Path templatePath) throws Exception {
-    try {
-      this.templatesPath = templatePath;
-      this.reloadExistingTemplates();
-    } catch (Exception e) {
-      logger.warn("could not get path {}: {}", templatePath, e.toString());
-      throw e;
-    }
+    this.templatesPath = templatePath;
+    this.reloadExistingTemplates();
   }
 
 
   /** Reloads all the templates from the disk.
    * 
-   * @throws Exception if no templates path is configured
+   * @throws NoTemplatesPathException when template path is not set (no exception if one specific template fails to unload/reload)
    */
-  public void reloadExistingTemplates() throws Exception {
+  public void reloadExistingTemplates() throws NoTemplatesPathException {
     if (templatesPath == null) {
-      throw new Exception("cannot reload as templates path is not set!");  
+      throw new NoTemplatesPathException("cannot reload all templates as templates path is not set!");
     } else {
       logger.info("templates path set to: {}, refreshing...", templatesPath);
       this.unloadTemplates();
       this.loadExistingTemplates();
-      logger.info("templates path refresh done, templates: {}", getTemplateIds().toString());
+      logger.info("templates path refresh done");
     }
   }
 
@@ -134,11 +131,12 @@ public class Store {
   /** Reloads a single template from the disk.
    * 
    * @param templateId the template to reload from the disk
-   * @throws Exception if something wrong happens
+   * @throws NoTemplatesPathException if templates path is not set
+   * @throws LoadTemplateException if the template cannot be loaded
    */
-  public void reloadExistingTemplate(String templateId) throws Exception {
+  public void reloadExistingTemplate(String templateId) throws NoTemplatesPathException, LoadTemplateException {
     if (templatesPath == null) {
-      throw new Exception("cannot reload " + templateId + " as templates path is not set!");
+      throw new NoTemplatesPathException("cannot reload " + templateId + " as templates path is not set!");
     } else {
       this.loadExistingTemplate(getTemplateFile(templateId));
     }
@@ -147,14 +145,18 @@ public class Store {
   /** Unloads a specific template.
    * 
    * @param templateId the ID of the template
-   * @throws Exception if the template was not loaded
+   * @throws UnloadTemplateException if the template was not loaded
    */
-  private void unloadTemplate(String templateId) throws Exception {
+  private void unloadTemplate(String templateId) throws UnloadTemplateException {
     if (rosaeContexts.get(templateId) == null) {
-      throw new Exception(templateId + " does not exist");
+      throw new UnloadTemplateException(templateId + " does not exist", null);
     }
-    rosaeContexts.get(templateId).destroy();
-    rosaeContexts.remove(templateId);
+    try {
+      rosaeContexts.get(templateId).destroy();
+      rosaeContexts.remove(templateId);
+    } catch (Exception e) {
+      throw new UnloadTemplateException("could not unload template " + templateId, e);
+    }
   }
 
   private void unloadTemplates() {
@@ -166,7 +168,7 @@ public class Store {
         logger.warn("could not unload template {}: {}", templateId, e.toString());
       }
     }
-    this.rosaeContexts = new ConcurrentHashMap<String, RosaeContext>();
+    this.rosaeContexts = new ConcurrentHashMap<>();
   }
 
   
@@ -174,38 +176,37 @@ public class Store {
    * @param jsonFile the json file to load
    * @throws Exception if the file could not be loaded
    */
-  private void loadExistingTemplate(File jsonFile) throws Exception {
+  private void loadExistingTemplate(Path jsonFile) throws LoadTemplateException {
     // read json file
     try {
-      String jsonContent = FileUtils.readFileToString(jsonFile, "utf-8");
-      logger.debug("json file {}: {}", jsonFile.toString(), jsonContent);
+      String jsonContent = new String(Files.readAllBytes(jsonFile), StandardCharsets.UTF_8);
+      logger.debug("json file {}: {}", jsonFile, jsonContent);
 
       RosaeContext rc = new RosaeContext(jsonContent);
       rosaeContexts.put(rc.getTemplateId(), rc);
 
     } catch (Exception e) {
-      logger.error("could not load {}: {}", jsonFile.toString(), e.toString());
-      throw e;
+      throw new LoadTemplateException("could not load " + jsonFile, e);
     }
-    logger.debug("json file {} properly loaded", jsonFile.toString());
+    logger.debug("json file {} properly loaded", jsonFile);
 
   }
 
   
   /** Loads all existing templates from the disk.
    * 
-   * @throws Exception if templates path is not set. No exception if a template could not be loaded.
+   * @throws NoTemplatesPathException if templates path is not set. No exception if a template could not be loaded.
    */
-  public void loadExistingTemplates() throws Exception {
+  public void loadExistingTemplates() throws NoTemplatesPathException {
     if (templatesPath == null) {
-      throw new Exception("nothing to load as templates path is not set!");
+      throw new NoTemplatesPathException("nothing to load as templates path is not set!");
     }
     for (final File file : templatesPath.toFile().listFiles()) {
       if (!file.isDirectory() && file.toString().endsWith(".json")) {
         try {
-          loadExistingTemplate(file);
+          loadExistingTemplate(file.toPath());
         } catch (Exception e) {
-          logger.error("could not load {}: {}", file.toString(), e.toString());
+          logger.error("could not load {}: {}", file, e.toString());
         }
       }
     }
@@ -228,10 +229,10 @@ public class Store {
    * </p>
    * 
    * @param templateId the ID of the template
-   * @return File the file that should contain the template
+   * @return Path the file that should contain the template
    */
-  private File getTemplateFile(String templateId) {
-    return new File(this.templatesPath + File.separator + templateId + ".json");
+  private Path getTemplateFile(String templateId) {
+    return Paths.get(this.templatesPath.toString(), templateId + ".json");
   }
 
   
@@ -253,10 +254,8 @@ public class Store {
    * @throws Exception if the file could not be deleted
    */
   private void deleteTemplateFile(String templateId) throws Exception {
-    File fileToDelete = getTemplateFile(templateId);
-    if (!fileToDelete.delete()) {
-      throw new Exception("cannot delete file " + fileToDelete.toString());
-    }
+    Path pathToDelete = getTemplateFile(templateId);
+    Files.delete(pathToDelete);
   }
 
   
@@ -269,25 +268,29 @@ public class Store {
    * 
    * @param template contains the JSON template package
    * @return the status of the created template (created or updated and its ID)
-   * @throws Exception if the content of the JSON package is not well formed
+   * @throws SaveTemplateOnDiskAndLoadException if the content of the JSON package is not well formed, or if save on disk failed
    */
-  public CreateTemplateStatus saveTemplateOnDiskAndLoad(String template) throws Exception {
-    // load
-    RosaeContext rc = new RosaeContext(template);
+  public CreateTemplateStatus saveTemplateOnDiskAndLoad(String template) throws SaveTemplateOnDiskAndLoadException {
+    try {
+      // load
+      RosaeContext rc = new RosaeContext(template);
 
-    // status
-    final CreateStatus status = templateLoaded(rc.getTemplateId())
-        ? CreateStatus.UPDATED 
-        : CreateStatus.CREATED;
+      // status
+      final CreateStatus status = templateLoaded(rc.getTemplateId())
+          ? CreateStatus.UPDATED 
+          : CreateStatus.CREATED;
 
-    rosaeContexts.put(rc.getTemplateId(), rc);
+      rosaeContexts.put(rc.getTemplateId(), rc);
 
-    // save
-    if (templatesPath != null) {
-      saveTemplateOnDisk(rc.getTemplateId(), template);
+      // save
+      if (templatesPath != null) {
+        saveTemplateOnDisk(rc.getTemplateId(), template);
+      }
+
+      return new CreateTemplateStatus(rc.getTemplateId(), status);
+    } catch (Exception e) {
+      throw new SaveTemplateOnDiskAndLoadException("cannot load template and save", e);
     }
-
-    return new CreateTemplateStatus(rc.getTemplateId(), status);
   }
 
   
@@ -295,21 +298,10 @@ public class Store {
    * 
    * @param templateId the ID of the template (to generate the filename)
    * @param template the content of the template (JSON package)
-   * @throws Exception if templates path is not set
+   * @throws IOException if cannot write to disk
    */
-  private void saveTemplateOnDisk(String templateId, String template) throws Exception {
-    // tmp file first
-    File tmpFile = new File(this.templatesPath + File.separator + templateId + ".tmp");
-    FileUtils.writeStringToFile(tmpFile, template, "utf-8");
-
-    // then rename
-    File targetFile = getTemplateFile(templateId);
-    targetFile.delete(); // must delete first because renameTo often fails
-    boolean renamed = tmpFile.renameTo(targetFile);
-
-    if (!renamed) {
-      throw new Exception("could not rename " + tmpFile.toString());
-    }
+  private void saveTemplateOnDisk(String templateId, String template) throws IOException {
+    Files.write(getTemplateFile(templateId), template.getBytes(StandardCharsets.UTF_8));
   }
 
   
@@ -323,7 +315,7 @@ public class Store {
    * @return a list of the ID of the loaded templates.
    */
   public List<String> getTemplateIds() {
-    List<String> res = new ArrayList<String>();
+    List<String> res = new ArrayList<>();
     for (Entry<String, RosaeContext> contextElt : rosaeContexts.entrySet()) {
       res.add(((RosaeContext) contextElt.getValue()).getTemplateId());
     }
@@ -336,14 +328,18 @@ public class Store {
    * @param templateId the ID of the template
    * @param jsonOptions the options (input data) for the template
    * @return RenderResult the rendered result (text + output data)
-   * @throws Exception if the template does not exist, or if there was an exception during rendering
+   * @throws RenderException if the template does not exist, or if there was an exception during rendering
    */
-  public RenderResult render(String templateId, String jsonOptions) throws Exception {
+  public RenderResult render(String templateId, String jsonOptions) throws RenderException {
     if (!templateLoaded(templateId)) {
-      throw new Exception("template not found: " + templateId);
+      throw new RenderException("template not found: " + templateId, null);
     }
-    RosaeContext rosaeContext = rosaeContexts.get(templateId);
-    return rosaeContext.render(jsonOptions);
+    try {
+      RosaeContext rosaeContext = rosaeContexts.get(templateId);
+      return rosaeContext.render(jsonOptions);
+    } catch (Exception e) {
+      throw new RenderException("could not render " + templateId, e);
+    }
   }
 
   
@@ -355,10 +351,14 @@ public class Store {
    * 
    * @param templateId the ID of the template.
    * @return String the template (JSON package)
-   * @throws Exception if the template was not loaded
+   * @throws FullTemplateException if the template was not loaded
    */
-  public String getFullTemplate(String templateId) throws Exception {
-    return rosaeContexts.get(templateId).getJsonPackageAsString();
+  public String getFullTemplate(String templateId) throws FullTemplateException {
+    try {
+      return rosaeContexts.get(templateId).getJsonPackageAsString();
+    } catch (Exception e) {
+      throw new FullTemplateException("cannot found a template " + templateId, e);
+    }
   }
 
 }

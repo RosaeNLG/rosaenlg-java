@@ -14,20 +14,23 @@
 -->
 
 
-## [Unreleased]
+## [1.20.1] 2020-11-19
 
 ### Added
 
-* sonar checks
+* sonar checks added
 * central repo publication using GitHub Actions
 
 ### Fixed
 
+* lot of small things, thanks to sonar checks
 * clearer message when path of templates does not exist
 
 ### Changed
 
 * Java 15
+* uses RosaeNLG 1.20.1
+
 
 ## [1.20.0] 2020-11-13
 

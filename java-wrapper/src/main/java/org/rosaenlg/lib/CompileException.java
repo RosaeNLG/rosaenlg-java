@@ -2,9 +2,9 @@ package org.rosaenlg.lib;
 
 /*-
  * #%L
- * RosaeNLG for Java
+ * java-wrapper
  * %%
- * Copyright (C) 2019 RosaeNLG.org, Ludan Stoecklé
+ * Copyright (C) 2019 - 2020 RosaeNLG.org, Ludan Stoecklé
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,18 @@ package org.rosaenlg.lib;
  * #L%
  */
 
-import org.junit.jupiter.api.Test;
 
-class TestCli {
-
-  @Test
-  void testMain() throws Exception {
-    Cli.main(null);
+/**
+ * Exception thrown when compilation fails.
+ * 
+ * @author Ludan Stoecklé contact@rosaenlg.org
+ */
+public class CompileException extends Exception { 
+  /** Constructor.
+   * 
+   * @param errorMessage error message
+   */
+  public CompileException(String errorMessage) {
+    super(errorMessage);
   }
-
 }

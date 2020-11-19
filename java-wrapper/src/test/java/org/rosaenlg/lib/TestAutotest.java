@@ -21,6 +21,7 @@ package org.rosaenlg.lib;
  */
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.json.JSONObject;
 
@@ -29,23 +30,23 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestAutotest {
+class TestAutotest {
 
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(TestAutotest.class);
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     String json = "{\"activate\":true," 
         + "\"input\":{\"language\":\"en_US\"},"
         + "\"expected\":[\"Bla\",\"included\"]}";
 
     Autotest at = new Autotest(new JSONObject(json));
 
-    assertEquals(at.getActivate(), true);
-    assertEquals(at.getJsonInput(), "{\"language\":\"en_US\"}");
+    assertTrue(at.getActivate());
+    assertEquals("{\"language\":\"en_US\"}", at.getJsonInput());
 
-    assertEquals(at.getExpected().size(), 2);
+    assertEquals(2, at.getExpected().size());
 
   }
 

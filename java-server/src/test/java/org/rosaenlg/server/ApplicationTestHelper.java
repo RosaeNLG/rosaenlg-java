@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -57,9 +57,7 @@ public class ApplicationTestHelper {
   }
 
   protected String getTemplate(String templateId) throws IOException {
-    return FileUtils.readFileToString(
-        new File(REPO_FOLDER + "/" + templateId + ".json"), 
-        "utf-8");
+    return new String(Files.readAllBytes(Paths.get(REPO_FOLDER, templateId + ".json")), StandardCharsets.UTF_8);    
   }
 
 
@@ -77,14 +75,13 @@ public class ApplicationTestHelper {
     JSONObject tomJsonObject = new JSONObject(content);
     JSONArray ids = tomJsonObject.getJSONArray("ids");
 
-    assertTrue(ids.length() == qty, ids.toString());
+    assertEquals(qty, ids.length(), ids.toString());
   }
 
 
   protected void createOneFrom(String templateId, String newTemplateId) throws Exception {
-    String template = FileUtils.readFileToString(
-        new File(REPO_FOLDER + "/" + templateId + ".json"), 
-        "utf-8");
+    String template = this.getTemplate(templateId);
+
     JSONObject parsed = new JSONObject(template);
     parsed.remove("templateId");
     parsed.put("templateId", newTemplateId);
@@ -93,9 +90,7 @@ public class ApplicationTestHelper {
 
 
   protected void createOne(String templateId) throws Exception {
-    String template = FileUtils.readFileToString(
-        new File(REPO_FOLDER + "/" + templateId + ".json"), 
-        "utf-8");
+    String template = this.getTemplate(templateId);
     this.createOne(templateId, template);
   }
 
@@ -135,7 +130,7 @@ public class ApplicationTestHelper {
         MockMvcRequestBuilders
           .post("/templates/{templateId}/render", templateId)
           .characterEncoding("UTF-8")
-          .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+          .contentType(MediaType.APPLICATION_JSON_VALUE)
           .accept(MediaType.APPLICATION_JSON_VALUE)
           .content(jsonData);
 

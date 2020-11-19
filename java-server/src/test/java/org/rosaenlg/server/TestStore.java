@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestStore {
+class TestStore {
 
   private static final Logger logger = LoggerFactory.getLogger(TestStore.class);
 
@@ -42,12 +42,12 @@ public class TestStore {
       "test-templates-testing");
 
   @AfterEach
-  public void cleanUp() throws Exception {
+  void cleanUp() throws Exception {
     filesHelper.cleanTest();
   }
 
   @Test
-  public void testReload() throws Exception {
+  void testReload() throws Exception {
 
     filesHelper.copyToTest("basic_a.json");
     Store store = new Store("test-templates-testing");
@@ -76,32 +76,32 @@ public class TestStore {
   }
 
   @Test
-  public void getTemplateIds() throws Exception {
+  void getTemplateIds() throws Exception {
     filesHelper.copyToTest("basic_a.json");
     filesHelper.copyToTest("basic_b.json");
 
     Store store = new Store("test-templates-testing");
 
     List<String> ids = store.getTemplateIds();
-    assertTrue(ids.size() == 2, ids.toString());
+    assertEquals(2, ids.size(), ids.toString());
 
     assertTrue(store.templateLoaded("basic_a"));
     assertTrue(store.templateLoaded("basic_b"));
   }
 
   @Test
-  public void render() throws Exception {
+  void render() throws Exception {
     filesHelper.copyToTest("basic_a.json");
 
     Store store = new Store("test-templates-testing");
     String opts = "{ \"language\": \"en_US\" }";
     String rendered = store.render("basic_a", opts).getText();
     logger.debug("rendered: ", rendered);
-    assertEquals(rendered, "<p>Aaa</p>");
+    assertEquals("<p>Aaa</p>", rendered);
   }
 
   @Test
-  public void reloadNoPath() throws Exception {
+  void reloadNoPath() throws Exception {
     Store store = new Store(null);
     assertThrows(Exception.class, () -> {
       store.reloadExistingTemplates();

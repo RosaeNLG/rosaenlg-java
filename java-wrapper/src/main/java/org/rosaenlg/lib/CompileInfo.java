@@ -27,9 +27,6 @@ import org.json.JSONArray;
 
 import org.json.JSONObject;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
 /**
  * RosaeNLG compilation options helper.
  * <p>
@@ -37,9 +34,15 @@ import org.json.JSONObject;
  * </p>
  * @author Ludan Stoecklé contact@rosaenlg.org
  */
-public class CompileInfo implements Cloneable {
+public class CompileInfo {
 
-  // private static final Logger logger = LoggerFactory.getLogger(CompileInfo.class);
+  private static final String KEY_NAME = "name";
+  private static final String KEY_LANGUAGE = "language";
+  private static final String KEY_COMPILEDEBUG = "compileDebug";
+  private static final String KEY_EMBEDRESOURCES = "embedResources";
+  private static final String KEY_VERBS = "verbs";
+  private static final String KEY_ADJECTIVES = "adjectives";
+  private static final String KEY_WORDS = "words";
 
   private String language;
   private String name;
@@ -49,14 +52,29 @@ public class CompileInfo implements Cloneable {
   private List<String> adjectives;
   private List<String> words;
 
-
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
-
   /** Default constructor, does nothing.
    */
   public CompileInfo() {
+  }
+
+  /** Constructor that clones an existing CompileInfo object.
+   * 
+   * @param compileInfo original to clone
+   */
+  public CompileInfo(CompileInfo compileInfo) {
+    this.language = compileInfo.language;
+    this.name = compileInfo.name;
+    this.compileDebug = compileInfo.compileDebug;
+    this.embedResources = compileInfo.embedResources;
+    if (compileInfo.verbs != null) {
+      this.verbs = new ArrayList<>(compileInfo.verbs);
+    }
+    if (compileInfo.adjectives != null) {
+      this.adjectives = new ArrayList<>(compileInfo.adjectives);
+    }
+    if (compileInfo.words != null) {
+      this.words = new ArrayList<>(compileInfo.words);
+    }
   }
 
   
@@ -69,32 +87,32 @@ public class CompileInfo implements Cloneable {
    * @param compileInfoJson json object containing the properties
    */
   public CompileInfo(JSONObject compileInfoJson) {
-    
-    if (compileInfoJson.has("language")) {
-      this.language = compileInfoJson.getString("language");
+
+    // no need to check as language is mandatory
+    this.language = compileInfoJson.getString(KEY_LANGUAGE);
+
+    if (compileInfoJson.has(KEY_NAME)) {
+      this.name = compileInfoJson.getString(KEY_NAME);
     }
-    if (compileInfoJson.has("name")) {
-      this.name = compileInfoJson.getString("name");
+    if (compileInfoJson.has(KEY_COMPILEDEBUG)) {
+      this.compileDebug = compileInfoJson.getBoolean(KEY_COMPILEDEBUG);
     }
-    if (compileInfoJson.has("compileDebug")) {
-      this.compileDebug = compileInfoJson.getBoolean("compileDebug");
+    if (compileInfoJson.has(KEY_EMBEDRESOURCES)) {
+      this.embedResources = compileInfoJson.getBoolean(KEY_EMBEDRESOURCES);
     }
-    if (compileInfoJson.has("embedResources")) {
-      this.embedResources = compileInfoJson.getBoolean("embedResources");
+    if (compileInfoJson.has(KEY_VERBS)) {
+      this.verbs = jsonArrayToStringArray(compileInfoJson.getJSONArray(KEY_VERBS));
     }
-    if (compileInfoJson.has("verbs")) {
-      this.verbs = jsonArrayToStringArray(compileInfoJson.getJSONArray("verbs"));
+    if (compileInfoJson.has(KEY_ADJECTIVES)) {
+      this.adjectives = jsonArrayToStringArray(compileInfoJson.getJSONArray(KEY_ADJECTIVES));
     }
-    if (compileInfoJson.has("adjectives")) {
-      this.adjectives = jsonArrayToStringArray(compileInfoJson.getJSONArray("adjectives"));
-    }
-    if (compileInfoJson.has("words")) {
-      this.words = jsonArrayToStringArray(compileInfoJson.getJSONArray("words"));
+    if (compileInfoJson.has(KEY_WORDS)) {
+      this.words = jsonArrayToStringArray(compileInfoJson.getJSONArray(KEY_WORDS));
     }
   }
 
   private List<String> jsonArrayToStringArray(JSONArray arr) {
-    List<String> res = new ArrayList<String>();
+    List<String> res = new ArrayList<>();
     for (int i = 0; i < arr.length(); i++) {
       res.add(arr.getString(i));
     }
@@ -109,25 +127,25 @@ public class CompileInfo implements Cloneable {
   public String toJson() {
     JSONObject res = new JSONObject();
     if (this.language != null) {
-      res.put("language", this.language);
+      res.put(KEY_LANGUAGE, this.language);
     }
     if (this.name != null) {
-      res.put("name", this.name);
+      res.put(KEY_NAME, this.name);
     }
     if (this.compileDebug != null) {
-      res.put("compileDebug", this.compileDebug);
+      res.put(KEY_COMPILEDEBUG, this.compileDebug);
     }
     if (this.embedResources != null) {
-      res.put("embedResources", this.embedResources);
+      res.put(KEY_EMBEDRESOURCES, this.embedResources);
     }
     if (this.verbs != null) {
-      res.put("verbs", new JSONArray(this.verbs));
+      res.put(KEY_VERBS, new JSONArray(this.verbs));
     }
     if (this.adjectives != null) {
-      res.put("adjectives", new JSONArray(this.adjectives));
+      res.put(KEY_ADJECTIVES, new JSONArray(this.adjectives));
     }
     if (this.words != null) {
-      res.put("words", new JSONArray(this.words));
+      res.put(KEY_WORDS, new JSONArray(this.words));
     }
     return res.toString();
   }

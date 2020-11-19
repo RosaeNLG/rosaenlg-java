@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.io.File;
-
-import org.apache.commons.io.FileUtils;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.json.JSONObject;
 
@@ -35,29 +35,29 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestJsonPackage {
+class TestJsonPackage {
 
   @SuppressWarnings("unused")
   private static final Logger logger = LoggerFactory.getLogger(TestJsonPackage.class);
 
+  private String readInRepo(String templateId) throws Exception {
+    return new String(Files.readAllBytes(Paths.get("test-templates-repo", templateId + ".json")), StandardCharsets.UTF_8);
+  }
+
   @Test
-  public void testNormal() throws Exception {
-    String jsonPackageString = FileUtils.readFileToString(
-        new File("test-templates-repo/chanson.json"), 
-        "utf-8");
+  void testNormal() throws Exception {
+    String jsonPackageString = this.readInRepo("chanson");
 
     JsonPackage jsonPackage = new JsonPackage(jsonPackageString);
 
-    assertEquals(jsonPackage.getTemplateId(), "chanson");
+    assertEquals("chanson", jsonPackage.getTemplateId());
     assertNotNull(jsonPackage.getSrc().getAutotest());
     assertEquals(jsonPackageString, jsonPackage.getInitialPackage());
   }
 
   @Test
-  public void testNoAutotest() throws Exception {
-    String jsonPackageString = FileUtils.readFileToString(
-        new File("test-templates-repo/chanson.json"), 
-        "utf-8");
+  void testNoAutotest() throws Exception {
+    String jsonPackageString = this.readInRepo("chanson");
 
     JSONObject parsed = new JSONObject(jsonPackageString);
     parsed.getJSONObject("src").remove("autotest");

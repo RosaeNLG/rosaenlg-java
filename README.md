@@ -12,6 +12,8 @@ This repo contains:
 - [Wrapper JavaDoc](https://www.javadoc.io/doc/org.rosaenlg/java-wrapper/)
 - [Server JavaDoc](https://www.javadoc.io/doc/org.rosaenlg/java-server/)
 
+- [Sonar dashboard for wrapper](https://sonarcloud.io/dashboard?id=java-wrapper)
+- [Sonar dashboard for server](https://sonarcloud.io/dashboard?id=java-server)
 
 ## Release
 
