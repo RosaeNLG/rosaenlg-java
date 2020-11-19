@@ -53,13 +53,13 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.4.8</version>
     </dependency>
-    <!-- RosaeNLG wrapper
-    should take either what is in the local repo (from the build)
-    or what is in the central repo -->
+    <!-- RosaeNLG wrapper, take it locally; cannot be solved before it is pushed to central repo -->
     <dependency>
       <groupId>org.rosaenlg</groupId>
       <artifactId>java-wrapper</artifactId>
       <version>${project.version}</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/../java-wrapper/target/java-wrapper-${project.version}.jar</systemPath>
     </dependency>
 
     <!-- useful only when using a local version of the wrapper -->
