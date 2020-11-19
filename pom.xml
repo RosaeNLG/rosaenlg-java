@@ -92,6 +92,18 @@
 
   <build>
     <plugins>
+      <!-- sonar -->
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.7.0.1746</version>
+        <executions>
+          <execution>
+            <id>sonar</id>
+          </execution>
+        </executions>
+      </plugin>      
+      <!-- compile -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

@@ -31,22 +31,27 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # build must be done globally, not module by module
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn -B package
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          # need to do it for each module, was not able to configure sonar properly
 
-        # run: |
-        #   # need to do it for each module, was not able to configure sonar properly
+          # wrapper
+          cd java-wrapper
+          mvn -B sonar:sonar
+          cd ..
 
-        #   # wrapper
-        #   cd java-wrapper
-        #   mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-        #   cd ..
-
-        #   # server
-        #   cd java-server
-        #   mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-        #   cd ..
+          # server
+          cd java-server
+          mvn -B sonar:sonar
+          cd ..
