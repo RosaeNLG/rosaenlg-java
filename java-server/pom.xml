@@ -26,12 +26,12 @@
     <sonar.projectKey>java-server</sonar.projectKey>
   </properties>
 
-  <repositories>
+  <!--repositories>
     <repository>
       <id>local-maven-repo</id>
       <url>file:///${project.parent.basedir}/java-wrapper/target</url>
     </repository>
-  </repositories>
+  </repositories-->
 
   <dependencyManagement>
     <dependencies>

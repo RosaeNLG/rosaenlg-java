@@ -36,14 +36,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # need to do it for each module, was not able to configure sonar properly
-
-          # wrapper
-          cd java-wrapper
           mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          cd ..
 
-          # server
-          cd java-server
-          mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          cd ..
+        # run: |
+        #   # need to do it for each module, was not able to configure sonar properly
+
+        #   # wrapper
+        #   cd java-wrapper
+        #   mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        #   cd ..
+
+        #   # server
+        #   cd java-server
+        #   mvn -B package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        #   cd ..
