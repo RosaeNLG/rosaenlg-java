@@ -233,24 +233,18 @@ public class Store {
   /** Deletes a template file and unloads it if it was loaded.
    * 
    * @param templateId the ID of the template
-   * @throws Exception if the template could not be unloaded
+   * @throws DeleteTemplateException if the template could not found, deleted or unloaded
    */
-  public void deleteTemplateFileAndUnload(String templateId) throws Exception {
-    if (templatesPath != null) {
-      deleteTemplateFile(templateId);
+  public void deleteTemplateFileAndUnload(String templateId) throws DeleteTemplateException {
+    try {
+      if (templatesPath != null) {
+        Path pathToDelete = getTemplateFile(templateId);
+        Files.delete(pathToDelete);
+      }
+      unloadTemplate(templateId);
+    } catch (Exception e) {
+      throw new DeleteTemplateException("could not delete " + templateId, e);
     }
-    unloadTemplate(templateId);
-  }
-
-  
-  /** Deletes a template file on the disk.
-   * @param templateId the ID of the template
-   * @throws NoSuchFileException if the file could not found
-   * @throws IOException if the file could not be deleted
-   */
-  private void deleteTemplateFile(String templateId) throws IOException, NoSuchFileException {
-    Path pathToDelete = getTemplateFile(templateId);
-    Files.delete(pathToDelete);
   }
 
   
