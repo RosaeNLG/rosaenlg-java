@@ -135,7 +135,7 @@ public class StoreController {
         required = true
       )
       @org.springframework.web.bind.annotation.RequestBody
-      String body) throws Exception {
+      String body) throws SaveTemplateOnDiskAndLoadException {
     logger.debug("createTemplate()");
     return this.store.saveTemplateOnDiskAndLoad(body);
   }
@@ -195,7 +195,7 @@ public class StoreController {
   )
   @GetMapping(value = "/templates/{templateId}/template")
   public String getTemplate(
-      @PathVariable(value = "templateId") String templateId) throws Exception {
+      @PathVariable(value = "templateId") String templateId) throws FullTemplateException {
     logger.debug("getTemplate() on {}", templateId);
     return this.store.getFullTemplate(templateId);
   }
@@ -304,7 +304,7 @@ public class StoreController {
         }
   )
   @GetMapping(value = "/templates/reload")
-  public void reloadTemplates() throws Exception {
+  public void reloadTemplates() throws NoTemplatesPathException {
     logger.debug("reloadTemplates()");
     this.store.reloadExistingTemplates();
   }

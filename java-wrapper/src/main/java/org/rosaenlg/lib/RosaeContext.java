@@ -231,7 +231,7 @@ public class RosaeContext {
     }
   }
 
-  private Source getSourcesForLanguage(String language) throws Exception {
+  private Source getSourcesForLanguage(String language) throws LoadLanguageException {
     try {
       if (sourcesRosaeNLG.get(language) == null) {
         logger.info("will now load rosaenlg js for {}", language);
