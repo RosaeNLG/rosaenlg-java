@@ -102,7 +102,7 @@ public class StoreController {
    * 
    * @param body the JSON package containing the template
    * @return CreateTemplateStatus: ID of the created template and status (created or updated).
-   * @throws Exception if a problem happens like invalid template
+   * @throws SaveTemplateOnDiskAndLoadException if a problem happens like invalid template
    */
   @Operation(
       summary = "Creates a new template.",
@@ -135,7 +135,7 @@ public class StoreController {
         required = true
       )
       @org.springframework.web.bind.annotation.RequestBody
-      String body) throws Exception {
+      String body) throws SaveTemplateOnDiskAndLoadException {
     logger.debug("createTemplate()");
     return this.store.saveTemplateOnDiskAndLoad(body);
   }
@@ -148,7 +148,7 @@ public class StoreController {
    * </p>
    * 
    * @param templateId the ID of the template
-   * @throws Exception if the template could not be unloaded or deleted
+   * @throws DeleteTemplateException if the template could not be unloaded or deleted
    */
   @Operation(
       summary = "Deletes an existing template.",
@@ -165,7 +165,7 @@ public class StoreController {
   )
   @DeleteMapping(value = "/templates/{templateId}")
   public void deleteTemplate(
-      @PathVariable(value = "templateId") String templateId) throws Exception {
+      @PathVariable(value = "templateId") String templateId) throws DeleteTemplateException {
     logger.debug("deleteTemplate() on {}", templateId);
     this.store.deleteTemplateFileAndUnload(templateId);
   }
@@ -174,7 +174,7 @@ public class StoreController {
    * 
    * @param templateId the ID of the template
    * @return String the JSON package
-   * @throws Exception if the template does not exist
+   * @throws FullTemplateException if the template does not exist
    */
   @Operation(
       summary = "Gets the original JSON package of an existing template.",
@@ -195,7 +195,7 @@ public class StoreController {
   )
   @GetMapping(value = "/templates/{templateId}/template")
   public String getTemplate(
-      @PathVariable(value = "templateId") String templateId) throws Exception {
+      @PathVariable(value = "templateId") String templateId) throws FullTemplateException {
     logger.debug("getTemplate() on {}", templateId);
     return this.store.getFullTemplate(templateId);
   }
@@ -288,7 +288,7 @@ public class StoreController {
   
   /** Reloads all templates from the disk (if a permanent storage is set).
    * 
-   * @throws Exception when a problem happens
+   * @throws NoTemplatesPathException when template path is not set (no exception if one specific template fails to unload/reload)
    */
   @Operation(
       summary = "Reloads all templates from the disk.",
@@ -304,7 +304,7 @@ public class StoreController {
         }
   )
   @GetMapping(value = "/templates/reload")
-  public void reloadTemplates() throws Exception {
+  public void reloadTemplates() throws NoTemplatesPathException {
     logger.debug("reloadTemplates()");
     this.store.reloadExistingTemplates();
   }

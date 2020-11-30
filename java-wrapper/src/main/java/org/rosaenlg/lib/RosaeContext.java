@@ -108,15 +108,18 @@ public class RosaeContext {
    * 
    * @param template    the content of the template
    * @param compileInfo how to compile the template
-   * @throws Exception if compiling fails
+   * @throws RosaeContextConstructorException if context construction fails
    */
-  public RosaeContext(String template, CompileInfo compileInfo) throws Exception {
+  public RosaeContext(String template, CompileInfo compileInfo) throws RosaeContextConstructorException {
+    try {
+      this.entryTemplate = "main";
+      this.compileInfo = compileInfo;
+      templates.put("main", template);
 
-    this.entryTemplate = "main";
-    this.compileInfo = compileInfo;
-    templates.put("main", template);
-
-    this.init();
+      this.init();
+    } catch (Exception e) {
+      throw new RosaeContextConstructorException(e);
+    }
   }
 
   /**
@@ -131,24 +134,29 @@ public class RosaeContext {
    * @param includesPath  the path where the templates to be included are located
    *                      (including the entry template)
    * @param compileInfo   how to compile the template
-   * @throws Exception if compiling fails, or if reading disk fails
+   * @throws RosaeContextConstructorException if compiling fails, or if reading
+   *                                          disk fails
    */
-  public RosaeContext(String entryTemplate, File includesPath, CompileInfo compileInfo) throws Exception {
+  public RosaeContext(String entryTemplate, File includesPath, CompileInfo compileInfo)
+      throws RosaeContextConstructorException {
 
-    this.entryTemplate = entryTemplate;
-    this.compileInfo = compileInfo;
+    try {
+      this.entryTemplate = entryTemplate;
+      this.compileInfo = compileInfo;
 
-    Collection<File> files = FileUtils.listFiles(includesPath, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-    for (File file : files) {
-      String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-      templates.put(Paths.get(includesPath.toURI()).relativize(Paths.get(file.toURI())).toString().replace("\\", "/"), // must
-                                                                                                                       // fit
-                                                                                                                       // pug
-                                                                                                                       // convention
-          content);
+      Collection<File> files = FileUtils.listFiles(includesPath, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+      for (File file : files) {
+        String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+        // must fit pug convention
+        templates.put(Paths.get(includesPath.toURI()).relativize(Paths.get(file.toURI())).toString().replace("\\", "/"),
+            content);
+      }
+
+      this.init();
+    } catch (Exception e) {
+      throw new RosaeContextConstructorException(e);
     }
-
-    this.init();
   }
 
   /**
@@ -163,42 +171,55 @@ public class RosaeContext {
    * 
    * @param jsonPackageAsString contains a template and its parameters, JSON
    *                            format
-   * @throws Exception when the JSON package is not well formated, or if the
-   *                   autotest was activated and failed.
+   * @throws RosaeContextConstructorException when the JSON package is not well
+   *                                          formated, or if the autotest was
+   *                                          activated and failed.
    */
-  public RosaeContext(String jsonPackageAsString) throws Exception {
-    JsonPackage jsonPackage = new JsonPackage(jsonPackageAsString);
-    this.originalJsonPackage = jsonPackageAsString;
-    this.templateId = jsonPackage.getTemplateId();
-    this.entryTemplate = jsonPackage.getSrc().getEntryTemplate();
-    this.compileInfo = jsonPackage.getSrc().getCompileInfo();
-    this.templates = jsonPackage.getSrc().getTemplates();
-    this.autotest = jsonPackage.getSrc().getAutotest();
+  public RosaeContext(String jsonPackageAsString) throws RosaeContextConstructorException {
+    try {
+      JsonPackage jsonPackage = new JsonPackage(jsonPackageAsString);
+      this.originalJsonPackage = jsonPackageAsString;
+      this.templateId = jsonPackage.getTemplateId();
+      this.entryTemplate = jsonPackage.getSrc().getEntryTemplate();
+      this.compileInfo = jsonPackage.getSrc().getCompileInfo();
+      this.templates = jsonPackage.getSrc().getTemplates();
+      this.autotest = jsonPackage.getSrc().getAutotest();
 
-    this.init();
+      this.init();
+    } catch (Exception e) {
+      throw new RosaeContextConstructorException(e);
+    }
   }
 
-  private void init() throws Exception {
-    logger.info("Constructor RosaeContext");
+  private void init() throws InitRosaeContextException {
+    try {
+      logger.info("Constructor RosaeContext");
 
-    this.language = this.compileInfo.getLanguage();
-    if (this.language == null) {
-      throw new LanguageNotDefinedException("language not defined in compileInfo");
+      this.language = this.compileInfo.getLanguage();
+      if (this.language == null) {
+        throw new LanguageNotDefinedException("language not defined in compileInfo");
+      }
+
+      this.initGraalContext();
+      this.compile();
+      this.autotest();
+
+      logger.info("Constructor RosaeContext done.");
+    } catch (Exception e) {
+      throw new InitRosaeContextException(e);
+    }
+  }
+
+  private void initGraalContext() throws InitGraalContextException {
+    try {
+      context = Context.newBuilder("js").allowAllAccess(false).build();
+
+      context.eval(getSourcesForLanguage(this.language));
+      context.eval(sourceWrapper);
+    } catch (Exception e) {
+      throw new InitGraalContextException(e);
     }
 
-    this.initGraalContext();
-    this.compile();
-    this.autotest();
-
-    logger.info("Constructor RosaeContext done.");
-  }
-
-  private void initGraalContext() throws Exception {
-
-    context = Context.newBuilder("js").allowAllAccess(false).build();
-
-    context.eval(getSourcesForLanguage(this.language));
-    context.eval(sourceWrapper);
   }
 
   private void compile() throws CompileException {
@@ -231,7 +252,7 @@ public class RosaeContext {
     }
   }
 
-  private Source getSourcesForLanguage(String language) throws Exception {
+  private Source getSourcesForLanguage(String language) throws LoadLanguageException {
     try {
       if (sourcesRosaeNLG.get(language) == null) {
         logger.info("will now load rosaenlg js for {}", language);

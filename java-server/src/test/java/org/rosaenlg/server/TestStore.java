@@ -108,4 +108,87 @@ class TestStore {
     });
   }
 
+  @Test
+  void createInvalidPath() throws Exception {
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new Store("+sfsdfè\\sdfdsf");
+    });
+    assertTrue(thrown instanceof StoreConstructorException);
+  }
+
+  @Test
+  void deleteNoTemplatesPath() throws Exception {
+    Store store = new Store(null);
+    Exception thrown = assertThrows(Exception.class, () -> {
+      store.deleteTemplateFileAndUnload("bla");
+    });
+    assertTrue(thrown instanceof DeleteTemplateException);
+    assertTrue(thrown.getCause() instanceof UnloadTemplateException);
+  }
+
+  @Test
+  void renderTemplateDoesNotExist() throws Exception {
+    Store store = new Store(null);
+    Exception thrown = assertThrows(Exception.class, () -> {
+      store.render("bla", "{}");
+    });
+    assertTrue(thrown instanceof RenderException);
+    assert(thrown.getMessage().contains("not found"));
+  }
+
+  @Test
+  void renderFails() throws Exception {
+    filesHelper.copyToTest("basic_a.json");
+
+    Store store = new Store("test-templates-testing");
+    String opts = "{}"; // no language
+
+    Exception thrown = assertThrows(Exception.class, () -> {
+      store.render("basic_a", opts);
+    });
+    assertTrue(thrown instanceof RenderException);
+    assert(thrown.getMessage().contains("could not render"));
+  }
+
+  @Test
+  void loadExistingNoTemplatesPath() throws Exception {
+    Store store = new Store(null);
+    Exception thrown = assertThrows(Exception.class, () -> {
+      store.loadExistingTemplates();
+    });
+    assertTrue(thrown instanceof NoTemplatesPathException);
+    assert(thrown.getMessage().contains("templates path"));
+  }
+
+  @Test
+  void storeWrongExplicitPath() throws Exception {
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new Store("sf^sfds°");
+    });
+    assertTrue(thrown instanceof StoreConstructorException);
+  }
+
+  @Test
+  void storeWrongSystemPropertyPath() throws Exception {
+    System.setProperty("rosaenlg.homedir", "sf^sfds°");
+    Exception thrown = assertThrows(Exception.class, () -> {
+      new Store();
+    });
+    assertTrue(thrown instanceof StoreConstructorException);
+    System.clearProperty("rosaenlg.homedir");
+  }
+
+  @Test
+  void storeGoodSystemPropertyPath() throws Exception {
+    filesHelper.copyToTest("basic_a.json");
+    System.setProperty("rosaenlg.homedir", "test-templates-testing");
+
+    Store store = new Store();
+    String opts = "{ \"language\": \"en_US\" }";
+    String rendered = store.render("basic_a", opts).getText();
+    logger.debug("rendered: ", rendered);
+    assertEquals("<p>Aaa</p>", rendered);
+    System.clearProperty("rosaenlg.homedir");
+  }
+
 }

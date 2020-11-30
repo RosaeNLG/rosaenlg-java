@@ -130,7 +130,8 @@ class TestRosaeContext {
     Exception thrown = assertThrows(Exception.class, () -> {
       new RosaeContext(newJsonPackage);
     });
-    assert(thrown instanceof AutotestException);
+
+    assert(thrown instanceof RosaeContextConstructorException);
     assert(thrown.getMessage().contains("render"));
   }
 
@@ -453,7 +454,7 @@ class TestRosaeContext {
       new RosaeContext("bla", new File("test-templates-repo"), compileOpts);
     });
 
-    assertTrue(thrown instanceof LoadLanguageException);
+    assertTrue(thrown instanceof RosaeContextConstructorException);
 
   }
 
