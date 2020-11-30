@@ -12,15 +12,15 @@
 
 -->
 
-## [Unreleased]
+## [2.0.0] 2020-11-30
 
 ### Added
 
 * added content following [LF AI recommendations](https://github.com/lfai/tac/blob/master/github-recommendations.md): CODE_OF_CONDUCT.md, COMMUNITY.md, CONTRIBUTING.md, DEVELOPER_GUIDE.md, GOVERNANCE.md, SECURITY.md, SUPPORT.md, issue templates, pull request templates
 
-### Fixed
-
 ### Changed
+
+* uses RosaeNLG 2.0.0
 
 
 ## [1.20.2] 2020-11-19

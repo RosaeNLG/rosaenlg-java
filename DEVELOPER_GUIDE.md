@@ -77,7 +77,7 @@ _for developers who can do the release_
   - change `ROSAENLG_VERSION` in `docker.yml` (same number)
   - `mvn clean`
   - `mvn package`
-  - commit
+  - commit 
   - create branch vXX.XX.XX
   - push branch
 - publication will trigger on vXX.XX.XX branch thanks to GitHub Actions
