@@ -23,6 +23,7 @@ package org.rosaenlg.server;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,12 +74,14 @@ public class Store {
     String propDir = System.getProperty("rosaenlg.homedir");
     if (propDir != null) {
       logger.info("using system property: {}", propDir);
-      this.init(Paths.get(propDir));
+      this.templatesPath = Paths.get(propDir);
+      this.reloadExistingTemplates();
     } else {
       String envDir = System.getenv("ROSAENLG_HOMEDIR");
       if (envDir != null) {
         logger.info("using env property: {}", envDir);
-        this.init(Paths.get(envDir));
+        this.templatesPath = Paths.get(envDir);
+        this.reloadExistingTemplates();
       } else {
         logger.info("did not find env nor system property");
       }
@@ -97,21 +100,12 @@ public class Store {
    */
   public Store(String templatePathString) throws Exception {
     if (templatePathString != null) {
-      this.init(Paths.get(templatePathString));
+      this.templatesPath = Paths.get(templatePathString);
+      this.reloadExistingTemplates();
     }
   }
 
-  /** Inits store and reloads constructor.
-   * 
-   * @throws Exception if templatesPath is set but templates cannot be loaded
-   * @param templatePath the path on the disk where to store the templates
-   */
-  private void init(Path templatePath) throws Exception {
-    this.templatesPath = templatePath;
-    this.reloadExistingTemplates();
-  }
-
-
+  
   /** Reloads all the templates from the disk.
    * 
    * @throws NoTemplatesPathException when template path is not set (no exception if one specific template fails to unload/reload)
@@ -239,23 +233,18 @@ public class Store {
   /** Deletes a template file and unloads it if it was loaded.
    * 
    * @param templateId the ID of the template
-   * @throws Exception if the template could not be unloaded
+   * @throws DeleteTemplateException if the template could not found, deleted or unloaded
    */
-  public void deleteTemplateFileAndUnload(String templateId) throws Exception {
-    if (templatesPath != null) {
-      deleteTemplateFile(templateId);
+  public void deleteTemplateFileAndUnload(String templateId) throws DeleteTemplateException {
+    try {
+      if (templatesPath != null) {
+        Path pathToDelete = getTemplateFile(templateId);
+        Files.delete(pathToDelete);
+      }
+      unloadTemplate(templateId);
+    } catch (Exception e) {
+      throw new DeleteTemplateException("could not delete " + templateId, e);
     }
-    unloadTemplate(templateId);
-  }
-
-  
-  /** Deletes a template file on the disk.
-   * @param templateId the ID of the template
-   * @throws Exception if the file could not be deleted
-   */
-  private void deleteTemplateFile(String templateId) throws Exception {
-    Path pathToDelete = getTemplateFile(templateId);
-    Files.delete(pathToDelete);
   }
 
   

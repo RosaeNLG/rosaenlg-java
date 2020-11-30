@@ -5,13 +5,23 @@
 
 ### Added
 
-
 ### Fixed
 
 ### Changed
 
 
 -->
+
+## [Unreleased]
+
+### Added
+
+* added content following [LF AI recommendations](https://github.com/lfai/tac/blob/master/github-recommendations.md): CODE_OF_CONDUCT.md, COMMUNITY.md, CONTRIBUTING.md, DEVELOPER_GUIDE.md, GOVERNANCE.md, SECURITY.md, SUPPORT.md, issue templates, pull request templates
+
+### Fixed
+
+### Changed
+
 
 ## [1.20.2] 2020-11-19
 
