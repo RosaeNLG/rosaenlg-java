@@ -23,7 +23,6 @@ package org.rosaenlg.server;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,24 +66,28 @@ public class Store {
    * the disk (you have to make REST calls to load them), and they will not be stored on the disk.
    * </p>
    * 
-   * @throws Exception if templatesPath is set but templates cannot be loaded
+   * @throws StoreConstructorException if templatesPath is set but templates cannot be loaded
    */
   @Autowired
-  public Store() throws Exception {
-    String propDir = System.getProperty("rosaenlg.homedir");
-    if (propDir != null) {
-      logger.info("using system property: {}", propDir);
-      this.templatesPath = Paths.get(propDir);
-      this.reloadExistingTemplates();
-    } else {
-      String envDir = System.getenv("ROSAENLG_HOMEDIR");
-      if (envDir != null) {
-        logger.info("using env property: {}", envDir);
-        this.templatesPath = Paths.get(envDir);
+  public Store() throws StoreConstructorException {
+    try {
+      String propDir = System.getProperty("rosaenlg.homedir");
+      if (propDir != null) {
+        logger.info("using system property: {}", propDir);
+        this.templatesPath = Paths.get(propDir);
         this.reloadExistingTemplates();
       } else {
-        logger.info("did not find env nor system property");
+        String envDir = System.getenv("ROSAENLG_HOMEDIR");
+        if (envDir != null) {
+          logger.info("using env property: {}", envDir);
+          this.templatesPath = Paths.get(envDir);
+          this.reloadExistingTemplates();
+        } else {
+          logger.info("did not find env nor system property");
+        }
       }
+    } catch (Exception e) {
+      throw new StoreConstructorException(e);
     }
   }
 
@@ -96,12 +99,16 @@ public class Store {
    * </p>
    * 
    * @param templatePathString the path on the disk where to store the templates (can be null)
-   * @throws Exception if templatesPath is set but templates cannot be loaded
+   * @throws StoreConstructorException if templatesPath is set but templates cannot be loaded
    */
-  public Store(String templatePathString) throws Exception {
-    if (templatePathString != null) {
-      this.templatesPath = Paths.get(templatePathString);
-      this.reloadExistingTemplates();
+  public Store(String templatePathString) throws StoreConstructorException {
+    try {
+      if (templatePathString != null) {
+        this.templatesPath = Paths.get(templatePathString);
+        this.reloadExistingTemplates();
+      }
+    } catch (Exception e) {
+      throw new StoreConstructorException(e);
     }
   }
 
@@ -168,7 +175,7 @@ public class Store {
   
   /** Loads an existing template from the disk.
    * @param jsonFile the json file to load
-   * @throws Exception if the file could not be loaded
+   * @throws LoadTemplateException if the file could not be loaded
    */
   private void loadExistingTemplate(Path jsonFile) throws LoadTemplateException {
     // read json file
