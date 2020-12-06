@@ -12,6 +12,19 @@
 
 -->
 
+## [Unreleased]
+
+### Added
+
+
+### Fixed
+
+* removed log4j:log4j dependency, source of CVE-2019-17571
+
+### Changed
+
+
+
 ## [2.0.0] 2020-11-30
 
 ### Added
