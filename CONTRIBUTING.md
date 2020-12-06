@@ -26,7 +26,8 @@ Development:
 
 - create a feature branch; name it after the topic: *my-feature* or *issue-#123*
 - develop
-- write tests
+- write tests: stick at least to current coverage which is around 85%
+- there must be no warnings in the nominal execution flow
 - lint your code following current configuration
 - each commit **MUST** contain a sign off message (see below)
 - new contents must be under Apache 2.0 license
