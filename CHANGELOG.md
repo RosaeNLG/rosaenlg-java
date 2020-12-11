@@ -21,6 +21,7 @@
 
 ### Fixed
 
+* upgraded spring boot to 2.3.7.RELEASE, source of CVE-2020-17527
 * removed log4j:log4j dependency, source of CVE-2019-17571
 
 ### Changed
