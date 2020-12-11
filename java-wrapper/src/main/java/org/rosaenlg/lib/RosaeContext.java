@@ -303,15 +303,8 @@ public class RosaeContext {
     Value realParam = context.eval("js", paramForge).execute();
     try {
       String jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
-
-      RenderResult renderResult = new RenderResult(jsonOptions, jsonRenderedString);
-
-      String renderedText = renderResult.getRenderedText();
-      if (renderedText.startsWith(EXCEPTION_MARKER)) {
-        throw new RenderingException(renderedText.replace(EXCEPTION_MARKER, ""), null);
-      }
-      return renderResult;
-
+      return new RenderResult(jsonOptions, jsonRenderedString);
+      
     } catch (Exception e) {
       throw new RenderingException("cannot render", e);
     }

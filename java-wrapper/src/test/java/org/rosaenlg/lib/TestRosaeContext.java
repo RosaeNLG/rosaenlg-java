@@ -313,6 +313,7 @@ class TestRosaeContext {
 
       fail("Exception did not throw!");
     } catch (Exception e) {
+      // e.printStackTrace();
       assertTrue(e.getMessage().contains("Unexpected token"));
       assertTrue(e.getMessage().contains("  > 5|   if true +!= false"));
       assertTrue(e.getMessage().contains("------------------^"));
