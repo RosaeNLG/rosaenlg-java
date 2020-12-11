@@ -240,7 +240,7 @@ public class RosaeContext {
       logger.info("auto test is activated");
 
       try {
-        String rendered = this.render(autotest.getJsonInput()).getText();
+        String rendered = this.render(autotest.getJsonInput()).getRenderedText();
         for (int i = 0; i < autotest.getExpected().size(); i++) {
           if (!rendered.contains(autotest.getExpected().get(i))) {
             throw new AutotestException(templateId, autotest.getExpected().get(i), rendered);
@@ -292,23 +292,23 @@ public class RosaeContext {
     // inject NlgLib into the options
     JSONObject jsonOptions = new JSONObject(jsonOptionsAsString);
 
-    RenderOptions runtimeOptions = new RenderOptions(jsonOptions);
+    RenderOptionsInput runtimeOptions = new RenderOptionsInput(jsonOptions);
 
     // we keep original but add 'util'
     jsonOptions.put("util", "NLGLIB_PLACEHOLDER");
     String finalOptions = jsonOptions.toString().replace("\"NLGLIB_PLACEHOLDER\"",
-        "new rosaenlg_" + this.language + ".NlgLib(JSON.parse('" + runtimeOptions.toJson() + "'))");
+        "new rosaenlg_" + this.language + ".NlgLib(JSON.parse('" + runtimeOptions.toJsonString() + "'))");
     String paramForge = "() => { return " + finalOptions + ";}";
 
     Value realParam = context.eval("js", paramForge).execute();
     try {
-      String jsonRendered = compiledTemplateFct.execute(realParam).asString();
+      String jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
 
-      RenderResult renderResult = new RenderResult(jsonRendered);
+      RenderResult renderResult = new RenderResult(jsonOptions, jsonRenderedString);
 
-      String text = renderResult.getText();
-      if (text.startsWith(EXCEPTION_MARKER)) {
-        throw new RenderingException(text.replace(EXCEPTION_MARKER, ""), null);
+      String renderedText = renderResult.getRenderedText();
+      if (renderedText.startsWith(EXCEPTION_MARKER)) {
+        throw new RenderingException(renderedText.replace(EXCEPTION_MARKER, ""), null);
       }
       return renderResult;
 

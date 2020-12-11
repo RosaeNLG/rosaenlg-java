@@ -4,7 +4,7 @@
     "entryTemplate": "chanson.pug",
     "compileInfo": {
       "activate": false,
-      "compileDebug": false,
+      "compileDebug": true,
       "language": "fr_FR"
     },
     "templates": {

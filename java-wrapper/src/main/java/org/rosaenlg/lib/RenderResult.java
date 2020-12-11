@@ -28,17 +28,23 @@ import org.json.JSONObject;
  */
 public class RenderResult {
 
-  private String text;
+  private String renderedText;
   private String outputData;
+  private String renderOptions;
   
   /** Constructor using a JSON string.
    * 
+   * @param jsonOptions the original JSON options, parsed
    * @param jsonString the string containing the JSON package
    */
-  public RenderResult(String jsonString) {
+  public RenderResult(JSONObject jsonOptions, String jsonString) {
     JSONObject jsonObj = new JSONObject(jsonString);
-    this.text = jsonObj.getString("text");
+    this.renderedText = jsonObj.getString("renderedText");
     this.outputData = jsonObj.getJSONObject("outputData").toString();
+
+    RenderOptionsOutput renderOptionsOutput = new RenderOptionsOutput(jsonOptions);
+    renderOptionsOutput.completeRenderOptionsOutput(jsonObj.getJSONObject("renderOptions"));
+    this.renderOptions = renderOptionsOutput.toJsonString();
   }
 
   /**
@@ -46,8 +52,8 @@ public class RenderResult {
    * 
    * @return text
    */  
-  public String getText() {
-    return this.text;
+  public String getRenderedText() {
+    return this.renderedText;
   }
 
   /**
@@ -57,5 +63,14 @@ public class RenderResult {
    */  
   public String getOutputData() {
     return this.outputData;
+  }
+
+  /**
+   * Returns the render options as JSON string.
+   * 
+   * @return renderOptions
+   */  
+  public String getRenderOptions() {
+    return this.renderOptions;
   }
 }

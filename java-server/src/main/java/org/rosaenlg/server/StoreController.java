@@ -243,17 +243,15 @@ public class StoreController {
 
     RenderResult renderResult = this.store.render(templateId, body);
 
-    String renderedText = renderResult.getText();
+    String renderedText = renderResult.getRenderedText();
     logger.info("render text done");
-
-    RenderOptionsForSerialize renderOptions = new RenderOptionsForSerialize(new JSONObject(body));
 
     long finish = System.currentTimeMillis();
 
     return new Rendered(
         renderedText,
         renderResult.getOutputData(),
-        renderOptions,
+        renderResult.getRenderOptions(),
         finish - start);
   }
 

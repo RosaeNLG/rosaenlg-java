@@ -95,7 +95,7 @@ class TestStore {
 
     Store store = new Store("test-templates-testing");
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = store.render("basic_a", opts).getText();
+    String rendered = store.render("basic_a", opts).getRenderedText();
     logger.debug("rendered: ", rendered);
     assertEquals("<p>Aaa</p>", rendered);
   }
@@ -185,7 +185,7 @@ class TestStore {
 
     Store store = new Store();
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = store.render("basic_a", opts).getText();
+    String rendered = store.render("basic_a", opts).getRenderedText();
     logger.debug("rendered: ", rendered);
     assertEquals("<p>Aaa</p>", rendered);
     System.clearProperty("rosaenlg.homedir");

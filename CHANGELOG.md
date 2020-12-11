@@ -16,6 +16,8 @@
 
 ### Added
 
+* `renderDebug` option
+* `randomSeed` is now present in the output
 
 ### Fixed
 
@@ -23,6 +25,7 @@
 
 ### Changed
 
+* uses RosaeNLG 2.1.0
 
 
 ## [2.0.0] 2020-11-30

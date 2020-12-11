@@ -43,9 +43,11 @@ public class Rendered {
   @JsonRawValue
   private String outputData;
 
+  @JsonRawValue
+  private String renderOptions;
+
   private long ms;
 
-  private RenderOptionsForSerialize renderOptions;
 
   
   /** Constructor.
@@ -57,7 +59,7 @@ public class Rendered {
   public Rendered(
       String renderedText,
       String outputData,
-      RenderOptionsForSerialize renderOptions,
+      String renderOptions,
       long ms) {
     this.renderedText = renderedText;
     this.outputData = outputData;
@@ -67,9 +69,9 @@ public class Rendered {
 
   
   /** Getter on rendering options.
-   * @return RenderOptionsForSerialize the rendering options
+   * @return String the rendering options
    */
-  public RenderOptionsForSerialize getRenderOptions() {
+  public String getRenderOptions() {
     return renderOptions;
   }
   

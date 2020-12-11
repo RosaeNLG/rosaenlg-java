@@ -44,6 +44,7 @@ function compileFileClient(path, language, jsonStaticFs, jsonOptions, exceptionM
   }
 }
 
+// used when debugging only
 function JSONStringify(object) {
   var cache = [];        
   var str = JSON.stringify(object,
@@ -67,14 +68,19 @@ function compileFile(path, language, jsonStaticFs, jsonOptions, exceptionMarker)
   try {
     const opts = JSON.parse(jsonOptions);
     opts.staticFs = JSON.parse(jsonStaticFs);
-    const fct = getRosaenlg(language).compileFile(cleanPath(path), opts)
-    return (opts) => {
-      opts.outputData = {}; // must be created here
-      const text = fct(opts);
-      const outputData = opts.outputData;
+    const fct = getRosaenlg(language).compileFile(cleanPath(path), opts);
+    return (renderOptsWithLib) => {
+      renderOptsWithLib.outputData = {}; // must be created here
+      const renderedText = fct(renderOptsWithLib);
+      const outputData = renderOptsWithLib.outputData;
+
       return JSON.stringify({
-        text: text,
+        renderedText: renderedText,
         outputData: outputData,
+        renderOptions: {
+          randomSeed: renderOptsWithLib.util.randomSeed
+          // we don't have a simple access to input render options; will be completed upflow
+        }
       });
     };
   } catch (e) {

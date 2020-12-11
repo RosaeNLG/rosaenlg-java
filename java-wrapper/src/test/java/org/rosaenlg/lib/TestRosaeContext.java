@@ -59,7 +59,7 @@ class TestRosaeContext {
 
     String opts = "{ \"language\": \"en_US\" }";
     for (int i = 0; i < 10; i++) {
-      String rendered = rc.render(opts).getText();
+      String rendered = rc.render(opts).getRenderedText();
       logger.debug("rendered: {}", rendered);
       assertEquals("<p>Bla included</p>", rendered);
     }
@@ -78,7 +78,7 @@ class TestRosaeContext {
 
       String opts = "{ \"language\": \"en_US\" }";
       for (int j = 0; j < 10; j++) {
-        String rendered = rc.render(opts).getText();
+        String rendered = rc.render(opts).getRenderedText();
         assertTrue(rendered.contains(letter));
       }
 
@@ -101,7 +101,7 @@ class TestRosaeContext {
 
       String opts = "{ \"language\": \"en_US\" }";
       for (int j = 0; j < 10; j++) {
-        String rendered = rc.render(opts).getText();
+        String rendered = rc.render(opts).getRenderedText();
         assertTrue(rendered.contains("Aaa" + i));
       }
 
@@ -146,7 +146,7 @@ class TestRosaeContext {
     RosaeContext rc = new RosaeContext(parsed.toString());
 
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = rc.render(opts).getText();
+    String rendered = rc.render(opts).getRenderedText();
     assertTrue(rendered.contains("Aaa"));
   }
 
@@ -163,7 +163,7 @@ class TestRosaeContext {
     RosaeContext rc = new RosaeContext(parsed.toString());
 
     String opts = "{ \"language\": \"en_US\" }";
-    String rendered = rc.render(opts).getText();
+    String rendered = rc.render(opts).getRenderedText();
     assertTrue(rendered.contains("Aaa"));
   }
 
@@ -174,7 +174,7 @@ class TestRosaeContext {
 
     RosaeContext rc = new RosaeContext("test.pug", new File("test-templates-repo/includes"), opts);
 
-    String rendered = rc.render(opts.toJson()).getText();
+    String rendered = rc.render(opts.toJson()).getRenderedText();
     assertEquals("<p>Bla included</p>", rendered);
   }
 
@@ -376,17 +376,17 @@ class TestRosaeContext {
     opts.setLanguage("en_US");
     RosaeContext rc = new RosaeContext("tutorial_en_US_nodata.pug", new File("test-templates-repo"), opts);
 
-    String rendered1 = rc.render(getJsonPhone1()).getText();
+    String rendered1 = rc.render(getJsonPhone1()).getRenderedText();
     // System.out.println(rendered1);
     assertTrue(rendered1.contains("OnePlus 5T"));
     assertTrue(rendered1.contains("80.43"));
 
-    String rendered2 = rc.render(getJsonPhone2()).getText();
+    String rendered2 = rc.render(getJsonPhone2()).getRenderedText();
     // System.out.println(rendered2);
     assertTrue(rendered2.contains("OnePlus 5"));
     assertTrue(rendered2.contains("5.5"));
 
-    String rendered3 = rc.render(getJsonPhone3()).getText();
+    String rendered3 = rc.render(getJsonPhone3()).getRenderedText();
     // System.out.println(rendered3);
     assertTrue(rendered3.contains("OnePlus 3T"));
     assertTrue(rendered3.contains("73.14"));
@@ -420,7 +420,7 @@ class TestRosaeContext {
     chanson.put("auteur", "Édith Piaf");
     renderOpts.put("chanson", chanson);
 
-    String rendered = rc.render(renderOpts.toString()).getText();
+    String rendered = rc.render(renderOpts.toString()).getRenderedText();
 
     assertTrue(rendered.contains("Il chantera \"Non, je ne regrette rien\" d'Édith Piaf"), rendered);
   }
@@ -440,7 +440,7 @@ class TestRosaeContext {
     renderOpts.put("input", input);
 
     RenderResult res = rc.render(renderOpts.toString());
-    assertTrue(res.getText().contains("Bla bla"), res.getText());
+    assertTrue(res.getRenderedText().contains("Bla bla"), res.getRenderedText());
 
     assertEquals("{\"val\":2,\"obj\":{\"aaa\":\"bbb\"},\"foo\":\"bar\"}", res.getOutputData());
   }
@@ -465,9 +465,55 @@ class TestRosaeContext {
     RosaeContext rc = new RosaeContext(jsonPackage);
 
     String opts = "{ \"language\": \"de_DE\" }";
-    String rendered = rc.render(opts).getText();
+    String rendered = rc.render(opts).getRenderedText();
     assertEquals("Die hohe und kluge Person", rendered);
   }
 
-  
+  @Test
+  void testRenderDebug() throws Exception {
+
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("fr_FR").setCompileDebug(true);
+
+    final RosaeContext rc = new RosaeContext("chanson.pug", new File("test-templates-repo"), compileOpts);
+
+    JSONObject renderOpts = new JSONObject();
+    renderOpts.put("language", "fr_FR");
+    renderOpts.put("renderDebug", true);
+    JSONObject chanson = new JSONObject();
+    chanson.put("nom", "Non, je ne regrette rien");
+    chanson.put("auteur", "Édith Piaf");
+    renderOpts.put("chanson", chanson);
+
+    RenderResult renderResult = rc.render(renderOpts.toString());
+
+    String rendered = renderResult.getRenderedText();
+    
+    assertTrue(rendered.contains("<span class=\"rosaenlg-debug\">chanson.pug: 4</span>"), rendered);
+    assertTrue(rendered.contains("Édith Piaf"), rendered);
+  }
+
+  @Test
+  void testRenderOptionsOutput() throws Exception {
+
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("fr_FR");
+
+    final RosaeContext rc = new RosaeContext("chanson.pug", new File("test-templates-repo"), compileOpts);
+
+    JSONObject renderOpts = new JSONObject();
+    renderOpts.put("language", "fr_FR");
+    renderOpts.put("forceRandomSeed", 42);
+    JSONObject chanson = new JSONObject();
+    chanson.put("nom", "Non, je ne regrette rien");
+    chanson.put("auteur", "Édith Piaf");
+    renderOpts.put("chanson", chanson);
+
+    RenderResult renderResult = rc.render(renderOpts.toString());
+
+    String renderedOptions = renderResult.getRenderOptions();
+
+    assertTrue(renderedOptions.contains("\"forceRandomSeed\":42"), renderedOptions);
+    assertTrue(renderedOptions.contains("\"randomSeed\":42"), renderedOptions);
+  }
 }

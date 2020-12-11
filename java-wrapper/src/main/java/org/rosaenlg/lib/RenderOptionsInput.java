@@ -25,28 +25,60 @@ import org.json.JSONObject;
 /**
  * RosaeNLG runtime options helper.
  * <p>
- * <a href="https://rosaenlg.org/rosaenlg/1.5.0/advanced/params.html#_rendering_parameters">Runtime options</a>
+ * <a href="https://rosaenlg.org/rosaenlg/2.1.0/advanced/params.html#_rendering_parameters">Runtime options</a>
  * </p>
  * 
  * @author Ludan Stoecklé contact@rosaenlg.org
  */
-public class RenderOptions {
-  private String language;
-  private Integer forceRandomSeed;
-  private String defaultSynoMode;
-  private Integer defaultAmong;
+public class RenderOptionsInput {
+  /**
+   * input language
+   */
+  protected String language;
+  /**
+   * force random seed
+   */
+  protected Integer forceRandomSeed;
+  /**
+   * default synonym mode
+   */
+  protected String defaultSynoMode;
+  /**
+   * default among
+   */
+  protected Integer defaultAmong;
+  /**
+   * render debug
+   */
+  protected boolean renderDebug = false;
 
-  private static final String KEY_LANGUAGE = "language";
-  private static final String KEY_FORCERANDOMSEED = "forceRandomSeed";
-  private static final String KEY_DEFAULTSYNOMODE = "defaultSynoMode";
-  private static final String KEY_DEFAULTAMONG = "defaultAmong";
+  /**
+   * JSON key for language
+   */
+  protected static final String KEY_LANGUAGE = "language";
+  /**
+   * JSON key for force random seed
+   */
+  protected static final String KEY_FORCERANDOMSEED = "forceRandomSeed";
+  /**
+   * JSON key for default synonym mode
+   */
+  protected static final String KEY_DEFAULTSYNOMODE = "defaultSynoMode";
+  /**
+   * JSON key for default among
+   */
+  protected static final String KEY_DEFAULTAMONG = "defaultAmong";
+  /**
+   * JSON key for render debug
+   */
+  protected static final String KEY_RENDERDEBUG = "renderDebug";
 
 
   /**
    * Create an empty object.
    * 
    */
-  public RenderOptions() {
+  public RenderOptionsInput() {
   }
     
 
@@ -55,7 +87,7 @@ public class RenderOptions {
    * 
    * @param jsonOptions json options which can contain runtime parameters
    */
-  public RenderOptions(JSONObject jsonOptions) {
+  public RenderOptionsInput(JSONObject jsonOptions) {
 
     language = jsonOptions.getString(KEY_LANGUAGE);
     if (jsonOptions.has(KEY_FORCERANDOMSEED)) {
@@ -67,15 +99,26 @@ public class RenderOptions {
     if (jsonOptions.has(KEY_DEFAULTAMONG)) {
       defaultAmong = jsonOptions.getInt(KEY_DEFAULTAMONG);
     }
+    if (jsonOptions.has(KEY_RENDERDEBUG)) {
+      renderDebug = jsonOptions.getBoolean(KEY_RENDERDEBUG);
+    }
   }
-
 
   /**
    * Serializes the object to a JSON String.
    * 
    * @return String the object as a JSON String
    */
-  public String toJson() {
+  public String toJsonString() {
+    return this.toJsonObj().toString();
+  }
+
+  /**
+   * Serializes the object to a JSON object.
+   * 
+   * @return JSONObject the object as a JSON String
+   */
+  public JSONObject toJsonObj() {
     JSONObject res = new JSONObject();
     // must not be null
     res.put(KEY_LANGUAGE, this.language);
@@ -89,16 +132,20 @@ public class RenderOptions {
     if (this.defaultAmong != null) {
       res.put(KEY_DEFAULTAMONG, this.defaultAmong);
     }
-    return res.toString();
+    if (this.renderDebug) {
+      res.put(KEY_RENDERDEBUG, this.renderDebug);
+    }
+    return res;
   }
 
+  
   /**
    * sets the language, for instance 'en_US' or 'fr_FR'.
    * 
    * @param language the language
    * @return this to set further options
    */
-  public RenderOptions setLanguage(String language) {
+  public RenderOptionsInput setLanguage(String language) {
     this.language = language;
     return this;
   }
@@ -109,7 +156,7 @@ public class RenderOptions {
    * @param forceRandomSeed the random seed
    * @return this to set further options
    */
-  public RenderOptions setForceRandomSeed(Integer forceRandomSeed) {
+  public RenderOptionsInput setForceRandomSeed(Integer forceRandomSeed) {
     this.forceRandomSeed = forceRandomSeed;
     return this;
   }
@@ -120,11 +167,21 @@ public class RenderOptions {
    * @param defaultAmong the default among value
    * @return this to set further options
    */
-  public RenderOptions setDefaultAmong(Integer defaultAmong) {
+  public RenderOptionsInput setDefaultAmong(Integer defaultAmong) {
     this.defaultAmong = defaultAmong;
     return this;
   }
 
+  /**
+   * sets renderDebug value.
+   * 
+   * @param renderDebug the renderDebug value
+   * @return this to set further options
+   */
+  public RenderOptionsInput setRenderDebug(boolean renderDebug) {
+    this.renderDebug = renderDebug;
+    return this;
+  }
 
   /**
    * gets the language.
@@ -136,11 +193,11 @@ public class RenderOptions {
   }
 
   /**
-   * gets the random seed.
+   * gets the forced random seed.
    * 
    * @return this to set further options
    */
-  public Integer getRandomSeed() {
+  public Integer getForceRandomSeed() {
     return this.forceRandomSeed;
   }
 
@@ -160,5 +217,14 @@ public class RenderOptions {
    */
   public Integer getDefaultAmong() {
     return this.defaultAmong;
+  }  
+
+  /**
+   * gets the renderDebug value.
+   * 
+   * @return renderDebug
+   */
+  public boolean getRenderDebug() {
+    return this.renderDebug;
   }  
 }
