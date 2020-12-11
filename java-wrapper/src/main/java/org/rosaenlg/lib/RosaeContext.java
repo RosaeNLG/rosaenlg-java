@@ -55,7 +55,6 @@ public class RosaeContext {
   private static final Logger logger = LoggerFactory.getLogger(RosaeContext.class);
 
   private static Source sourceWrapper;
-  private static final String EXCEPTION_MARKER = "EXCEPTION ";
   private static Map<String, Source> sourcesRosaeNLG = new HashMap<>();
 
   private String language;
@@ -223,15 +222,15 @@ public class RosaeContext {
   }
 
   private void compile() throws CompileException {
+    try {
 
     Value compileFileFct = context.eval("js", "compileFile");
     assert compileFileFct.canExecute();
 
     compiledTemplateFct = compileFileFct.execute(entryTemplate, this.language, (new JSONObject(templates)).toString(),
-        compileInfo.toJson(), EXCEPTION_MARKER);
-
-    if (compiledTemplateFct.toString().startsWith(EXCEPTION_MARKER)) {
-      throw new CompileException(compiledTemplateFct.toString().replace(EXCEPTION_MARKER, ""));
+        compileInfo.toJson());
+    } catch (Exception e) {
+      throw new CompileException("cannot compile", e);
     }
   }
 
@@ -304,7 +303,7 @@ public class RosaeContext {
     try {
       String jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
       return new RenderResult(jsonOptions, jsonRenderedString);
-      
+
     } catch (Exception e) {
       throw new RenderingException("cannot render", e);
     }
@@ -321,20 +320,24 @@ public class RosaeContext {
    * @throws CompiledClientException if a problem occurs
    */
   public String getCompiledClient() throws CompiledClientException {
-    Value compileFileClientFct = context.eval("js", "compileFileClient");
-    assert compileFileClientFct.canExecute();
+    try {
+      Value compileFileClientFct = context.eval("js", "compileFileClient");
+      assert compileFileClientFct.canExecute();
 
-    CompileInfo newCompileOpts = new CompileInfo(this.compileInfo);
+      CompileInfo newCompileOpts = new CompileInfo(this.compileInfo);
 
-    newCompileOpts.setEmbedResources(true);
+      newCompileOpts.setEmbedResources(true);
 
-    String compiled = compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
-        newCompileOpts.toJson(), EXCEPTION_MARKER).asString();
+      String compiled = compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
+          newCompileOpts.toJson()).asString();
 
-    if (compiled.startsWith(EXCEPTION_MARKER)) {
-      throw new CompiledClientException(compiled.replace(EXCEPTION_MARKER, ""));
+      return compiled;
+
+    } catch (Exception e) {
+      throw new CompiledClientException("cannot compile", e);
+
     }
-    return compiled;
+
   }
 
   /**

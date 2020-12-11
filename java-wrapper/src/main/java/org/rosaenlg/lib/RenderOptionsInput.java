@@ -38,7 +38,7 @@ public class RenderOptionsInput {
   /**
    * force random seed
    */
-  protected Integer forceRandomSeed;
+  protected int forceRandomSeed;
   /**
    * default synonym mode
    */
@@ -46,7 +46,7 @@ public class RenderOptionsInput {
   /**
    * default among
    */
-  protected Integer defaultAmong;
+  protected int defaultAmong;
   /**
    * render debug
    */
@@ -123,13 +123,13 @@ public class RenderOptionsInput {
     // must not be null
     res.put(KEY_LANGUAGE, this.language);
 
-    if (this.forceRandomSeed != null) {
+    if (this.forceRandomSeed > 0) {
       res.put(KEY_FORCERANDOMSEED, this.forceRandomSeed);
     }
     if (this.defaultSynoMode != null) {
       res.put(KEY_DEFAULTSYNOMODE, this.defaultSynoMode);
     }
-    if (this.defaultAmong != null) {
+    if (this.defaultAmong > 0) {
       res.put(KEY_DEFAULTAMONG, this.defaultAmong);
     }
     if (this.renderDebug) {
@@ -156,10 +156,23 @@ public class RenderOptionsInput {
    * @param forceRandomSeed the random seed
    * @return this to set further options
    */
-  public RenderOptionsInput setForceRandomSeed(Integer forceRandomSeed) {
+  public RenderOptionsInput setForceRandomSeed(int forceRandomSeed) {
     this.forceRandomSeed = forceRandomSeed;
     return this;
   }
+
+
+  /**
+   * sets defaultSynoMode param.
+   * 
+   * @param defaultSynoMode the default synonym mode
+   * @return this to set further options
+   */
+  public RenderOptionsInput setDefaultSynoMode(String defaultSynoMode) {
+    this.defaultSynoMode = defaultSynoMode;
+    return this;
+  }
+  
 
   /**
    * sets the defaultAmong value.
@@ -167,7 +180,7 @@ public class RenderOptionsInput {
    * @param defaultAmong the default among value
    * @return this to set further options
    */
-  public RenderOptionsInput setDefaultAmong(Integer defaultAmong) {
+  public RenderOptionsInput setDefaultAmong(int defaultAmong) {
     this.defaultAmong = defaultAmong;
     return this;
   }
@@ -197,7 +210,7 @@ public class RenderOptionsInput {
    * 
    * @return this to set further options
    */
-  public Integer getForceRandomSeed() {
+  public int getForceRandomSeed() {
     return this.forceRandomSeed;
   }
 
@@ -215,7 +228,7 @@ public class RenderOptionsInput {
    * 
    * @return defaultAmong
    */
-  public Integer getDefaultAmong() {
+  public int getDefaultAmong() {
     return this.defaultAmong;
   }  
 

@@ -31,7 +31,7 @@ import org.json.JSONObject;
  * @author Ludan Stoecklé contact@rosaenlg.org
  */
 public class RenderOptionsOutput extends RenderOptionsInput {
-  private Integer randomSeed;
+  private int randomSeed;
 
   private static final String KEY_RANDOMSEED = "randomSeed";
 
@@ -70,7 +70,7 @@ public class RenderOptionsOutput extends RenderOptionsInput {
   @Override
   public JSONObject toJsonObj() {
     JSONObject res = super.toJsonObj();
-    if (this.randomSeed != null) {
+    if (this.randomSeed > 0) {
       res.put(KEY_RANDOMSEED, this.randomSeed);
     }
     return res;
@@ -82,7 +82,7 @@ public class RenderOptionsOutput extends RenderOptionsInput {
    * @param randomSeed the random seed
    * @return this to set further options
    */
-  public RenderOptionsOutput setRandomSeed(Integer randomSeed) {
+  public RenderOptionsOutput setRandomSeed(int randomSeed) {
     this.randomSeed = randomSeed;
     return this;
   }
@@ -92,7 +92,7 @@ public class RenderOptionsOutput extends RenderOptionsInput {
    * 
    * @return this to set further options
    */
-  public Integer getRandomSeed() {
+  public int getRandomSeed() {
     return this.randomSeed;
   }
 

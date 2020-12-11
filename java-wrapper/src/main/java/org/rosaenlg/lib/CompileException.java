@@ -30,8 +30,9 @@ public class CompileException extends Exception {
   /** Constructor.
    * 
    * @param errorMessage error message
+   * @param err the original error
    */
-  public CompileException(String errorMessage) {
-    super(errorMessage);
+  public CompileException(String errorMessage, Throwable err) {
+    super(errorMessage, err);
   }
 }

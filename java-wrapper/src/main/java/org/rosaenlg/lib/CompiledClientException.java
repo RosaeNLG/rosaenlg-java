@@ -30,8 +30,9 @@ public class CompiledClientException extends Exception {
   /** Constructor.
    * 
    * @param errorMessage error message
+   * @param err the original error
    */
-  public CompiledClientException(String errorMessage) {
-    super(errorMessage);
+  public CompiledClientException(String errorMessage, Throwable err) {
+    super(errorMessage, err);
   }
 }

@@ -313,10 +313,27 @@ class TestRosaeContext {
 
       fail("Exception did not throw!");
     } catch (Exception e) {
-      // e.printStackTrace();
-      assertTrue(e.getMessage().contains("Unexpected token"));
-      assertTrue(e.getMessage().contains("  > 5|   if true +!= false"));
-      assertTrue(e.getMessage().contains("------------------^"));
+      Throwable rootException = e.getCause().getCause().getCause();      
+      assertTrue(rootException.getMessage().contains("Unexpected token"));
+      assertTrue(rootException.getMessage().contains("  > 5|   if true +!= false"));
+      assertTrue(rootException.getMessage().contains("------------------^"));
+    }
+  }
+
+  @Test
+  void testCompileErrorForSimpleTemplates() throws Exception {
+    try {
+      CompileInfo opts = new CompileInfo();
+      opts.setLanguage("en_US");
+
+      new RosaeContext("| bla#{", opts);
+
+      fail("Exception did not throw!");
+    } catch (Exception e) {
+      Throwable rootException = e.getCause().getCause().getCause();
+      assertTrue(rootException.getMessage().contains("Error: main:1:8"));
+      assertTrue(rootException.getMessage().contains("  > 1| | bla#{"));
+      assertTrue(rootException.getMessage().contains("--------------^"));
     }
   }
 
