@@ -34,50 +34,48 @@ function getRosaenlg(language) {
   }
 }
 
-function compileFileClient(path, language, jsonStaticFs, jsonOptions, exceptionMarker) {
-  try {
-    const opts = JSON.parse(jsonOptions);
-    opts.staticFs = JSON.parse(jsonStaticFs);
-    return getRosaenlg(language).compileFileClient(cleanPath(path), opts);
-  } catch (e) {
-    return exceptionMarker + e.toString();
-  }
+function compileFileClient(path, language, jsonStaticFs, jsonOptions) {
+  const opts = JSON.parse(jsonOptions);
+  opts.staticFs = JSON.parse(jsonStaticFs);
+  return getRosaenlg(language).compileFileClient(cleanPath(path), opts);
 }
 
+// used when debugging only
 function JSONStringify(object) {
-  var cache = [];        
+  var cache = [];
   var str = JSON.stringify(object,
-      // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON" 
-      function(key, value) {
-          if (typeof value === 'object' && value !== null) {
-              if (cache.indexOf(value) !== -1) {
-                  // Circular reference found, discard key
-                  return;
-              }
-              // Store value in our collection
-              cache.push(value);
-          }
-          return value;
-      }, 4);
+    // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON" 
+    function (key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+          // Circular reference found, discard key
+          return;
+        }
+        // Store value in our collection
+        cache.push(value);
+      }
+      return value;
+    }, 4);
   cache = null; // enable garbage collection
   return str;
 };
 
-function compileFile(path, language, jsonStaticFs, jsonOptions, exceptionMarker) { 
-  try {
-    const opts = JSON.parse(jsonOptions);
-    opts.staticFs = JSON.parse(jsonStaticFs);
-    const fct = getRosaenlg(language).compileFile(cleanPath(path), opts)
-    return (opts) => {
-      opts.outputData = {}; // must be created here
-      const text = fct(opts);
-      const outputData = opts.outputData;
-      return JSON.stringify({
-        text: text,
-        outputData: outputData,
-      });
-    };
-  } catch (e) {
-    return exceptionMarker + e.toString();
-  }
+function compileFile(path, language, jsonStaticFs, jsonOptions) {
+  const opts = JSON.parse(jsonOptions);
+  opts.staticFs = JSON.parse(jsonStaticFs);
+  const fct = getRosaenlg(language).compileFile(cleanPath(path), opts);
+  return (renderOptsWithLib) => {
+    renderOptsWithLib.outputData = {}; // must be created here
+    const renderedText = fct(renderOptsWithLib);
+    const outputData = renderOptsWithLib.outputData;
+
+    return JSON.stringify({
+      renderedText: renderedText,
+      outputData: outputData,
+      renderOptions: {
+        randomSeed: renderOptsWithLib.util.randomSeed
+        // we don't have a simple access to input render options; will be completed upflow
+      }
+    });
+  };
 }

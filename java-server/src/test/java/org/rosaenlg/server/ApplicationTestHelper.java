@@ -164,6 +164,8 @@ public class ApplicationTestHelper {
     long ms = jsonContent.getLong("ms");
     assertTrue(ms >= 0);
 
+    assertTrue(jsonContent.getJSONObject("renderOptions").getInt("randomSeed") > -1);
+
     if (jsonOuputDataExpected != null) {
       String realJsonOutputData = jsonContent.getJSONObject("outputData").toString();
       assertEquals(

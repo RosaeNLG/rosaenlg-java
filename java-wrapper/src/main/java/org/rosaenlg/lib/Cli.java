@@ -56,7 +56,7 @@ public class Cli {
     chanson.put("auteur", "Édith Piaf");
     opts.put("chanson", chanson);
 
-    String rendered = rosaeContext.render(opts.toString()).getText();
+    String rendered = rosaeContext.render(opts.toString()).getRenderedText();
     System.out.println(rendered);
   }
 }

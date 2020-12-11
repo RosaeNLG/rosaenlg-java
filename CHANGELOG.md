@@ -16,13 +16,17 @@
 
 ### Added
 
+* `renderDebug` option
+* `randomSeed` is now present in the output
 
 ### Fixed
 
+* upgraded spring boot to 2.3.7.RELEASE, source of CVE-2020-17527
 * removed log4j:log4j dependency, source of CVE-2019-17571
 
 ### Changed
 
+* uses RosaeNLG 2.1.0
 
 
 ## [2.0.0] 2020-11-30

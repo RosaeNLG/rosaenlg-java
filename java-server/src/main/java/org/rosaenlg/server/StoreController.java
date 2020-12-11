@@ -28,7 +28,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-import org.json.JSONObject;
 import org.rosaenlg.lib.JsonPackage;
 import org.rosaenlg.lib.RenderResult;
 import org.slf4j.Logger;
@@ -243,17 +242,15 @@ public class StoreController {
 
     RenderResult renderResult = this.store.render(templateId, body);
 
-    String renderedText = renderResult.getText();
+    String renderedText = renderResult.getRenderedText();
     logger.info("render text done");
-
-    RenderOptionsForSerialize renderOptions = new RenderOptionsForSerialize(new JSONObject(body));
 
     long finish = System.currentTimeMillis();
 
     return new Rendered(
         renderedText,
         renderResult.getOutputData(),
-        renderOptions,
+        renderResult.getRenderOptions(),
         finish - start);
   }
 

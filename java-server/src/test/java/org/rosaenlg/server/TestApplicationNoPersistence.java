@@ -204,6 +204,27 @@ class TestApplicationNoPersistence extends AbstractTest {
     ath.deleteOne("outputdata");
   }
 
+
+  @Test
+  void testRenderDebug() throws Exception {
+    ath.checkTemplateList(0);
+    ath.createOne("chanson");
+    ath.checkTemplateList(1);
+
+    JSONObject opts = new JSONObject();
+    opts.put("language", "fr_FR");
+    opts.put("renderDebug", true);
+    JSONObject chanson = new JSONObject();
+    chanson.put("nom", "Non, je ne regrette rien");
+    chanson.put("auteur", "Édith Piaf");
+    opts.put("chanson", chanson);
+
+    ath.render("chanson", opts.toString(), new String[] { "rosaenlg-debug", "Édith Piaf" },
+        null);
+
+    ath.deleteOne("chanson");
+  }
+
   @AfterEach
   void checkEmptyList() throws Exception {
     ath.checkTemplateList(0);

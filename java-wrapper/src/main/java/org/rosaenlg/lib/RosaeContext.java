@@ -55,7 +55,6 @@ public class RosaeContext {
   private static final Logger logger = LoggerFactory.getLogger(RosaeContext.class);
 
   private static Source sourceWrapper;
-  private static final String EXCEPTION_MARKER = "EXCEPTION ";
   private static Map<String, Source> sourcesRosaeNLG = new HashMap<>();
 
   private String language;
@@ -223,15 +222,15 @@ public class RosaeContext {
   }
 
   private void compile() throws CompileException {
+    try {
 
     Value compileFileFct = context.eval("js", "compileFile");
     assert compileFileFct.canExecute();
 
     compiledTemplateFct = compileFileFct.execute(entryTemplate, this.language, (new JSONObject(templates)).toString(),
-        compileInfo.toJson(), EXCEPTION_MARKER);
-
-    if (compiledTemplateFct.toString().startsWith(EXCEPTION_MARKER)) {
-      throw new CompileException(compiledTemplateFct.toString().replace(EXCEPTION_MARKER, ""));
+        compileInfo.toJson());
+    } catch (Exception e) {
+      throw new CompileException("cannot compile", e);
     }
   }
 
@@ -240,7 +239,7 @@ public class RosaeContext {
       logger.info("auto test is activated");
 
       try {
-        String rendered = this.render(autotest.getJsonInput()).getText();
+        String rendered = this.render(autotest.getJsonInput()).getRenderedText();
         for (int i = 0; i < autotest.getExpected().size(); i++) {
           if (!rendered.contains(autotest.getExpected().get(i))) {
             throw new AutotestException(templateId, autotest.getExpected().get(i), rendered);
@@ -292,25 +291,18 @@ public class RosaeContext {
     // inject NlgLib into the options
     JSONObject jsonOptions = new JSONObject(jsonOptionsAsString);
 
-    RenderOptions runtimeOptions = new RenderOptions(jsonOptions);
+    RenderOptionsInput runtimeOptions = new RenderOptionsInput(jsonOptions);
 
     // we keep original but add 'util'
     jsonOptions.put("util", "NLGLIB_PLACEHOLDER");
     String finalOptions = jsonOptions.toString().replace("\"NLGLIB_PLACEHOLDER\"",
-        "new rosaenlg_" + this.language + ".NlgLib(JSON.parse('" + runtimeOptions.toJson() + "'))");
+        "new rosaenlg_" + this.language + ".NlgLib(JSON.parse('" + runtimeOptions.toJsonString() + "'))");
     String paramForge = "() => { return " + finalOptions + ";}";
 
     Value realParam = context.eval("js", paramForge).execute();
     try {
-      String jsonRendered = compiledTemplateFct.execute(realParam).asString();
-
-      RenderResult renderResult = new RenderResult(jsonRendered);
-
-      String text = renderResult.getText();
-      if (text.startsWith(EXCEPTION_MARKER)) {
-        throw new RenderingException(text.replace(EXCEPTION_MARKER, ""), null);
-      }
-      return renderResult;
+      String jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
+      return new RenderResult(jsonOptions, jsonRenderedString);
 
     } catch (Exception e) {
       throw new RenderingException("cannot render", e);
@@ -328,20 +320,21 @@ public class RosaeContext {
    * @throws CompiledClientException if a problem occurs
    */
   public String getCompiledClient() throws CompiledClientException {
-    Value compileFileClientFct = context.eval("js", "compileFileClient");
-    assert compileFileClientFct.canExecute();
+    try {
+      Value compileFileClientFct = context.eval("js", "compileFileClient");
+      assert compileFileClientFct.canExecute();
 
-    CompileInfo newCompileOpts = new CompileInfo(this.compileInfo);
+      CompileInfo newCompileOpts = new CompileInfo(this.compileInfo);
 
-    newCompileOpts.setEmbedResources(true);
+      newCompileOpts.setEmbedResources(true);
 
-    String compiled = compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
-        newCompileOpts.toJson(), EXCEPTION_MARKER).asString();
+      return compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
+          newCompileOpts.toJson()).asString();
+    } catch (Exception e) {
+      throw new CompiledClientException("cannot compile", e);
 
-    if (compiled.startsWith(EXCEPTION_MARKER)) {
-      throw new CompiledClientException(compiled.replace(EXCEPTION_MARKER, ""));
     }
-    return compiled;
+
   }
 
   /**
