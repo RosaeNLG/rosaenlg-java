@@ -1,6 +1,7 @@
 package org.rosaenlg.lib;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /*-
  * #%L
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.json.JSONObject;
 
-public class TestRenderOptionsOutput {
+class TestRenderOptionsOutput {
 
   @Test
   void testRandomSeed() throws Exception {
@@ -39,7 +40,7 @@ public class TestRenderOptionsOutput {
   void testJsonWithoutRandomSeed() throws Exception {
     RenderOptionsOutput roo = new RenderOptionsOutput();
     roo.completeRenderOptionsOutput(new JSONObject());
-    assert(!roo.toJsonObj().has("randomKey"));
+    assertFalse(roo.toJsonObj().has("randomKey"));
   }
 
 

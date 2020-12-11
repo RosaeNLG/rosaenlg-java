@@ -328,11 +328,8 @@ public class RosaeContext {
 
       newCompileOpts.setEmbedResources(true);
 
-      String compiled = compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
+      return compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
           newCompileOpts.toJson()).asString();
-
-      return compiled;
-
     } catch (Exception e) {
       throw new CompiledClientException("cannot compile", e);
 
