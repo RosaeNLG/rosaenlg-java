@@ -162,6 +162,7 @@ public class RosaeContext {
           logger.debug("{} is readable...", resource);
           String content = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8.name());
           logger.debug("content: {}", content);
+          // relativize does not work on jar URI
           String correctedPath = resource.getURI().toString().replace(root.getURI().toString() + "/", "");
           logger.debug("corrected path: <{}>", correctedPath);
           templates.put(correctedPath, content);
