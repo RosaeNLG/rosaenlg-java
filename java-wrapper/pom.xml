@@ -29,12 +29,12 @@
     <sonar.projectKey>java-wrapper</sonar.projectKey>
   </properties>
 
-  <repositories>
+  <!--repositories>
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
-  </repositories>
+  </repositories-->
 
   <profiles>
     <profile>
@@ -439,5 +439,13 @@
       <version>5.2.0</version>
       <scope>test</scope>
     </dependency-->
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>5.3.2</version>
+    </dependency>
+
   </dependencies>
 </project>

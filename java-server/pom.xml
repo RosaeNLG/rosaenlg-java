@@ -26,13 +26,6 @@
     <sonar.projectKey>java-server</sonar.projectKey>
   </properties>
 
-  <!--repositories>
-    <repository>
-      <id>local-maven-repo</id>
-      <url>file:///${project.parent.basedir}/java-wrapper/target</url>
-    </repository>
-  </repositories-->
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -53,13 +46,11 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.4.8</version>
     </dependency>
-    <!-- RosaeNLG wrapper, take it locally; cannot be solved before it is pushed to central repo -->
+    <!-- RosaeNLG wrapper -->
     <dependency>
       <groupId>org.rosaenlg</groupId>
       <artifactId>java-wrapper</artifactId>
       <version>${project.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/../java-wrapper/target/java-wrapper-${project.version}.jar</systemPath>
     </dependency>
 
     <!-- useful only when using a local version of the wrapper -->

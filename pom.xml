@@ -39,8 +39,9 @@
   <inceptionYear>2019</inceptionYear>
 
   <properties>
-    <revision>2.1.2</revision>
-    <rosaenlg.version>${revision}</rosaenlg.version>
+    <revision>2.1.3-SNAPSHOT</revision>
+    <!--rosaenlg.version>${revision}</rosaenlg.version-->
+    <rosaenlg.version>2.1.2</rosaenlg.version>
     <slf4j.version>1.7.29</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

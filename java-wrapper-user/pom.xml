@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <organization>
+    <name>RosaeNLG.org, Ludan Stoecklé</name>
+    <url>https://rosaenlg.org</url>
+  </organization>
+  <inceptionYear>2020</inceptionYear>
+
   <properties>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
@@ -111,6 +117,31 @@
           <mainClass>org.rosaenlg.user.Main</mainClass>
         </configuration>
       </plugin>
+
+      <!-- add license to files, one shot -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>2.0.0</version>
+        <configuration>
+          <licenseName>apache_v2</licenseName>
+          <header>${license.dir}/LICENSE</header>
+          <excludes>
+            <exclude>**/*pug</exclude>
+          </excludes>
+          <encoding>utf-8</encoding>
+        </configuration>
+        <executions>
+          <execution>
+            <id>first</id>
+            <goals>
+              <goal>update-file-header</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

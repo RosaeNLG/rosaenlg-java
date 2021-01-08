@@ -1,3 +1,7 @@
+<!--
+Copyright 2020 Ludan Stoecklé
+SPDX-License-Identifier: Apache-2.0
+-->
 # Changelog
 
 <!---
@@ -11,6 +15,17 @@
 
 
 -->
+
+## [Unreleased]
+
+### Added
+
+* `java-wrapper`: the templates can now be put in standard `resources` folder; use dedicated `RosaeContext` constructor (thanks to suggestion of EN)
+
+### Fixed
+
+### Changed
+
 
 ## [2.1.2] 2020-12-29
 
