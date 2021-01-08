@@ -26,7 +26,6 @@ import java.net.URL;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
-import java.nio.file.Paths;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +33,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
@@ -43,6 +44,9 @@ import org.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.Resource;
 
 /**
  * Wrapper around RosaeNLG.
@@ -122,6 +126,54 @@ public class RosaeContext {
   }
 
   /**
+   * Constructor, based on traditional Pug templates but located in <b>project
+   * resources</b>.
+   * 
+   * <p>
+   * Will create a new GraalVM context for this template, compile the template,
+   * and be ready to render multiple times.
+   * </p>
+   * 
+   * @param entryTemplate     the name of the template to compile
+   * @param resourcesLocation the subfolder in resources where the templates to be
+   *                          included are located (including the entry template)
+   *                          (could be "templates")
+   * @param compileInfo       how to compile the template
+   * @throws RosaeContextConstructorException if compiling fails, or if reading
+   *                                          disk fails
+   */
+  public RosaeContext(String entryTemplate, String resourcesLocation, CompileInfo compileInfo)
+      throws RosaeContextConstructorException {
+
+    try {
+      this.entryTemplate = entryTemplate;
+      this.compileInfo = compileInfo;
+
+      logger.info("resources path is {}", resourcesLocation);
+
+      PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+      Resource[] resourcesArr = resourceResolver.getResources(resourcesLocation + "/**");
+
+      Resource root = resourceResolver.getResource(resourcesLocation);
+
+      for (Resource resource : resourcesArr) {
+        logger.debug("one resource: {}", resource);
+        if (resource.isReadable()) {
+          logger.debug("{} is readable...", resource);
+          String content = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8.name());
+          logger.debug("content: {}", content);
+          String correctedPath = resource.getURI().toString().replace(root.getURI().toString() + "/", "");
+          logger.debug("corrected path: <{}>", correctedPath);
+          templates.put(correctedPath, content);
+        }
+      }
+      this.init();
+    } catch (Exception e) {
+      throw new RosaeContextConstructorException(e);
+    }
+  }
+
+  /**
    * Constructor, based on traditional Pug templates.
    * 
    * <p>
@@ -148,8 +200,9 @@ public class RosaeContext {
         String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
         // must fit pug convention
-        templates.put(Paths.get(includesPath.toURI()).relativize(Paths.get(file.toURI())).toString().replace("\\", "/"),
-            content);
+        String correctedPath = includesPath.toURI().relativize(file.toURI()).toString().replace("\\", "/");
+        logger.debug("corrected path: <{}>", correctedPath);
+        templates.put(correctedPath, content);
       }
 
       this.init();
@@ -224,11 +277,11 @@ public class RosaeContext {
   private void compile() throws CompileException {
     try {
 
-    Value compileFileFct = context.eval("js", "compileFile");
-    assert compileFileFct.canExecute();
+      Value compileFileFct = context.eval("js", "compileFile");
+      assert compileFileFct.canExecute();
 
-    compiledTemplateFct = compileFileFct.execute(entryTemplate, this.language, (new JSONObject(templates)).toString(),
-        compileInfo.toJson());
+      compiledTemplateFct = compileFileFct.execute(entryTemplate, this.language, (new JSONObject(templates)).toString(),
+          compileInfo.toJson());
     } catch (Exception e) {
       throw new CompileException("cannot compile", e);
     }
@@ -328,8 +381,8 @@ public class RosaeContext {
 
       newCompileOpts.setEmbedResources(true);
 
-      return compileFileClientFct.execute(entryTemplate, language, (new JSONObject(templates)).toString(),
-          newCompileOpts.toJson()).asString();
+      return compileFileClientFct
+          .execute(entryTemplate, language, (new JSONObject(templates)).toString(), newCompileOpts.toJson()).asString();
     } catch (Exception e) {
       throw new CompiledClientException("cannot compile", e);
 

@@ -179,6 +179,21 @@ class TestRosaeContext {
   }
 
   @Test
+  void usingResources() throws Exception {
+    CompileInfo compileOpts = new CompileInfo();
+    compileOpts.setLanguage("en_US");
+
+    final RosaeContext rc = new RosaeContext("main.pug", "templates", compileOpts);
+
+    JSONObject renderOpts = new JSONObject();
+    renderOpts.put("language", "en_US");
+
+    String rendered = rc.render(renderOpts.toString()).getRenderedText();
+
+    assertEquals("Some text: bla bla", rendered);
+  }
+
+  @Test
   void compileClientWithSpecificName() throws Exception {
 
     CompileInfo compileOpts = new CompileInfo();
