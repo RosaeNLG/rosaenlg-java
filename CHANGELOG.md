@@ -16,15 +16,15 @@ SPDX-License-Identifier: Apache-2.0
 
 -->
 
-## [Unreleased]
+## [2.1.3] 2021-01-17
 
 ### Added
 
 * `java-wrapper`: the templates can now be put in standard `resources` folder; use dedicated `RosaeContext` constructor (thanks to suggestion of EN)
 
-### Fixed
-
 ### Changed
+
+* uses RosaeNLG 2.1.3
 
 
 ## [2.1.2] 2020-12-29
