@@ -15,6 +15,13 @@ SPDX-License-Identifier: Apache-2.0
 
 -->
 
+## [2.1.5] 2021-02-20
+
+### Changed
+
+* uses RosaeNLG 2.1.5
+
+
 ## [2.1.4] 2021-31-01
 
 ### Changed
