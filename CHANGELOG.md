@@ -1,6 +1,6 @@
 <!--
 Copyright 2020 Ludan Stoecklé
-SPDX-License-Identifier: Apache-2.0
+SPDX-License-Identifier: CC-BY-4.0
 -->
 # Changelog
 
@@ -14,6 +14,17 @@ SPDX-License-Identifier: Apache-2.0
 ### Changed
 
 -->
+
+## [Unreleased]
+
+### Added
+
+### Fixed
+
+### Changed
+
+* license for documentation files is now CC-BY-4.0
+
 
 ## [2.1.5] 2021-02-20
 
