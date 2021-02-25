@@ -83,5 +83,5 @@ _for developers who can do the release_
 - publication will trigger on vXX.XX.XX branch thanks to GitHub Actions
 - Docker images:
   - **wait** for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
-  - trigger docker on GitHub Actions to generate docker images
+  - trigger docker on GitHub Actions to generate docker images 
 
