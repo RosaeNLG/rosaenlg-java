@@ -19,7 +19,7 @@
 
   <properties>
     <license.dir>${basedir}</license.dir>
-    <springframework.boot.version>2.3.7.RELEASE</springframework.boot.version>
+    <springframework.boot.version>2.3.9.RELEASE</springframework.boot.version>
 
     <sonar.organization>rosaenlg</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>

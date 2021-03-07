@@ -15,11 +15,11 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
-## [Unreleased]
-
-### Added
+## [2.1.6] 2021-03-07
 
 ### Fixed
+
+* some security warnings by updating Spring to 2.3.9.RELEASE
 
 ### Changed
 
