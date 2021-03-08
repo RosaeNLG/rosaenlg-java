@@ -15,6 +15,13 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
+## [2.1.7] 2021-03-08
+
+### Changed
+
+* uses RosaeNLG 2.1.7
+
+
 ## [2.1.6] 2021-03-07
 
 ### Fixed
@@ -24,6 +31,7 @@ SPDX-License-Identifier: CC-BY-4.0
 ### Changed
 
 * license for documentation files is now CC-BY-4.0
+* uses RosaeNLG 2.1.6
 
 
 ## [2.1.5] 2021-02-20
