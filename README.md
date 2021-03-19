@@ -3,7 +3,7 @@ Copyright 2020 Ludan Stoecklé
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-![RosaeNLG logo, thanks to Denis Aulas](packages/rosaenlg-doc/doc/modules/advanced/assets/images/rosaenlg-logo-white-bg.png)
+![RosaeNLG logo, thanks to Denis Aulas](rosaenlg-logo-white-bg.png)
 
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4502/badge)](https://bestpractices.coreinfrastructure.org/projects/4502)
 [![Known Vulnerabilities](https://snyk.io/test/github/RosaeNLG/rosaenlg-java/badge.svg)](https://snyk.io/test/github/RosaeNLG/rosaenlg-java)
