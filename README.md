@@ -2,6 +2,9 @@
 Copyright 2020 Ludan Stoecklé
 SPDX-License-Identifier: CC-BY-4.0
 -->
+
+![RosaeNLG logo, thanks to Denis Aulas](packages/rosaenlg-doc/doc/modules/advanced/assets/images/rosaenlg-logo-white-bg.png)
+
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4502/badge)](https://bestpractices.coreinfrastructure.org/projects/4502)
 [![Known Vulnerabilities](https://snyk.io/test/github/RosaeNLG/rosaenlg-java/badge.svg)](https://snyk.io/test/github/RosaeNLG/rosaenlg-java)
 
@@ -14,6 +17,10 @@ RosaeNLG for Java is a wrapper around RosaeNLG main version to run RosaeNLG in a
 This repo contains:
 - a Java Wrapper (lib) around RosaeNLG
 - a Java Server based on the Wrapper
+
+RosaeNLG is a Sandbox Project of LF AI & Data Foundation, part of the Linux Foundation.
+
+<img src="https://artwork.lfaidata.foundation/lfaidata-assets/lfaidata-project-badge/sandbox/color/lfaidata-project-badge-sandbox-color.svg" width="300">
 
 
 ## Getting Started Using RosaeNLG Java Version
@@ -47,6 +54,12 @@ Also check our [Code of Conduct](CODE_OF_CONDUCT.md).
 ## Roadmap
 
 RosaeNLG for Java roadmap is currently centered on industrialization.
+
+
+## Logo & Artwork
+
+RosaeNLG logo was made by Denis Aulas.
+Reference artwork is [here](https://github.com/RosaeNLG/artwork).
 
 
 ## License
