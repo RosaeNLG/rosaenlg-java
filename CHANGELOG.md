@@ -15,6 +15,18 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
+## [Unreleased]
+
+### Added
+
+### Fixed
+
+* `commons-io` version changed to 2.7 due to CVE-2021-29425
+
+### Changed
+
+
+
 ## [2.1.9] 2021-04-13
 
 ### Changed
