@@ -180,10 +180,10 @@ public class Store {
   private void loadExistingTemplate(Path jsonFile) throws LoadTemplateException {
     // read json file
     try {
-      String jsonContent = new String(Files.readAllBytes(jsonFile), StandardCharsets.UTF_8);
+      var jsonContent = new String(Files.readAllBytes(jsonFile), StandardCharsets.UTF_8);
       logger.debug("json file {}: {}", jsonFile, jsonContent);
 
-      RosaeContext rc = new RosaeContext(jsonContent);
+      var rc = new RosaeContext(jsonContent);
       rosaeContexts.put(rc.getTemplateId(), rc);
 
     } catch (Exception e) {
@@ -245,7 +245,7 @@ public class Store {
   public void deleteTemplateFileAndUnload(String templateId) throws DeleteTemplateException {
     try {
       if (templatesPath != null) {
-        Path pathToDelete = getTemplateFile(templateId);
+        var pathToDelete = getTemplateFile(templateId);
         Files.delete(pathToDelete);
       }
       unloadTemplate(templateId);
@@ -269,7 +269,7 @@ public class Store {
   public CreateTemplateStatus saveTemplateOnDiskAndLoad(String template) throws SaveTemplateOnDiskAndLoadException {
     try {
       // load
-      RosaeContext rc = new RosaeContext(template);
+      var rc = new RosaeContext(template);
 
       // status
       final CreateStatus status = templateLoaded(rc.getTemplateId())
@@ -331,7 +331,7 @@ public class Store {
       throw new RenderException("template not found: " + templateId, null);
     }
     try {
-      RosaeContext rosaeContext = rosaeContexts.get(templateId);
+      var rosaeContext = rosaeContexts.get(templateId);
       return rosaeContext.render(jsonOptions);
     } catch (Exception e) {
       throw new RenderException("could not render " + templateId, e);

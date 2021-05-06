@@ -38,11 +38,11 @@ public class RenderResult {
    * @param jsonString the string containing the JSON package
    */
   public RenderResult(JSONObject jsonOptions, String jsonString) {
-    JSONObject jsonObj = new JSONObject(jsonString);
+    var jsonObj = new JSONObject(jsonString);
     this.renderedText = jsonObj.getString("renderedText");
     this.outputData = jsonObj.getJSONObject("outputData").toString();
 
-    RenderOptionsOutput renderOptionsOutput = new RenderOptionsOutput(jsonOptions);
+    var renderOptionsOutput = new RenderOptionsOutput(jsonOptions);
     renderOptionsOutput.completeRenderOptionsOutput(jsonObj.getJSONObject("renderOptions"));
     this.renderOptions = renderOptionsOutput.toJsonString();
   }

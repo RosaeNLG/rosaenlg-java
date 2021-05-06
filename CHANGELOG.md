@@ -17,11 +17,16 @@ SPDX-License-Identifier: CC-BY-4.0
 
 ## [Unreleased]
 
+
+TODO change .ref and .refexpr for next version
+
+
 ### Added
 
 ### Fixed
 
 * `commons-io` version changed to 2.7 due to CVE-2021-29425
+* Sonar code smells
 
 ### Changed
 

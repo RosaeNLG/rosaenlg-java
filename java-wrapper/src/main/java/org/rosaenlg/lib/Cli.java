@@ -44,14 +44,14 @@ public class Cli {
     String template = "p\n" + "  | il #[+verb(getAnonMS(), {verb: 'chanter', tense:'FUTUR'} )]\n"
         + "  | \"#{chanson.nom}\"\n" + "  | de #{chanson.auteur}\n";
 
-    CompileInfo compileInfo = new CompileInfo();
+    var compileInfo = new CompileInfo();
     compileInfo.setLanguage("fr_FR");
 
-    final RosaeContext rosaeContext = new RosaeContext(template, compileInfo);
+    final var rosaeContext = new RosaeContext(template, compileInfo);
 
-    JSONObject opts = new JSONObject();
+    var opts = new JSONObject();
     opts.put("language", "fr_FR");
-    JSONObject chanson = new JSONObject();
+    var chanson = new JSONObject();
     chanson.put("nom", "Non, je ne regrette rien");
     chanson.put("auteur", "Édith Piaf");
     opts.put("chanson", chanson);
