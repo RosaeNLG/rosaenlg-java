@@ -15,13 +15,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
-## [Unreleased]
-
-
-TODO change .ref and .refexpr for next version
-
-
-### Added
+## [3.0.0] 2021-05-06
 
 ### Fixed
 
@@ -30,6 +24,7 @@ TODO change .ref and .refexpr for next version
 
 ### Changed
 
+* uses RosaeNLG 3.0.0
 
 
 ## [2.1.9] 2021-04-13

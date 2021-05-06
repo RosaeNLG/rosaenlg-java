@@ -57,12 +57,12 @@ mixin phone_refexpr(obj, params)
         | it
 
 
-mixin phone
+mixin printPhone
   | #[+intro] .
   | #[+phone_chunks]
 
 p
   -
-    phone.ref = 'phone_ref';
-    phone.refexpr = 'phone_refexpr';
-  | #[+phone]
+    phone.ref = phone_ref;
+    phone.refexpr = phone_refexpr;
+  | #[+printPhone]
