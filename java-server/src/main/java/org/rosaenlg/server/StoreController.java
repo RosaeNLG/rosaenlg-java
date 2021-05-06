@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import org.rosaenlg.lib.JsonPackage;
-import org.rosaenlg.lib.RenderResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

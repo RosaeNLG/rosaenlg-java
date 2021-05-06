@@ -1,6 +1,5 @@
 package org.rosaenlg.lib;
 
-import java.io.InputStream;
 import java.util.List;
 
 /*-
@@ -23,7 +22,6 @@ import java.util.List;
  * #L%
  */
 
-import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 

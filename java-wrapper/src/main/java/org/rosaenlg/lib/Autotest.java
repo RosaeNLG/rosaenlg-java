@@ -22,10 +22,7 @@ package org.rosaenlg.lib;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-
 
 /**
  * Autotest structure.
