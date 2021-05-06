@@ -240,7 +240,7 @@ public class StoreController {
 
     long start = System.currentTimeMillis();
 
-    RenderResult renderResult = this.store.render(templateId, body);
+    var renderResult = this.store.render(templateId, body);
 
     String renderedText = renderResult.getRenderedText();
     logger.info("render text done");

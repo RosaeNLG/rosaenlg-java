@@ -63,8 +63,8 @@ public class Autotest {
     this.jsonInput = jsonConf.getJSONObject("input").toString();
 
     this.expected = new ArrayList<>();
-    JSONArray jsonExpected = jsonConf.getJSONArray("expected");
-    for (int i = 0; i < jsonExpected.length(); i++) {
+    var jsonExpected = jsonConf.getJSONArray("expected");
+    for (var i = 0; i < jsonExpected.length(); i++) {
       this.expected.add(jsonExpected.getString(i));
     }
   }
