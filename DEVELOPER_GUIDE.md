@@ -85,3 +85,11 @@ _for developers who can do the release_
   - **wait** for [maven publication available](https://repo1.maven.org/maven2/org/rosaenlg/java-wrapper/)
   - trigger docker on GitHub Actions to generate docker images 
 
+
+## Expired key for Maven
+
+* check if key has expired: `gpg --list-keys`
+* generate a new key with a new passphrase
+* export the new key: `gpg --output private.pgp --armor --export-secret-key username@email`
+* on GitHub, update secrets: MAVEN_GPG_PRIVATE_KEY and MAVEN_GPG_PASSPHRASE
+* make the keys public: `gpg --keyserver keyserver.ubuntu.com --send-keys KEY_ID`, check with `gpg --keyserver keyserver.ubuntu.com --recv-key KEY_ID`
