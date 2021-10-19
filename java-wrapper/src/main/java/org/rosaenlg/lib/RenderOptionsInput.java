@@ -119,7 +119,7 @@ public class RenderOptionsInput {
    * @return JSONObject the object as a JSON String
    */
   public JSONObject toJsonObj() {
-    var res = new JSONObject();
+    JSONObject res = new JSONObject();
     // must not be null
     res.put(KEY_LANGUAGE, this.language);
 

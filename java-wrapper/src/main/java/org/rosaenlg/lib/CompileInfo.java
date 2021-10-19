@@ -113,7 +113,7 @@ public class CompileInfo {
 
   private List<String> jsonArrayToStringArray(JSONArray arr) {
     List<String> res = new ArrayList<>();
-    for (var i = 0; i < arr.length(); i++) {
+    for (int i = 0; i < arr.length(); i++) {
       res.add(arr.getString(i));
     }
     return res;
@@ -125,7 +125,7 @@ public class CompileInfo {
    * @return String the object as a JSON String
    */
   public String toJson() {
-    var res = new JSONObject();
+    JSONObject res = new JSONObject();
     if (this.language != null) {
       res.put(KEY_LANGUAGE, this.language);
     }

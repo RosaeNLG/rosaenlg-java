@@ -151,16 +151,16 @@ public class RosaeContext {
 
       logger.info("resources path is {}", resourcesLocation);
 
-      var resourceResolver = new PathMatchingResourcePatternResolver();
+      PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
       Resource[] resourcesArr = resourceResolver.getResources(resourcesLocation + "/**");
 
-      var root = resourceResolver.getResource(resourcesLocation);
+      Resource root = resourceResolver.getResource(resourcesLocation);
 
       for (Resource resource : resourcesArr) {
         logger.debug("one resource: {}", resource);
         if (resource.isReadable()) {
           logger.debug("{} is readable...", resource);
-          var content = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8.name());
+          String content = IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8.name());
           logger.debug("content: {}", content);
           // relativize does not work on jar URI
           String correctedPath = resource.getURI().toString().replace(root.getURI().toString() + "/", "");
@@ -198,7 +198,7 @@ public class RosaeContext {
 
       Collection<File> files = FileUtils.listFiles(includesPath, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
       for (File file : files) {
-        var content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
 
         // must fit pug convention
         String correctedPath = includesPath.toURI().relativize(file.toURI()).toString().replace("\\", "/");
@@ -230,7 +230,7 @@ public class RosaeContext {
    */
   public RosaeContext(String jsonPackageAsString) throws RosaeContextConstructorException {
     try {
-      var jsonPackage = new JsonPackage(jsonPackageAsString);
+      JsonPackage jsonPackage = new JsonPackage(jsonPackageAsString);
       this.originalJsonPackage = jsonPackageAsString;
       this.templateId = jsonPackage.getTemplateId();
       this.entryTemplate = jsonPackage.getSrc().getEntryTemplate();
@@ -294,7 +294,7 @@ public class RosaeContext {
 
       try {
         String rendered = this.render(autotest.getJsonInput()).getRenderedText();
-        for (var i = 0; i < autotest.getExpected().size(); i++) {
+        for (int i = 0; i < autotest.getExpected().size(); i++) {
           if (!rendered.contains(autotest.getExpected().get(i))) {
             throw new AutotestException(templateId, autotest.getExpected().get(i), rendered);
           }
@@ -310,13 +310,13 @@ public class RosaeContext {
       if (sourcesRosaeNLG.get(language) == null) {
         logger.info("will now load rosaenlg js for {}", language);
 
-        final var properties = new Properties();
+        final Properties properties = new Properties();
         properties.load(RosaeContext.class.getResourceAsStream("/project.properties"));
         String version = properties.getProperty("rosaenlg.version");
         String rosaejsFileName = "rosaenlg_tiny_" + language + "_" + version + "_comp.js";
         logger.info("using rosaenlg file: {}", rosaejsFileName);
 
-        var sourceRosaeNlg = Source
+        Source sourceRosaeNlg = Source
             .newBuilder("js", new InputStreamReader(RosaeContext.class.getResourceAsStream("/" + rosaejsFileName),
                 StandardCharsets.UTF_8), rosaejsFileName)
             .build();
@@ -343,9 +343,9 @@ public class RosaeContext {
   public synchronized RenderResult render(String jsonOptionsAsString) throws RenderingException {
 
     // inject NlgLib into the options
-    var jsonOptions = new JSONObject(jsonOptionsAsString);
+    JSONObject jsonOptions = new JSONObject(jsonOptionsAsString);
 
-    var runtimeOptions = new RenderOptionsInput(jsonOptions);
+    RenderOptionsInput runtimeOptions = new RenderOptionsInput(jsonOptions);
 
     // we keep original but add 'util'
     jsonOptions.put("util", "NLGLIB_PLACEHOLDER");
@@ -355,7 +355,7 @@ public class RosaeContext {
 
     Value realParam = context.eval("js", paramForge).execute();
     try {
-      var jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
+      String jsonRenderedString = compiledTemplateFct.execute(realParam).asString();
       return new RenderResult(jsonOptions, jsonRenderedString);
 
     } catch (Exception e) {
@@ -378,7 +378,7 @@ public class RosaeContext {
       Value compileFileClientFct = context.eval("js", "compileFileClient");
       assert compileFileClientFct.canExecute();
 
-      var newCompileOpts = new CompileInfo(this.compileInfo);
+      CompileInfo newCompileOpts = new CompileInfo(this.compileInfo);
 
       newCompileOpts.setEmbedResources(true);
 

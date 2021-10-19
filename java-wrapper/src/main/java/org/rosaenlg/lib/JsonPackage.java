@@ -1,6 +1,9 @@
 package org.rosaenlg.lib;
 
+import java.io.InputStream;
 import java.util.List;
+
+import org.everit.json.schema.Schema;
 
 /*-
  * #%L
@@ -58,17 +61,17 @@ public class JsonPackage {
 
     this.initialPackage = jsonPackageAsString;
 
-    var jsonPackage = new JSONObject(jsonPackageAsString);
+    JSONObject jsonPackage = new JSONObject(jsonPackageAsString);
 
     try {
-      var inputStreamSchema = getClass().getResourceAsStream("/jsonPackage.schema.json");
-      var rawSchema = new JSONObject(new JSONTokener(inputStreamSchema));
-      var schema = SchemaLoader.load(rawSchema);
+      InputStream inputStreamSchema = getClass().getResourceAsStream("/jsonPackage.schema.json");
+      JSONObject rawSchema = new JSONObject(new JSONTokener(inputStreamSchema));
+      Schema schema = SchemaLoader.load(rawSchema);
       schema.validate(jsonPackage);
     } catch (ValidationException ve) {
       logger.error("Errors in JSON template validation:");
       List<ValidationException> causes = ve.getCausingExceptions();
-      for (var i = 0; i < causes.size(); i++) {
+      for (int i = 0; i < causes.size(); i++) {
         logger.error(causes.get(i).toString());
       }      
       throw ve;

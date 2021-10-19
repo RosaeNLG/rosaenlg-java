@@ -50,10 +50,10 @@ public class JsonPackageSrc {
 
     this.entryTemplate = src.getString("entryTemplate");
     
-    var compileInfoJson = src.getJSONObject("compileInfo");
+    JSONObject compileInfoJson = src.getJSONObject("compileInfo");
     this.compileInfo = new CompileInfo(compileInfoJson);
 
-    var templatesJson = src.getJSONObject("templates");
+    JSONObject templatesJson = src.getJSONObject("templates");
     Iterator<String> keys = templatesJson.keys();
     while (keys.hasNext()) {
       String key = keys.next();
