@@ -19,7 +19,7 @@
 
   <properties>
     <license.dir>${basedir}</license.dir>
-    <springframework.boot.version>2.3.9.RELEASE</springframework.boot.version>
+    <springframework.boot.version>2.6.2</springframework.boot.version>
 
     <sonar.organization>rosaenlg</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.4.8</version>
+      <version>1.6.2</version>
     </dependency>
     <!-- RosaeNLG wrapper -->
     <dependency>
@@ -62,7 +62,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.7</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
       <groupId>org.graalvm.sdk</groupId>

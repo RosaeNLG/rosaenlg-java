@@ -12,7 +12,7 @@
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
     <java.version>11</java.version>
-    <graalvm.version>20.2.0</graalvm.version>
+    <graalvm.version>21.3.0</graalvm.version>
     <license.dir>${basedir}</license.dir>
     <springframework.boot.version>2.3.7.RELEASE</springframework.boot.version>
   </properties>
@@ -54,7 +54,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.7</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
       <groupId>org.graalvm.sdk</groupId>
