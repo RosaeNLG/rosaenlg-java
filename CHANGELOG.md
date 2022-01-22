@@ -15,15 +15,12 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
-## [Unreleased]
+## [3.2.0] 2022-01-22
 
 ### Fixed
 
 * updated some dependencies
-
-### Changed
-
-* uses RosaeNLG 3.1.0
+* uses RosaeNLG 3.2.0
 
 
 ## [3.0.4] 2021-12-24
