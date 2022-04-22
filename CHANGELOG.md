@@ -15,6 +15,13 @@ SPDX-License-Identifier: CC-BY-4.0
 
 -->
 
+## [3.2.2] 2022-04-22
+
+### Changed
+
+* uses RosaeNLG 3.2.2
+
+
 ## [3.2.0] 2022-01-22
 
 ### Fixed
