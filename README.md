@@ -8,6 +8,11 @@ SPDX-License-Identifier: CC-BY-4.0
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4502/badge)](https://bestpractices.coreinfrastructure.org/projects/4502)
 [![Known Vulnerabilities](https://snyk.io/test/github/RosaeNLG/rosaenlg-java/badge.svg)](https://snyk.io/test/github/RosaeNLG/rosaenlg-java)
 
+# DEPRECATED March 2026
+
+**RosaeNLG is deprecated from March 2026.**
+
+
 # RosaeNLG for Java
 
 [RosaeNLG](https://rosaenlg.org) is a Natural Language Generation library.
